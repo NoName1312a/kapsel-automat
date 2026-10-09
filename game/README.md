@@ -1,17 +1,21 @@
-# Kapsel-Automat – Prototyp v5 (Godot 4.4)
+# Kapsel-Automat – Prototyp v0.6 (Godot 4.4)
 
 Kurbel drehen → Kapsel fällt → öffnen → Figur ins Album. Dazu Wirtschaft mit passivem Einkommen, 3 Automaten, Neueröffnung (Prestige), Fusion und 30 Erfolge.
 **v3: mit Pixel-Art** aus dem Grafik-Thread (Ordner `art/`, Details in `art/manifest.md`): 4 Automaten-Skins, 30 Figuren, Hintergrund, Kapseln inkl. Fluch/Segen, Hamster, Upgrade-Icons, Album-Kacheln mit Silhouetten, Pokale, Set-Abzeichen, Knöpfe und Rahmen. Alles wird ×2 bzw. ×3 mit Nearest-Filter dargestellt.
 Fehlt eine Grafik, zeichnet das Spiel den alten Platzhalter.
 **v4: Hauptmenü, Einstellungen, Pausenmenü, echte Sounds und Musik** aus dem Sound-Thread (`audio/`). Fehlt ein Sound, erzeugt das Spiel einen Platzhalter per Code.
 **v5: Welten-Update** für lange Spielzeit: 4 Welten mit je eigenem Album (192 Figuren), 12 Automaten mit eigenen Mechaniken, mehrere Automaten gleichzeitig, Automaten-Stufen, Story (Tante Gerda und Hamster Krümel), neue Kapseln und Animationen, neu geordnete Seitenleiste. Plan: `../design-v5-welten.md`.
+**v0.6 (nach Leons Test):** Upgrades gelten pro Automat und haben viel mehr Stufen, Upgrade-Gruppen lassen sich auf- und zuklappen (fertige Upgrades werden zur schmalen Zeile), Story per Mausklick weiter, Auflösung 720p/900p/1080p, leisere Effekte mit Begrenzer, „Alles fusionieren“, „Willkommen zurück“ als Fenster mit Bild, **Mini-Modus** (Taste M oder Knopf „Mini“).
 
 ## Links für Steam, Discord, Reddit, X eintragen
 Alle vier Links stehen in **`data/links.json`**. Dort die Platzhalter (`DEINE_APP_ID`, `DEIN_EINLADUNGSCODE` …) durch die echten Adressen ersetzen. Solange ein Link noch „DEIN“ enthält, zeigt der Knopf nur „Link kommt bald!“ statt den Browser zu öffnen.
 
+## Mini-Modus
+Knopf **Mini** oben oder Taste **M**: Das Fenster wird klein, randlos und bleibt im Vordergrund, unten rechts über der Taskleiste (wie TaskbarHero). Darin: Automat gedrückt halten zum Kurbeln (oder Leertaste), Kapseln öffnen sich von selbst, die drei günstigsten Upgrades direkt kaufen, mit ◀ ▶ zwischen aufgestellten Automaten wechseln, am Rand ziehen zum Verschieben, **Groß** (oder M) zurück. Code: `scripts/mini_mode.gd`.
+
 ## Menüs
 - **Hauptmenü** (Startszene `menu.tscn`): Neues Spiel (fragt nach, wenn schon ein Spielstand existiert), Spiel laden (grau ohne Spielstand), Einstellungen, Auf Steam wunschlisten, Beenden, unten rechts Discord / Reddit / X.
-- **Einstellungen** (im Hauptmenü, im Spiel über das Zahnrad oben links oder über Esc → Einstellungen): Gesamtlautstärke, Musik, Effekte, Bildschirmwackeln (0–100 %), Vollbild. Gespeichert in `user://settings.cfg`.
+- **Einstellungen** (im Hauptmenü, im Spiel über das Zahnrad oben links oder über Esc → Einstellungen): Gesamtlautstärke, Musik, Effekte, Bildschirmwackeln (0–100 %), Auflösung (720p, 900p, 1080p im Fenster; nie größer als der Bildschirm), Vollbild. Gespeichert in `user://settings.cfg`.
 - **Pausenmenü** im Spiel mit **Esc** oder dem Knopf „Menü“: Weiter, Einstellungen, Hauptmenü (speichert), Spielstand löschen, Speichern & Beenden. Das Spiel läuft im Hintergrund weiter (Idle-Spiel).
 
 ## Audio
@@ -52,7 +56,7 @@ Alle vier Links stehen in **`data/links.json`**. Dort die Platzhalter (`DEINE_AP
 **Mehrere Automaten**: Aufstellplätze (Start 1, über „Anbau“ und „Filiale“ bis 6). Der gezeigte Automat wird gekurbelt, die anderen laufen nebenbei von allein (Leiste links, Tab „Automaten“). So füllt man alte Alben weiter, während man in neuen Welten spielt.
 **Automaten-Stufen**: Jeder Automat bis Stufe 10 (+30 % Münzen, +25 % Tempo nebenbei je Stufe), Sterne am Sockel und Aufwertungs-Animation.
 
-**Upgrades** in 4 Gruppen (Kurbel & Schale, Glück & Kombo, Münzen, Laden), werden nach und nach sichtbar. Mit „Max“ kauft man so viele Stufen wie möglich.
+**Upgrades** in 4 Gruppen, werden nach und nach sichtbar. Kurbel & Schale, Glück & Kombo und Münzen gelten **nur für den gezeigten Automaten** (jeder Automat hat eigene Stufen, Preise wachsen mit dem Wert des Automaten). „Laden“ (Vitrine, Nachtschicht, Anbau, Aushilfe) gilt für alle. Mit „Max“ kauft man so viele Stufen wie möglich.
 
 **Neueröffnung (Prestige)**: Münzen, Upgrades, Automaten und ihre Stufen werden zurückgesetzt, Album, Erfolge und Welten bleiben. Goldmarken kaufen dauerhafte Upgrades, z. B. Fusion, Spuk-Lizenz, Filiale (+1 Platz), Stammpersonal (schnellere Nebenautomaten).
 
@@ -70,20 +74,19 @@ Alle Werte stehen in `data/`: `figures.json`, `machines.json`, `upgrades.json` (
 
 | Meilenstein | Bot |
 |---|---|
-| Glücksautomat | ~25 min |
-| Album Spielhalle komplett | ~1,2 h |
-| Reise Tropeninsel | ~1,5 h |
-| Reise Eisgipfel | ~5,3 h |
-| Reise Sternenstation | ~10 h |
-| alle 192 Figuren | ~17 h |
-| Goldener Automat (Ende) | ~22 h |
+| Album Spielhalle komplett | ~2,4 h |
+| Reise Tropeninsel | ~2,9 h |
+| Reise Eisgipfel | ~6,9 h |
+| Reise Sternenstation | ~13,7 h |
+| alle 192 Figuren | ~17,6 h |
+| Goldener Automat (Ende) | ~19,6 h |
 
 Der Bot kauft ohne Pause immer optimal; ein Mensch braucht etwa das 1,5- bis 2-Fache, also grob 30–45 Stunden bis zum Ende (v4: 5–8 h).
 Stellschrauben: `cost`/`value_mult` in `machines.json`, `travel_cost` und `value_scale` in `worlds.json`, `MACHINE_LEVEL_*` und `PRESTIGE_*` oben in `game_state.gd`.
 
 ## Tests
 ```
-godot --headless --path . -s res://tests/smoke_test.gd    # 45 Prüfungen: Spiellogik, Welten, Automaten, Menüs, Sounds
+godot --headless --path . -s res://tests/smoke_test.gd    # 50 Prüfungen: Spiellogik, Welten, Automaten, Menüs, Sounds
 godot --headless --path . -s res://tests/balance_sim.gd   # Balancing-Simulation
 godot --path . -s res://tests/screenshots.gd              # Screenshots (Ausgabepfad oben im Skript anpassen)
 ```

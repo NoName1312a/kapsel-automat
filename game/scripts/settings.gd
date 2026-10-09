@@ -7,9 +7,10 @@ signal changed
 const FILE := "user://settings.cfg"
 const DEFAULTS := {
 	"master": 0.8,
-	"music": 0.6,
-	"sfx": 0.8,
+	"music": 0.7,
+	"sfx": 0.7,
 	"fullscreen": false,
+	"resolution": "1280x720",
 	"shake": 1.0,
 }
 
@@ -29,6 +30,11 @@ func _ready() -> void:
 		rv.wet = 0.08
 		rv.dry = 1.0
 		AudioServer.add_bus_effect(sfx_bus, rv)
+		# Begrenzer: viele Effekte gleichzeitig werden nicht lauter als -4 dB
+		var lim := AudioEffectHardLimiter.new()
+		lim.ceiling_db = -4.0
+		lim.pre_gain_db = 0.0
+		AudioServer.add_bus_effect(sfx_bus, lim)
 	_load()
 	apply()
 
@@ -53,6 +59,33 @@ func set_value(key: String, v) -> void:
 	changed.emit()
 
 
+const RESOLUTIONS := ["1280x720", "1600x900", "1920x1080"]
+var mini_mode := false   # Mini-Modus (main.gd) steuert das Fenster selbst
+
+
+func resolution() -> Vector2i:
+	var parts: PackedStringArray = str(get_value("resolution")).split("x")
+	if parts.size() != 2:
+		return Vector2i(1280, 720)
+	return Vector2i(int(parts[0]), int(parts[1]))
+
+
+## Fenstergröße setzen (nur im Fenstermodus), nie größer als der Bildschirm, und mittig platzieren.
+func apply_resolution() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var want := resolution()
+	var screen := DisplayServer.window_get_current_screen()
+	var usable := DisplayServer.screen_get_usable_rect(screen)
+	if want.x > usable.size.x or want.y > usable.size.y:
+		var k := minf(float(usable.size.x) / want.x, float(usable.size.y - 40) / want.y)
+		want = Vector2i(int(want.x * k), int(want.y * k))
+	if DisplayServer.window_get_size() == want:
+		return
+	DisplayServer.window_set_size(want)
+	DisplayServer.window_set_position(usable.position + (usable.size - want) / 2)
+
+
 func shake_mult() -> float:
 	return float(get_value("shake"))
 
@@ -65,8 +98,10 @@ func apply() -> void:
 	if DisplayServer.get_name() != "headless":
 		var fs: bool = get_value("fullscreen")
 		var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if fs else DisplayServer.WINDOW_MODE_WINDOWED
-		if DisplayServer.window_get_mode() != mode:
+		if DisplayServer.window_get_mode() != mode and not mini_mode:
 			DisplayServer.window_set_mode(mode)
+		if not fs and not mini_mode:
+			apply_resolution()
 
 
 func _set_volume(bus_name: String, linear: float) -> void:

@@ -16,7 +16,7 @@ signal story_event(trigger: String)
 const SAVE_FILE := "save.json"
 const BACKUP_FILE := "save.bak"
 const TMP_FILE := "save.tmp"
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 const START_COINS := 30.0
 const COMBO_WINDOW := 2.5
 const OFFLINE_RATE := 0.5
@@ -214,24 +214,39 @@ func top_value_scale() -> float:
 
 # --- Werte und Multiplikatoren -------------------------------------------
 
-func level(id: String) -> int:
-	return int(levels.get(id, 0))
+## Upgrades mit "scope": "machine" gelten nur für einen Automaten (Schlüssel "<automat>/<upgrade>"),
+## die übrigen (Laden) für alle.
+func is_machine_upgrade(id: String) -> bool:
+	return upgrade_by_id[id].get("scope", "") == "machine"
+
+
+func _lkey(id: String, m: String = "") -> String:
+	if not is_machine_upgrade(id):
+		return id
+	return (m if m != "" else current_machine) + "/" + id
+
+
+func level(id: String, m: String = "") -> int:
+	var lv := int(levels.get(_lkey(id, m), 0))
+	if id == "hamster":
+		lv = maxi(lv, int(_peff("p_hamster")))   # Hamster-Rente gilt für jeden Automaten
+	return lv
 
 
 func plevel(id: String) -> int:
 	return int(prestige_levels.get(id, 0))
 
 
-func _eff(id: String) -> float:
-	return float(upgrade_by_id[id]["per_level"]) * level(id)
+func _eff(id: String, m: String = "") -> float:
+	return float(upgrade_by_id[id]["per_level"]) * level(id, m)
 
 
 func _peff(id: String) -> float:
 	return float(prestige_by_id[id]["per_level"]) * plevel(id)
 
 
-func luck_mult() -> float:
-	return (1.0 + _eff("luck")) * (1.0 + _peff("p_luck"))
+func luck_mult(m: String = "") -> float:
+	return (1.0 + _eff("luck", m)) * (1.0 + _peff("p_luck"))
 
 
 ## Gilt für Kapsel-Münzen und passives Einkommen.
@@ -242,13 +257,13 @@ func global_mult() -> float:
 		* (1.0 + achievement_bonus * achievements.size())
 
 
-func capsule_value_mult() -> float:
-	return (1.0 + _eff("value")) * global_mult()
+func capsule_value_mult(m: String = "") -> float:
+	return (1.0 + _eff("value", m)) * global_mult()
 
 
 func combo_max(machine_id: String = "") -> int:
 	var m: Dictionary = machine_by_id[machine_id if machine_id != "" else current_machine]
-	return 1 + int(_eff("combo")) + int(m.get("combo_bonus", 0))
+	return 1 + int(_eff("combo", m["id"])) + int(m.get("combo_bonus", 0))
 
 
 func combo_mult() -> float:
@@ -274,11 +289,11 @@ func tray_size() -> int:
 
 func double_chance(machine_id: String = "") -> float:
 	var m: Dictionary = machine_by_id[machine_id if machine_id != "" else current_machine]
-	return _eff("double") + float(m.get("double_bonus", 0.0))
+	return _eff("double", m["id"]) + float(m.get("double_bonus", 0.0))
 
 
-func crit_chance() -> float:
-	return _eff("crit")
+func crit_chance(m: String = "") -> float:
+	return _eff("crit", m)
 
 
 func has_bulk_open() -> bool:
@@ -395,7 +410,7 @@ func machine() -> Dictionary:
 
 func capsule_cost(machine_id: String = "") -> float:
 	var m: Dictionary = machine_by_id[machine_id if machine_id != "" else current_machine]
-	return floorf(float(m["cost"]) * (1.0 - _eff("discount")))
+	return floorf(float(m["cost"]) * (1.0 - _eff("discount", m["id"])))
 
 
 func can_afford_capsule() -> bool:
@@ -539,17 +554,17 @@ func roll_capsule(machine_id: String = "") -> Dictionary:
 
 func _roll_figure(m: Dictionary) -> Dictionary:
 	var weights: Dictionary = m["weights"]
-	var chosen := _roll_rarity(weights)
+	var chosen := _roll_rarity(weights, m["id"])
 	return _random_figure(chosen, m["sets"])
 
 
-func _roll_rarity(weights: Dictionary) -> String:
+func _roll_rarity(weights: Dictionary, machine_id: String = "") -> String:
 	var total := 0.0
 	var w := {}
 	for r in rarities:
 		var x := float(weights[r["id"]])
 		if r["id"] != "common":
-			x *= luck_mult()
+			x *= luck_mult(machine_id)
 		w[r["id"]] = x
 		total += x
 	var roll := randf() * total
@@ -612,12 +627,12 @@ func open_capsule(content: Dictionary, machine_id: String, background: bool = fa
 			fire_story("legendary_first")
 		value += float(rarity_by_id[fig["rarity"]]["value"])
 		res["figures"].append(fig)
-	value *= machine_value_mult(machine_id) * capsule_value_mult() * (combo_mult() if not background else 1.0)
+	value *= machine_value_mult(machine_id) * capsule_value_mult(machine_id) * (combo_mult() if not background else 1.0)
 	if content["type"] == "curse":
 		stats["curses"] += 1
 		value = -minf(coins, capsule_cost(machine_id) * 2.0)
 	else:
-		if randf() < crit_chance():
+		if randf() < crit_chance(machine_id):
 			value *= 5.0
 			res["crit"] = true
 			stats["crits"] += 1
@@ -652,37 +667,44 @@ func add_crank_turn() -> void:
 
 # --- Upgrades -------------------------------------------------------------
 
-func upgrade_cost(id: String) -> float:
+## Automaten-Upgrades kosten so viel mehr, wie der Automat mehr einbringt.
+func upgrade_cost_scale(id: String, m: String = "") -> float:
+	if not is_machine_upgrade(id):
+		return 1.0
+	return maxf(1.0, float(machine_by_id[m if m != "" else current_machine]["value_mult"]))
+
+
+func upgrade_cost(id: String, m: String = "") -> float:
 	var u: Dictionary = upgrade_by_id[id]
-	return floorf(float(u["base_cost"]) * pow(float(u["growth"]), level(id)))
+	return floorf(float(u["base_cost"]) * pow(float(u["growth"]), level(id, m)) * upgrade_cost_scale(id, m))
 
 
-func is_maxed(id: String) -> bool:
-	return level(id) >= int(upgrade_by_id[id]["max_level"])
+func is_maxed(id: String, m: String = "") -> bool:
+	return level(id, m) >= int(upgrade_by_id[id]["max_level"])
 
 
 func is_revealed(id: String) -> bool:
 	return revealed.has(id) or float(upgrade_by_id[id]["unlock_at"]) <= 0.0
 
 
-func can_buy(id: String) -> bool:
-	return is_revealed(id) and not is_maxed(id) and coins >= upgrade_cost(id)
+func can_buy(id: String, m: String = "") -> bool:
+	return is_revealed(id) and not is_maxed(id, m) and coins >= upgrade_cost(id, m)
 
 
-func buy(id: String) -> bool:
-	if not can_buy(id):
+func buy(id: String, m: String = "") -> bool:
+	if not can_buy(id, m):
 		return false
-	coins -= upgrade_cost(id)
-	levels[id] = level(id) + 1
+	coins -= upgrade_cost(id, m)
+	levels[_lkey(id, m)] = int(levels.get(_lkey(id, m), 0)) + 1
 	stats["upgrades_bought"] += 1
 	_after_change()
 	return true
 
 
 ## Wie oft man das Upgrade direkt hintereinander kaufen kann (für "Max kaufen").
-func buy_max(id: String) -> int:
+func buy_max(id: String, m: String = "") -> int:
 	var n := 0
-	while buy(id):
+	while buy(id, m):
 		n += 1
 	return n
 
@@ -729,8 +751,6 @@ func do_prestige() -> int:
 	stats["run_points"] = 0.0
 	coins = START_COINS + _peff("p_start")
 	levels = {}
-	if plevel("p_hamster") > 0:
-		levels["hamster"] = int(_peff("p_hamster"))
 	unlocked_machines = []
 	for w in unlocked_worlds:
 		unlocked_machines.append(world_machines(w)[0]["id"])
@@ -790,6 +810,24 @@ func fuse(rarity: String) -> Dictionary:
 		stats["legendaries"] += 1
 	_after_change()
 	return {"figure": fig, "is_new": is_new}
+
+
+## Fusioniert alles, was geht (Gewöhnlich zuerst, dann die neu entstandenen Seltenen usw.).
+## Gibt {count, new, legendary, figures} zurück.
+func fuse_all() -> Dictionary:
+	var out := {"count": 0, "new": 0, "legendary": 0, "figures": []}
+	for rarity in ["common", "rare", "epic"]:
+		while can_fuse(rarity) and out["count"] < 2000:
+			var r := fuse(rarity)
+			if r.is_empty():
+				break
+			out["count"] += 1
+			out["figures"].append(r["figure"])
+			if r["is_new"]:
+				out["new"] += 1
+			if r["figure"]["rarity"] == "legendary":
+				out["legendary"] += 1
+	return out
 
 
 # --- Goldener Automat (Spielziel) ----------------------------------------
@@ -989,6 +1027,11 @@ func load_game() -> void:
 		achievements = d.get("achievements", {})
 		revealed = d.get("revealed", {})
 		story_seen = d.get("story_seen", {})
+		# Bis v4 galten alle Upgrades für alle Automaten: Stufen dem Standard-Automaten geben
+		for k in levels.keys():
+			if upgrade_by_id.has(k) and is_machine_upgrade(k):
+				levels["standard/" + k] = maxi(int(levels.get("standard/" + k, 0)), int(levels[k]))
+				levels.erase(k)
 		var s: Dictionary = d.get("stats", {})
 		for k in STAT_KEYS:
 			stats[k] = float(s.get(k, 0.0))

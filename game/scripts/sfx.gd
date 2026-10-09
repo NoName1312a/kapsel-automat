@@ -50,14 +50,28 @@ func has_file(sound: String) -> bool:
 	return from_file.has(sound)
 
 
+## Grundabsenkung aller Effekte gegenüber der Musik (Leon: Effekte waren viel zu laut).
+const SFX_TRIM := -2.0
+var _last_played: Dictionary = {}
+
+
 func play(sound: String, pitch: float = 1.0, volume_db: float = 0.0) -> void:
 	var list: Array = streams.get(sound, [])
 	if list.is_empty():
 		return
 	var stream: AudioStream = list[randi() % list.size()]
-	if from_file.has(sound):
-		# Die gelieferten Dateien sind schon fertig abgemischt: nur noch leicht absenken
-		volume_db = maxf(volume_db, -3.0)
+	# Derselbe Effekt schnell hintereinander (z. B. "Alle öffnen") stapelt sich sonst zu einem Knall
+	var now := Time.get_ticks_msec()
+	if now - int(_last_played.get(sound, -1000)) < 45:
+		return
+	_last_played[sound] = now
+	var same := 0
+	for p in players:
+		if p.playing and p.stream == stream:
+			same += 1
+	if same >= 3:
+		return
+	volume_db += SFX_TRIM
 	if list.size() > 1 or from_file.has(sound):
 		pitch *= randf_range(0.97, 1.03)
 	var target: AudioStreamPlayer = null
@@ -233,10 +247,10 @@ func _on_node_added(n: Node) -> void:
 			if b.toggle_mode:
 				play_pref(["ui_toggle_on" if b.button_pressed else "ui_toggle_off", "ui_click"], 1.0, -4.0)
 			else:
-				play("ui_click", randf_range(0.96, 1.04), -6.0))
+				play("ui_click", randf_range(0.96, 1.04), -2.0))
 		b.mouse_entered.connect(func() -> void:
 			if not b.disabled and _ui_ready(60):
-				play("ui_hover", randf_range(0.95, 1.05), -14.0))
+				play("ui_hover", randf_range(0.95, 1.05), -4.0))
 	elif n is Slider:
 		var r: Slider = n
 		r.value_changed.connect(func(_v: float) -> void:

@@ -344,7 +344,7 @@
  "golden": {
   "name": "Goldener Automat",
   "desc": "Das große Ziel: der Automat aller Automaten in der Sternenstation. Braucht 150 verschiedene Figuren.",
-  "cost": 1e+21,
+  "cost": 2e+20,
   "album_needed": 150,
   "world": "station"
  }

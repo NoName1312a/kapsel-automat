@@ -17,6 +17,10 @@ func _run() -> void:
 	var main = load("res://main.tscn").instantiate()
 	root.add_child(main)
 	await process_frame
+	# main.gd lädt beim Start den Spielstand von der Platte: für den Test frisch anfangen
+	game.reset_game()
+	game.coins = 500.0
+	main._clear_tray()
 	var opened := 0
 	for i in 40:
 		main._advance_crank(1.0, true)
@@ -28,12 +32,14 @@ func _run() -> void:
 	check(game.achievements.has("first_capsule"), "Erfolg 'Erste Kapsel' freigeschaltet")
 	check(game.album_count() > 5, "Album gefüllt (%d)" % game.album_count())
 
-	game.coins = 1e12
+	game.coins = 1e18
 	for id in game.upgrade_by_id:
 		game.revealed[id] = true
 		game.buy_max(id)
 	check(game.is_maxed("speed") and game.is_maxed("bulk"), "Upgrades bis Max kaufbar")
 	check(game.slot_count() >= 3, "Anbau gibt Aufstellplätze (%d)" % game.slot_count())
+	check(game.level("speed", "glueck") == 0 and game.level("speed", "standard") == 40, "Upgrades gelten nur für ihren Automaten")
+	check(game.upgrade_cost("value", "glueck") > game.upgrade_cost("value", "standard") * 0.0 and game.upgrade_cost("speed", "glueck") == floorf(15.0 * 4.0), "Upgrade-Preis skaliert mit dem Automaten")
 	check(game.unlock_machine("glueck"), "Glücksautomat freischaltbar")
 	check(not game.unlock_machine("spuk"), "Spuk-Automat ohne Lizenz gesperrt")
 	check(not game.unlock_machine("muschel"), "Automat einer fremden Welt gesperrt")
@@ -118,6 +124,8 @@ func _run() -> void:
 			game.owned[id] = 5
 	var fused: Dictionary = game.fuse("common")
 	check(not fused.is_empty() and fused["figure"]["rarity"] == "rare", "Fusion Gewöhnlich → Selten")
+	var fa: Dictionary = game.fuse_all()
+	check(fa["count"] > 0 and not game.can_fuse("common"), "Alles fusionieren (%d Fusionen)" % fa["count"])
 
 	for id in game.figures:
 		game.owned[id] = int(game.owned.get(id, 0)) + 1
@@ -147,6 +155,24 @@ func _run() -> void:
 	await process_frame
 	check(main.ui.ach_list.get_child_count() > 0 and main.ui.album_list.get_child_count() > 0, "Album und Erfolge bauen sich auf")
 	check(Fmt.num(1234.0) == "1,23 K" and Fmt.num(5e9) == "5,00 Mrd", "Zahlenformat (%s, %s)" % [Fmt.num(1234.0), Fmt.num(5e9)])
+
+	# Story: Mausklick blättert weiter
+	main.ui._on_story_event("new_game")
+	await process_frame
+	var lines_left: int = main.ui._story_queue.size()
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	main.ui._on_story_click(click)   # Text fertig zeigen
+	main.ui._on_story_click(click)   # nächste Zeile
+	check(main.ui.story_panel.visible and main.ui._story_queue.size() == lines_left - 1, "Story per Mausklick weiter")
+	main.ui._story_queue.clear()
+	main.ui._next_story_line()
+	check(not main.ui.story_catcher.visible, "Story schließt nach der letzten Zeile")
+	main.ui._open_welcome({"seconds": 600.0, "amount": 12345.0})
+	check(main.ui.welcome_panel.visible and main.ui.is_blocking(), "Willkommen-zurück-Fenster")
+	main.ui.welcome_panel.visible = false
+	main.ui.dim.visible = false
 
 	# Menüs, Einstellungen, Sounds
 	main.ui.toggle_pause()

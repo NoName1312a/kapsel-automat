@@ -4,6 +4,7 @@ extends CanvasLayer
 
 signal open_all_requested
 signal clear_tray_requested
+signal mini_requested
 
 const SettingsPanel := preload("res://scripts/settings_panel.gd")
 const MENU_SCENE := "res://menu.tscn"
@@ -30,6 +31,9 @@ var strip: VBoxContainer
 var _strip_key := ""
 
 var upgrade_rows: Dictionary = {}       # id -> {row, name, desc, buy, max}
+var upgrade_machine_icon: TextureRect
+var upgrade_machine_label: Label
+var _collapsed: Dictionary = {}         # Upgrade-Gruppe -> zugeklappt
 var machine_rows: Dictionary = {}       # id -> {row, title, info, main, level, place}
 var world_rows: Dictionary = {}         # id -> {row, info, button}
 var slots_label: Label
@@ -50,6 +54,11 @@ var story_panel: PanelContainer
 var story_label: Label
 var story_name: Label
 var story_portrait: TextureRect
+var story_catcher: Control
+var welcome_panel: PanelContainer
+var welcome_text: Label
+var welcome_amount: Label
+var _story_tween: Tween
 var _story_queue: Array = []
 var confirm: ConfirmationDialog
 var info_dialog: AcceptDialog
@@ -114,19 +123,16 @@ func _process(delta: float) -> void:
 
 func is_blocking() -> bool:
 	return album_panel.visible or ach_panel.visible or confirm.visible or info_dialog.visible \
+		or (welcome_panel != null and welcome_panel.visible) \
 		or pause_panel.visible or settings_panel.visible or story_panel.visible
 
 
 ## Esc schließt das oberste Fenster, sonst öffnet es das Menü.
 func _unhandled_input(event: InputEvent) -> void:
-	if story_panel.visible and event is InputEventMouseButton and event.pressed:
-		_next_story_line()
-		get_viewport().set_input_as_handled()
-		return
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 	if story_panel.visible and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_E, KEY_ESCAPE]:
-		_next_story_line()
+		_advance_story()
 		get_viewport().set_input_as_handled()
 		return
 	if event.keycode != KEY_ESCAPE:
@@ -299,7 +305,7 @@ func _trophy_tier(a: Dictionary) -> String:
 
 
 func _build_hud() -> void:
-	var hint := _label("Kurbel halten/ziehen oder LEERTASTE  ·  Kapsel anklicken oder E  ·  A = alle öffnen  ·  Esc = Menü", 14, Color(1, 1, 1, 0.55))
+	var hint := _label("Kurbeln: halten oder LEERTASTE  ·  Öffnen: Klick oder E  ·  A: alle  ·  M: Mini  ·  Esc: Menü", 14, Color(1, 1, 1, 0.55))
 	hint.position = Vector2(120, 694)
 	add_child(hint)
 
@@ -373,6 +379,11 @@ func _build_topbar() -> void:
 	var spacer2 := Control.new()
 	spacer2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h.add_child(spacer2)
+	var mini_b := _button("Mini", func() -> void: mini_requested.emit())
+	mini_b.tooltip_text = "Mini-Modus: kleines Fenster über der Taskleiste, weiterspielen nebenbei (M)"
+	mini_b.custom_minimum_size = Vector2(70, 0)
+	mini_b.add_theme_font_size_override("font_size", 16)
+	h.add_child(mini_b)
 	for e in [["Album", func() -> void: _toggle_overlay(album_panel)],
 			["Erfolge", func() -> void: _toggle_overlay(ach_panel)],
 			["Menü", toggle_pause]]:
@@ -488,26 +499,55 @@ func _scroll_tab(tc: TabContainer, title: String) -> VBoxContainer:
 
 
 func _build_upgrade_tab(v: VBoxContainer) -> void:
-	var cats: Array = Game.upgrades.map(func(u: Dictionary) -> String: return u.get("category", ""))
+	# Kopf: für welchen Automaten die Upgrades gelten
+	var head_card := _card()
+	v.add_child(head_card)
+	var hh := HBoxContainer.new()
+	hh.add_theme_constant_override("separation", 8)
+	head_card.add_child(hh)
+	upgrade_machine_icon = _icon_rect(null, 36)
+	hh.add_child(upgrade_machine_icon)
+	var hv := VBoxContainer.new()
+	hv.add_theme_constant_override("separation", 0)
+	hv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hh.add_child(hv)
+	upgrade_machine_label = _label("", 16, GOLD)
+	hv.add_child(upgrade_machine_label)
+	hv.add_child(_wrap_label("Jeder Automat hat eigene Upgrades. Gruppe anklicken zum Auf- und Zuklappen.", 12, DIM_TEXT, 120))
+
 	var cat_names: Dictionary = {}
 	var cat_order: Array = []
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/upgrades.json"))
 	for c in data.get("categories", []):
 		cat_names[c["id"]] = c["name"]
 		cat_order.append(c["id"])
-	for c in cats:
-		if not c in cat_order:
-			cat_order.append(c)
+	for u in Game.upgrades:
+		if not u.get("category", "") in cat_order:
+			cat_order.append(u.get("category", ""))
 	for cat in cat_order:
-		var head := _header(cat_names.get(cat, "Weitere"))
-		v.add_child(head)
 		var members: Array = []
 		for u in Game.upgrades:
 			if u.get("category", "") == cat:
 				members.append(u)
+		var head := Button.new()
+		head.flat = true
+		head.focus_mode = Control.FOCUS_NONE
+		head.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		head.add_theme_font_size_override("font_size", 16)
+		head.add_theme_color_override("font_color", GOLD)
+		head.add_theme_color_override("font_hover_color", Color.WHITE)
+		v.add_child(head)
+		var body := VBoxContainer.new()
+		body.add_theme_constant_override("separation", 4)
+		v.add_child(body)
+		var key: String = cat
+		head.pressed.connect(func() -> void:
+			_collapsed[key] = not _collapsed.get(key, false)
+			refresh())
 		for u in members:
-			_upgrade_row(v, u)
-		upgrade_rows["_head_" + cat] = {"head": head, "members": members.map(func(u: Dictionary) -> String: return u["id"])}
+			_upgrade_row(body, u)
+		upgrade_rows["_head_" + cat] = {"head": head, "body": body, "name": cat_names.get(cat, "Weitere"),
+			"members": members.map(func(u: Dictionary) -> String: return u["id"])}
 
 
 func _upgrade_row(v: VBoxContainer, u: Dictionary) -> void:
@@ -515,26 +555,28 @@ func _upgrade_row(v: VBoxContainer, u: Dictionary) -> void:
 	var card := _card()
 	v.add_child(card)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", 6)
 	card.add_child(row)
 	var ic := Art.tex("icons/upgrades/%s.png" % id)
-	if ic:
-		row.add_child(_icon_rect(ic, 32))
+	var icr := _icon_rect(ic, 28)
+	row.add_child(icr)
 	var tv := VBoxContainer.new()
 	tv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tv.add_theme_constant_override("separation", 0)
 	row.add_child(tv)
-	var name_l := _label("", 15)
+	var name_l := _label("", 14)
+	name_l.clip_text = true
+	name_l.custom_minimum_size = Vector2(60, 0)
 	tv.add_child(name_l)
-	var desc_l := _wrap_label(u["desc"], 12, DIM_TEXT, 170)
+	var desc_l := _wrap_label(u["desc"], 12, DIM_TEXT, 60)
 	tv.add_child(desc_l)
 	var b := _button("", func() -> void:
 		if Game.buy(id):
 			Sfx.play("upgrade")
 		else:
 			Sfx.play("deny"))
-	b.custom_minimum_size = Vector2(96, 40)
-	b.add_theme_font_size_override("font_size", 14)
+	b.custom_minimum_size = Vector2(84, 34)
+	b.add_theme_font_size_override("font_size", 13)
 	b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(b)
 	var mx := _button("Max", func() -> void:
@@ -542,8 +584,8 @@ func _upgrade_row(v: VBoxContainer, u: Dictionary) -> void:
 			Sfx.play("upgrade", 0.9)
 		else:
 			Sfx.play("deny"))
-	mx.custom_minimum_size = Vector2(44, 40)
-	mx.add_theme_font_size_override("font_size", 12)
+	mx.custom_minimum_size = Vector2(40, 34)
+	mx.add_theme_font_size_override("font_size", 11)
 	mx.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(mx)
 	upgrade_rows[id] = {"row": card, "name": name_l, "desc": desc_l, "buy": b, "max": mx}
@@ -822,6 +864,14 @@ func _build_story() -> void:
 	story_panel.custom_minimum_size = Vector2(720, 200)
 	story_panel.size = Vector2(720, 200)
 	story_panel.visible = false
+	# Unsichtbare Fläche über allem: ein Klick irgendwo blättert weiter
+	story_catcher = Control.new()
+	story_catcher.size = Vector2(1280, 720)
+	story_catcher.mouse_filter = Control.MOUSE_FILTER_STOP
+	story_catcher.visible = false
+	story_catcher.gui_input.connect(_on_story_click)
+	add_child(story_catcher)
+	story_panel.gui_input.connect(_on_story_click)
 	add_child(story_panel)
 	var m := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
@@ -864,9 +914,26 @@ func _on_story_event(trigger: String) -> void:
 		_next_story_line()
 
 
+func _on_story_click(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		get_viewport().set_input_as_handled()
+		_advance_story()
+
+
+## Erst den Text fertig zeigen, beim nächsten Klick weiter.
+func _advance_story() -> void:
+	if story_label.visible_ratio < 1.0:
+		if _story_tween:
+			_story_tween.kill()
+		story_label.visible_ratio = 1.0
+		return
+	_next_story_line()
+
+
 func _next_story_line() -> void:
 	if _story_queue.is_empty():
 		story_panel.visible = false
+		story_catcher.visible = false
 		return
 	var item: Dictionary = _story_queue.pop_front()
 	story_name.text = item["name"]
@@ -879,9 +946,10 @@ func _next_story_line() -> void:
 	story_label.add_theme_color_override("font_color", Color.WHITE if item["name"] != "" else Color(0.85, 0.85, 0.95))
 	story_label.visible_ratio = 0.0
 	story_panel.visible = true
-	Sfx.play_first(["story_blip", "ui_hover"], 1.0, -4.0)
-	var tw := story_label.create_tween()
-	tw.tween_property(story_label, "visible_ratio", 1.0, clampf(item["text"].length() * 0.02, 0.2, 1.5))
+	story_catcher.visible = true
+	Sfx.play_first(["story_blip", "ui_hover"], 1.0, -8.0)
+	_story_tween = story_label.create_tween()
+	_story_tween.tween_property(story_label, "visible_ratio", 1.0, clampf(item["text"].length() * 0.02, 0.2, 1.5))
 
 
 # --- Dialoge --------------------------------------------------------------
@@ -917,9 +985,75 @@ func _show_offline_report() -> void:
 	if r.is_empty():
 		return
 	Sfx.play_first(["offline_welcome"])
-	_info("Willkommen zurück!", "Du warst %s weg.\nDeine Vitrinen haben in der Zeit %s Münzen verdient." % [
-		Fmt.duration(r["seconds"]), Fmt.num(r["amount"])])
+	_open_welcome(r)
 	Game.offline_report = {}
+
+
+## "Willkommen zurück" mit Bild: art/ui/welcome_back.png (vom Grafik-Thread), sonst Krümel + Münzen.
+func _open_welcome(r: Dictionary) -> void:
+	if welcome_panel == null:
+		welcome_panel = PanelContainer.new()
+		_themed(welcome_panel)
+		var wsb: StyleBox = Art.stylebox("ui/welcome/panel_9slice.png", 10, 3, 18.0)
+		if wsb:
+			welcome_panel.add_theme_stylebox_override("panel", wsb)
+		welcome_panel.custom_minimum_size = Vector2(520, 0)
+		add_child(welcome_panel)
+		var m := MarginContainer.new()
+		for side in ["left", "right", "top", "bottom"]:
+			m.add_theme_constant_override("margin_" + side, 18)
+		welcome_panel.add_child(m)
+		var v := VBoxContainer.new()
+		v.add_theme_constant_override("separation", 10)
+		v.alignment = BoxContainer.ALIGNMENT_CENTER
+		m.add_child(v)
+		var title := _label("Willkommen zurück!", 30, GOLD)
+		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		title.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.15))
+		title.add_theme_constant_override("outline_size", 8)
+		v.add_child(title)
+		var pic := Art.tex("ui/welcome_back.png")
+		if pic:
+			var tr := _icon_rect(pic, 0)
+			tr.custom_minimum_size = pic.get_size() * 3.0
+			v.add_child(tr)
+		else:
+			var h := HBoxContainer.new()
+			h.alignment = BoxContainer.ALIGNMENT_CENTER
+			h.add_theme_constant_override("separation", 16)
+			v.add_child(h)
+			var k := Art.tex("portraits/kruemel.png")
+			if k == null:
+				k = Art.tex("props/hamster_0.png")
+			if k:
+				h.add_child(_icon_rect(k, 128))
+			var c := Art.tex("icons/ui16/coins.png")
+			if c:
+				h.add_child(_icon_rect(c, 64))
+		welcome_text = _label("", 18)
+		welcome_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		v.add_child(welcome_text)
+		welcome_amount = _label("", 34, Color("#9fffcb"))
+		welcome_amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		welcome_amount.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.15))
+		welcome_amount.add_theme_constant_override("outline_size", 8)
+		v.add_child(welcome_amount)
+		var ok := _button("Einsammeln", func() -> void:
+			welcome_panel.visible = false
+			dim.visible = false
+			Sfx.play_pref(["coin_big", "coin"]))
+		ok.theme_type_variation = "BigButton"
+		ok.custom_minimum_size = Vector2(240, 48)
+		ok.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		v.add_child(ok)
+	welcome_text.text = "Du warst %s weg. Krümel hat aufgepasst,\ndie Vitrinen haben in der Zeit verdient:" % Fmt.duration(r["seconds"])
+	welcome_amount.text = "+%s Münzen" % Fmt.num(r["amount"])
+	dim.visible = true
+	move_child(dim, -1)
+	move_child(welcome_panel, -1)
+	welcome_panel.visible = true
+	welcome_panel.reset_size()
+	welcome_panel.position = (Vector2(1280, 720) - welcome_panel.size) / 2.0
 
 
 func _show_ending() -> void:
@@ -996,6 +1130,21 @@ func _fill_album() -> void:
 				_fill_album())
 			b.disabled = not Game.can_fuse(rarity)
 			fr.add_child(b)
+		var any_fuse := false
+		for rarity in Game.FUSION_NEXT:
+			any_fuse = any_fuse or Game.can_fuse(rarity)
+		var all_b := _button("Alles fusionieren", func() -> void:
+			var res := Game.fuse_all()
+			if res["count"] == 0:
+				Sfx.play("deny")
+				return
+			Sfx.play("fusion")
+			toast("%d Fusionen!" % res["count"], "%d neue Figuren%s" % [res["new"], ", %d legendär" % res["legendary"] if res["legendary"] > 0 else ""])
+			_fill_album())
+		all_b.theme_type_variation = "BigButton"
+		all_b.tooltip_text = "Fusioniert alle Duplikate, bis keine Fusion mehr geht. Die Stufen der Figuren sinken dabei."
+		all_b.disabled = not any_fuse
+		fr.add_child(all_b)
 
 	for s in Game.world_sets(album_world):
 		var done := Game.is_set_complete(s)
@@ -1122,14 +1271,34 @@ func refresh() -> void:
 	open_all_btn.visible = Game.has_bulk_open()
 	_rebuild_strip()
 
-	# Upgrades
+	# Upgrades (für den gezeigten Automaten)
+	var cm: Dictionary = Game.machine()
+	upgrade_machine_label.text = "Upgrades: %s" % cm["name"]
+	upgrade_machine_icon.texture = _machine_icon(cm["id"])
 	for key in upgrade_rows:
-		if String(key).begins_with("_head_"):
-			var hd: Dictionary = upgrade_rows[key]
-			var any := false
-			for id in hd["members"]:
-				any = any or Game.is_revealed(id)
-			hd["head"].visible = any
+		if not String(key).begins_with("_head_"):
+			continue
+		var hd: Dictionary = upgrade_rows[key]
+		var shown_n := 0
+		var buyable := 0
+		var done := 0
+		for id in hd["members"]:
+			if Game.is_revealed(id):
+				shown_n += 1
+				if Game.is_maxed(id):
+					done += 1
+				elif Game.can_buy(id):
+					buyable += 1
+		var cat := String(key).substr(6)
+		var closed: bool = _collapsed.get(cat, false)
+		hd["head"].visible = shown_n > 0
+		hd["body"].visible = not closed
+		var extra := ""
+		if buyable > 0:
+			extra = "   %d kaufbar" % buyable
+		elif done == shown_n and shown_n > 0:
+			extra = "   alles max"
+		hd["head"].text = "%s %s%s" % ["▸" if closed else "▾", hd["name"], extra]
 	for u in Game.upgrades:
 		var id: String = u["id"]
 		var r: Dictionary = upgrade_rows[id]
@@ -1139,12 +1308,14 @@ func refresh() -> void:
 			continue
 		var b: Button = r["buy"]
 		var mx: Button = r["max"]
+		var maxed := Game.is_maxed(id)
 		r["name"].text = "%s  %d/%d" % [u["name"], Game.level(id), int(u["max_level"])]
-		if Game.is_maxed(id):
-			b.text = "Max"
-			b.disabled = true
-			mx.disabled = true
-		else:
+		r["name"].add_theme_color_override("font_color", GOLD if maxed else Color.WHITE)
+		# Fertige Upgrades als schmale Zeile, damit die Liste kurz bleibt
+		r["desc"].visible = not maxed
+		b.visible = not maxed
+		mx.visible = not maxed
+		if not maxed:
 			b.text = Fmt.num(Game.upgrade_cost(id))
 			b.disabled = not Game.can_buy(id)
 			mx.disabled = b.disabled

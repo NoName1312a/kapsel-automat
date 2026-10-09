@@ -47,6 +47,30 @@ func _ready() -> void:
 	_slider_row(v, "Effekte", "sfx", "sound_on")
 	_slider_row(v, "Bildschirmwackeln", "shake", "")
 
+	# Auflösung (Fenstermodus); das Bild wird immer passend skaliert
+	var rrow := HBoxContainer.new()
+	rrow.add_theme_constant_override("separation", 8)
+	v.add_child(rrow)
+	var rl := Label.new()
+	rl.text = "Auflösung"
+	rl.custom_minimum_size = Vector2(150, 0)
+	rl.add_theme_font_size_override("font_size", 20)
+	rrow.add_child(rl)
+	var group := ButtonGroup.new()
+	for res in Settings.RESOLUTIONS:
+		var rb := Button.new()
+		rb.toggle_mode = true
+		rb.button_group = group
+		rb.focus_mode = Control.FOCUS_NONE
+		rb.text = {"1280x720": "720p", "1600x900": "900p", "1920x1080": "1080p"}.get(res, res)
+		rb.tooltip_text = res.replace("x", " × ")
+		rb.custom_minimum_size = Vector2(96, 40)
+		rb.add_theme_font_size_override("font_size", 18)
+		rb.button_pressed = Settings.get_value("resolution") == res
+		var key: String = res
+		rb.pressed.connect(func() -> void: Settings.set_value("resolution", key))
+		rrow.add_child(rb)
+
 	# Mit Checkbox-Grafik eine echte Checkbox, sonst ein Umschalt-Knopf
 	var has_cb := Art.tex("ui/checkbox_on.png") != null
 	var fs: Button = CheckBox.new() if has_cb else Button.new()

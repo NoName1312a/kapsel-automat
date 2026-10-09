@@ -7,6 +7,7 @@ const FigureView := preload("res://scripts/figure_view.gd")
 const UI := preload("res://scripts/ui.gd")
 
 const FX := preload("res://scripts/fx.gd")
+const MiniMode := preload("res://scripts/mini_mode.gd")
 
 const MACHINE_POS := Vector2(340, 296)
 const REVEAL_POS := Vector2(690, 330)
@@ -30,6 +31,8 @@ var save_timer := 0.0
 var bg_sprite: Sprite2D
 var _bg_world := ""
 var _last_machine := ""
+var mini: MiniMode
+var bg_layer: CanvasLayer
 
 
 func _ready() -> void:
@@ -37,7 +40,7 @@ func _ready() -> void:
 	world = Node2D.new()
 	add_child(world)
 	# Eigene Ebene hinter allem, damit der Hintergrund beim Screenshake ruhig bleibt
-	var bg_layer := CanvasLayer.new()
+	bg_layer = CanvasLayer.new()
 	bg_layer.layer = -1
 	add_child(bg_layer)
 	bg_sprite = Sprite2D.new()
@@ -70,6 +73,11 @@ func _ready() -> void:
 	add_child(ui)
 	ui.open_all_requested.connect(_open_all)
 	ui.clear_tray_requested.connect(_clear_tray)
+	ui.mini_requested.connect(toggle_mini)
+	mini = MiniMode.new()
+	mini.main = self
+	add_child(mini)
+	mini.exit_requested.connect(toggle_mini)
 	Game.changed.connect(_sync_machine)
 	Game.machine_leveled.connect(_on_machine_leveled)
 	# Direkt gestartet (ohne Hauptmenü, z. B. im Editor mit F6): Spielstand laden
@@ -129,7 +137,33 @@ func _sync_machine() -> void:
 
 # --- Eingabe --------------------------------------------------------------
 
+## Zwischen großem Fenster und Mini-Modus wechseln (Taste M oder Knopf oben).
+func toggle_mini() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	if mini.active:
+		mini.exit()
+		world.visible = true
+		ui.visible = true
+		bg_layer.visible = true
+	else:
+		holding_mouse = false
+		dragging = false
+		world.visible = false
+		ui.visible = false
+		bg_layer.visible = false
+		mini.enter()
+	Sfx.play("ui_click")
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M \
+			and (mini.active or not ui.is_blocking()):
+		toggle_mini()
+		get_viewport().set_input_as_handled()
+		return
+	if mini.active:
+		return
 	if ui.is_blocking():
 		holding_mouse = false
 		dragging = false
@@ -169,6 +203,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	var manual := (holding_mouse or Input.is_key_pressed(KEY_SPACE)) and not ui.is_blocking()
+	if mini.active:
+		manual = mini.holding or Input.is_key_pressed(KEY_SPACE)
 	if manual:
 		_advance_crank(Game.crank_speed() * delta, true)
 	if Game.hamster_speed() > 0.0:
@@ -210,7 +246,7 @@ func _advance_crank(amount: float, manual: bool) -> void:
 	var before := crank_progress
 	crank_progress += amount
 	if int(before * TICKS_PER_TURN) != int(crank_progress * TICKS_PER_TURN):
-		Sfx.play("tick", randf_range(0.92, 1.08), -4.0)
+		Sfx.play("tick", randf_range(0.92, 1.08), -2.0)
 		machine.jiggle = 1.0
 	machine.crank_angle = crank_progress * TAU
 	if crank_progress >= 1.0:
@@ -317,6 +353,7 @@ func _open_capsule(c: Capsule) -> void:
 	if not is_instance_valid(c):
 		return
 	var res := Game.open_capsule(c.content, c.machine_id)
+	mini.show_result(res)
 	var pos := c.position
 	tray.erase(c)
 	c.queue_free()

@@ -3,112 +3,121 @@
   {
    "id": "speed",
    "name": "Geölte Kurbel",
-   "desc": "+20 % Kurbel-Tempo",
+   "desc": "+15 % Kurbel-Tempo",
    "base_cost": 15,
-   "growth": 1.9,
-   "max_level": 15,
-   "per_level": 0.2,
+   "growth": 1.85,
+   "max_level": 40,
+   "per_level": 0.15,
    "unlock_at": 0,
-   "category": "kurbel"
+   "category": "kurbel",
+   "scope": "machine"
   },
   {
    "id": "luck",
    "name": "Glücksfeder",
-   "desc": "+10 % Chance auf Seltenes",
+   "desc": "+8 % Chance auf Seltenes",
    "base_cost": 60,
-   "growth": 2.2,
-   "max_level": 20,
-   "per_level": 0.1,
+   "growth": 2.0,
+   "max_level": 40,
+   "per_level": 0.08,
    "unlock_at": 0,
-   "category": "glueck"
+   "category": "glueck",
+   "scope": "machine"
   },
   {
    "id": "value",
    "name": "Polierte Kapseln",
-   "desc": "+25 % Münzen",
+   "desc": "+20 % Münzen aus Kapseln",
    "base_cost": 40,
-   "growth": 2.0,
-   "max_level": 100,
-   "per_level": 0.25,
+   "growth": 1.95,
+   "max_level": 200,
+   "per_level": 0.2,
    "unlock_at": 0,
-   "category": "muenzen"
+   "category": "muenzen",
+   "scope": "machine"
   },
   {
    "id": "tray",
    "name": "Größere Schale",
    "desc": "+1 Platz in der Schale",
    "base_cost": 60,
-   "growth": 2.2,
+   "growth": 2.6,
    "max_level": 5,
    "per_level": 1,
    "unlock_at": 5,
-   "category": "kurbel"
+   "category": "kurbel",
+   "scope": "machine"
   },
   {
    "id": "hamster",
    "name": "Kurbel-Hamster",
-   "desc": "Kurbelt von allein (+0,2 Umdr./s)",
+   "desc": "Kurbelt von allein (+0,15 Umdr./s)",
    "base_cost": 120,
-   "growth": 2.2,
-   "max_level": 15,
-   "per_level": 0.2,
+   "growth": 1.9,
+   "max_level": 30,
+   "per_level": 0.15,
    "unlock_at": 10,
-   "category": "kurbel"
+   "category": "kurbel",
+   "scope": "machine"
   },
   {
    "id": "combo",
    "name": "Kombo-Glocke",
-   "desc": "Kombo: +5 % je schnelle Öffnung, +5 Stufen",
+   "desc": "+3 Kombo-Stufen (je +5 %)",
    "base_cost": 150,
-   "growth": 1.9,
-   "max_level": 6,
-   "per_level": 5,
+   "growth": 2.0,
+   "max_level": 15,
+   "per_level": 3,
    "unlock_at": 15,
-   "category": "glueck"
+   "category": "glueck",
+   "scope": "machine"
   },
   {
    "id": "passive",
    "name": "Vitrine",
-   "desc": "+25 % Einkommen aus dem Album",
+   "desc": "+20 % Album-Einkommen",
    "base_cost": 200,
-   "growth": 2.0,
-   "max_level": 100,
-   "per_level": 0.25,
+   "growth": 1.95,
+   "max_level": 200,
+   "per_level": 0.2,
    "unlock_at": 20,
-   "category": "muenzen"
+   "category": "laden"
   },
   {
    "id": "autoopen",
    "name": "Kapsel-Öffner",
    "desc": "Öffnet Kapseln automatisch, jede Stufe schneller",
    "base_cost": 400,
-   "growth": 3.0,
-   "max_level": 4,
+   "growth": 2.4,
+   "max_level": 10,
    "per_level": 1,
    "unlock_at": 25,
-   "category": "kurbel"
+   "category": "kurbel",
+   "scope": "machine"
   },
   {
    "id": "double",
    "name": "Doppelkapsel",
-   "desc": "+4 % Chance auf 2 Figuren pro Kapsel",
+   "desc": "+3 % Chance auf Doppelkapsel",
    "base_cost": 300,
-   "growth": 2.0,
-   "max_level": 10,
-   "per_level": 0.04,
+   "growth": 1.9,
+   "max_level": 20,
+   "per_level": 0.03,
    "unlock_at": 40,
-   "category": "glueck"
+   "category": "glueck",
+   "scope": "machine"
   },
   {
    "id": "crit",
    "name": "Glückstreffer",
-   "desc": "+3 % Chance auf x5 Münzen",
+   "desc": "+2 % Chance auf x5-Treffer",
    "base_cost": 400,
-   "growth": 2.0,
-   "max_level": 10,
-   "per_level": 0.03,
+   "growth": 1.9,
+   "max_level": 20,
+   "per_level": 0.02,
    "unlock_at": 60,
-   "category": "glueck"
+   "category": "glueck",
+   "scope": "machine"
   },
   {
    "id": "bulk",
@@ -119,29 +128,31 @@
    "max_level": 1,
    "per_level": 1,
    "unlock_at": 60,
-   "category": "kurbel"
+   "category": "kurbel",
+   "scope": "machine"
   },
   {
    "id": "discount",
    "name": "Großhändler",
-   "desc": "−6 % Kapselpreis",
+   "desc": "Kapseln 4 % billiger",
    "base_cost": 800,
-   "growth": 2.3,
-   "max_level": 6,
-   "per_level": 0.06,
+   "growth": 2.2,
+   "max_level": 12,
+   "per_level": 0.04,
    "unlock_at": 100,
-   "category": "muenzen"
+   "category": "muenzen",
+   "scope": "machine"
   },
   {
    "id": "offline",
    "name": "Nachtschicht",
-   "desc": "+2 h Offline-Einnahmen (Start: 2 h)",
+   "desc": "+1 h Offline-Zeit",
    "base_cost": 1000,
-   "growth": 2.5,
-   "max_level": 5,
-   "per_level": 2,
+   "growth": 2.0,
+   "max_level": 10,
+   "per_level": 1,
    "unlock_at": 100,
-   "category": "muenzen"
+   "category": "laden"
   },
   {
    "id": "anbau",
@@ -159,11 +170,11 @@
   {
    "id": "aushilfe",
    "name": "Aushilfe",
-   "desc": "Nebenautomaten öffnen +20 % schneller",
+   "desc": "Nebenautomaten +15 % schneller",
    "base_cost": 2000000.0,
-   "growth": 3.0,
-   "max_level": 30,
-   "per_level": 0.2,
+   "growth": 1.9,
+   "max_level": 60,
+   "per_level": 0.15,
    "unlock_at": 0,
    "unlock_stat": "slots",
    "unlock_value": 2,
@@ -277,7 +288,7 @@
   },
   {
    "id": "laden",
-   "name": "Laden & Aushilfen"
+   "name": "Laden (alle Automaten)"
   }
  ]
 }
