@@ -1,5 +1,6 @@
 # Baut Spiel + Launcher und veröffentlicht ein GitHub-Release, sobald ein Versions-Tag gepusht wird.
 #   git tag v0.6.0 && git push origin v0.6.0
+# Oder: Versionsnummer in der Datei VERSION ändern (z. B. 0.6.0) und nach main pushen.
 # Oder ohne Git: GitHub → Actions → Release → "Run workflow", Version eintragen.
 # Erwartete Repo-Struktur:
 #   game/       Godot-Projekt des Spiels (mit export_presets.cfg)
@@ -11,6 +12,8 @@ name: Release
 on:
   push:
     tags: ["v*"]
+    branches: [main]
+    paths: ["VERSION"]
   workflow_dispatch:
     inputs:
       tag:
@@ -27,19 +30,31 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Tag bestimmen
-        id: tag
-        run: |
-          TAG="${{ github.event.inputs.tag || github.ref_name }}"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
-
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Godot und Export-Vorlagen holen
+      - name: Tag bestimmen
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="v$(tr -d ' \r\n' < VERSION)"
+            TAG="${TAG#vv}"; TAG="v${TAG#v}"
+            if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+              echo "Release $TAG gibt es schon, nichts zu tun."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - if: steps.tag.outputs.skip != 'true'
+        name: Godot und Export-Vorlagen holen
         run: |
           set -e
           V="$GODOT_VERSION"
@@ -54,7 +69,8 @@ jobs:
           unzip -q -j tpl.tpz "templates/windows_release_x86_64.exe" "templates/linux_release.x86_64" "templates/version.txt" -d "$DEST"
           rm tpl.tpz
 
-      - name: Versionsnummer ins Spiel schreiben
+      - if: steps.tag.outputs.skip != 'true'
+        name: Versionsnummer ins Spiel schreiben
         run: |
           VER="${{ steps.tag.outputs.version }}"
           F=game/project.godot
@@ -65,7 +81,8 @@ jobs:
           fi
           grep '^config/version=' "$F"
 
-      - name: Spiel exportieren
+      - if: steps.tag.outputs.skip != 'true'
+        name: Spiel exportieren
         run: |
           set -e
           mkdir -p build/game-windows build/game-linux
@@ -77,7 +94,8 @@ jobs:
             godot --headless --path game --export-release "Linux" "$PWD/build/game-linux/KapselAutomat.x86_64"
           fi
 
-      - name: Launcher exportieren
+      - if: steps.tag.outputs.skip != 'true'
+        name: Launcher exportieren
         run: |
           set -e
           mkdir -p build/launcher-windows build/launcher-linux
@@ -86,7 +104,8 @@ jobs:
           godot --headless --path launcher --export-release "Linux" "$PWD/build/launcher-linux/KapselLauncher.x86_64"
           test -s build/launcher-windows/KapselLauncher.exe
 
-      - name: Pakete schnüren
+      - if: steps.tag.outputs.skip != 'true'
+        name: Pakete schnüren
         run: |
           set -e
           TAG="${{ steps.tag.outputs.tag }}"
@@ -99,7 +118,8 @@ jobs:
           (cd build/launcher-linux && zip -qr "../../dist/kapsel-launcher-linux.zip" .)
           ls -la dist
 
-      - name: Release-Text
+      - if: steps.tag.outputs.skip != 'true'
+        name: Release-Text
         run: |
           TAG="${{ steps.tag.outputs.tag }}"
           if [ -f "changelog/${TAG}.md" ]; then
@@ -111,7 +131,8 @@ jobs:
           fi
           cat notes.md
 
-      - uses: softprops/action-gh-release@v2
+      - if: steps.tag.outputs.skip != 'true'
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
           target_commitish: ${{ github.sha }}
