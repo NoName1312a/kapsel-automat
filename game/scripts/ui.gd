@@ -1102,14 +1102,24 @@ func _toggle_overlay(panel: PanelContainer) -> void:
 
 # --- Inhalte --------------------------------------------------------------
 
+const ALBUM_W := 4 * 250 + 3 * 10
+
+
 func _fill_album() -> void:
 	for child in album_list.get_children():
 		child.queue_free()
 	var w: Dictionary = Game.world_by_id[album_world]
+	# Alles in einer mittigen Spalte genau so breit wie das Figuren-Raster (4 × 250 + 3 × 10)
+	var col := VBoxContainer.new()
+	col.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col.custom_minimum_size = Vector2(ALBUM_W, 0)
+	col.add_theme_constant_override("separation", 10)
+	album_list.add_child(col)
 	# Welt-Auswahl
 	var wrow := HBoxContainer.new()
 	wrow.add_theme_constant_override("separation", 8)
-	album_list.add_child(wrow)
+	wrow.alignment = BoxContainer.ALIGNMENT_CENTER
+	col.add_child(wrow)
 	for ww in Game.worlds:
 		var wid: String = ww["id"]
 		var known: bool = wid in Game.unlocked_worlds or Game.album_count(wid) > 0
@@ -1125,19 +1135,19 @@ func _fill_album() -> void:
 		wrow.add_child(b)
 	var head := _wrap_label("%s: %d/%d Figuren  ·  Sets %d/%d  ·  Insgesamt %d/%d  ·  Jedes Set +%d %% auf alle Münzen, jede Figur bringt passives Einkommen, Duplikate erhöhen ihre Stufe." % [
 		w["name"], Game.album_count(album_world), Game.album_size(album_world), Game.complete_sets(album_world), Game.world_sets(album_world).size(),
-		Game.album_count(), Game.figures.size(), int(Game.set_bonus * 100)], 14, Color(1, 1, 1, 0.8), 1060)
-	album_list.add_child(head)
+		Game.album_count(), Game.figures.size(), int(Game.set_bonus * 100)], 14, Color(1, 1, 1, 0.8), ALBUM_W)
+	col.add_child(head)
 
 	if Game.fusion_unlocked():
 		var fr := HBoxContainer.new()
-		fr.add_theme_constant_override("separation", 10)
-		album_list.add_child(fr)
-		fr.add_child(_label("Fusion:", 18, Color("#c77dff")))
+		fr.add_theme_constant_override("separation", 8)
+		col.add_child(fr)
+		fr.add_child(_label("Fusion:", 16, Color("#c77dff")))
 		for rarity in Game.FUSION_NEXT:
 			var r: Dictionary = Game.rarity_by_id[rarity]
 			var nxt: Dictionary = Game.rarity_by_id[Game.FUSION_NEXT[rarity]]
 			var rr: String = rarity
-			var b := _button("%d %s → 1 %s  (%d Duplikate)" % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Game.fusion_dupes(rarity)], func() -> void:
+			var b := _button("%d %s → %s  (%s)" % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Fmt.num(Game.fusion_dupes(rarity))], func() -> void:
 				var res := Game.fuse(rr)
 				if res.is_empty():
 					Sfx.play("deny")
@@ -1146,6 +1156,11 @@ func _fill_album() -> void:
 				toast("Fusion!", "%s (%s)%s" % [res["figure"]["name"], res["figure"]["rarity_name"], "  NEU!" if res["is_new"] else ""])
 				_fill_album())
 			b.disabled = not Game.can_fuse(rarity)
+			b.tooltip_text = "%d %s-Duplikate ergeben 1 zufällige %s Figur. Vorhanden: %d Duplikate." % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Game.fusion_dupes(rarity)]
+			b.add_theme_font_size_override("font_size", 14)
+			b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			b.clip_text = true
+			b.custom_minimum_size = Vector2(150, 40)
 			fr.add_child(b)
 		var any_fuse := false
 		for rarity in Game.FUSION_NEXT:
@@ -1161,6 +1176,8 @@ func _fill_album() -> void:
 		all_b.theme_type_variation = "BigButton"
 		all_b.tooltip_text = "Fusioniert alle Duplikate, bis keine Fusion mehr geht. Die Stufen der Figuren sinken dabei."
 		all_b.disabled = not any_fuse
+		all_b.add_theme_font_size_override("font_size", 16)
+		all_b.custom_minimum_size = Vector2(180, 40)
 		fr.add_child(all_b)
 
 	for s in Game.world_sets(album_world):
@@ -1170,7 +1187,7 @@ func _fill_album() -> void:
 			if Game.owned.has(fig["id"]):
 				have_n += 1
 		var trow := HBoxContainer.new()
-		album_list.add_child(trow)
+		col.add_child(trow)
 		var badge := Art.scaled("ui/set_badge_%s.png" % s["id"], 2)
 		if badge:
 			trow.add_child(_icon_rect(badge, 32))
@@ -1179,7 +1196,7 @@ func _fill_album() -> void:
 		grid.columns = 4
 		grid.add_theme_constant_override("h_separation", 10)
 		grid.add_theme_constant_override("v_separation", 8)
-		album_list.add_child(grid)
+		col.add_child(grid)
 		for fig in s["figures"]:
 			grid.add_child(_album_cell(s, Game.figures[fig["id"]]))
 
@@ -1188,7 +1205,7 @@ func _album_cell(s: Dictionary, fig: Dictionary) -> Control:
 	var have: int = int(Game.owned.get(fig["id"], 0))
 	var r: Dictionary = Game.rarity_by_id[fig["rarity"]]
 	var cell := PanelContainer.new()
-	cell.custom_minimum_size = Vector2(256, 84)
+	cell.custom_minimum_size = Vector2(250, 84)
 	var art_sb := Art.stylebox("ui/album_slot_%s%s.png" % [fig["rarity"], "" if have > 0 else "_locked"], 6, 2, 10.0)
 	if art_sb:
 		cell.add_theme_stylebox_override("panel", art_sb)

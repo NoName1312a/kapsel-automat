@@ -80,6 +80,9 @@ func apply_resolution() -> void:
 	if want.x > usable.size.x or want.y > usable.size.y:
 		var k := minf(float(usable.size.x) / want.x, float(usable.size.y - 40) / want.y)
 		want = Vector2i(int(want.x * k), int(want.y * k))
+	# Ein maximiertes Fenster ignoriert neue Größen, also erst wieder normal machen
+	if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_WINDOWED:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if DisplayServer.window_get_size() == want:
 		return
 	DisplayServer.window_set_size(want)

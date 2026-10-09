@@ -6,6 +6,11 @@ signal closed
 const GOLD := Color("#ffe14d")
 
 
+var _res_buttons: Array = []
+var _fs_button: Button
+var _fs_label: Callable
+
+
 func _ready() -> void:
 	var th := Art.ui_theme()
 	if th:
@@ -68,8 +73,9 @@ func _ready() -> void:
 		rb.add_theme_font_size_override("font_size", 18)
 		rb.button_pressed = Settings.get_value("resolution") == res
 		var key: String = res
-		rb.pressed.connect(func() -> void: Settings.set_value("resolution", key))
+		rb.pressed.connect(func() -> void: _pick_resolution(key))
 		rrow.add_child(rb)
+		_res_buttons.append(rb)
 
 	# Mit Checkbox-Grafik eine echte Checkbox, sonst ein Umschalt-Knopf
 	var has_cb := Art.tex("ui/checkbox_on.png") != null
@@ -86,6 +92,8 @@ func _ready() -> void:
 		fs.text = label_for.call(on)
 		Settings.set_value("fullscreen", on))
 	v.add_child(fs)
+	_fs_button = fs
+	_fs_label = label_for
 
 	var done := Button.new()
 	done.text = "Fertig"
@@ -142,6 +150,15 @@ func _slider_row(v: VBoxContainer, label: String, key: String, icon: String) -> 
 		# Hörprobe beim Effekte-Regler
 		if key == "sfx" or key == "master":
 			Sfx.play("coin", 1.0, -6.0))
+
+
+## Auflösung gilt für das Fenster. Im Vollbild würde sie nichts ändern, also dabei zurück ins Fenster.
+func _pick_resolution(key: String) -> void:
+	if Settings.get_value("fullscreen") and _fs_button:
+		_fs_button.set_pressed_no_signal(false)
+		_fs_button.text = _fs_label.call(false)
+		Settings.values["fullscreen"] = false
+	Settings.set_value("resolution", key)
 
 
 func open() -> void:
