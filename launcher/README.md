@@ -5,7 +5,7 @@ Kleiner Launcher (Godot 4.4), der Kapsel-Automat aus den GitHub-Releases install
 ## So sieht der Ablauf aus
 
 1. Du änderst das Spiel und pushst es ins Repo.
-2. Du setzt einen Versions-Tag: `git tag v0.6.0` und `git push origin v0.6.0`.
+2. Du trägst die neue Nummer in `VERSION` ein (z. B. `0.6.0`) und pushst, oder setzt einen Tag `v0.6.0`.
 3. GitHub Actions baut die Spieldaten (`KapselAutomat.pck`) und den Launcher und legt ein Release an (dauert ein paar Minuten).
 4. Beim nächsten Start zeigt der Launcher „Neue Version v0.6.0 ist da!“ mit den Änderungen. Ein Klick auf **Aktualisieren** lädt und installiert sie, danach **Spielen**.
 
@@ -41,7 +41,7 @@ Kapsel-Automat\
 
 Den Ordner irgendwohin legen, wo man schreiben darf (z. B. `Dokumente\Spiele\Kapsel-Automat`), nicht nach `C:\Programme`. Sonst weicht der Launcher in seinen Benutzerordner aus.
 
-Windows zeigt beim ersten Start evtl. „Der Computer wurde durch Windows geschützt“, weil die .exe nicht signiert ist: „Weitere Informationen“ → „Trotzdem ausführen“. Die Datei `LIES MICH.txt` im Launcher-ZIP erklärt das für Tester.
+Die Datei `LIES MICH.txt` im Launcher-ZIP erklärt Testern die Installation.
 
 ## Einstellungen (`launcher_config.json`)
 
@@ -71,7 +71,7 @@ kapsel-automat/
 
 Gibt es keine `changelog/<tag>.md`, nimmt der Workflow die Commit-Nachrichten seit dem letzten Tag. Der Workflow schreibt die Tag-Version außerdem in `game/project.godot` (`application/config/version`), damit das Spiel sie anzeigen kann.
 
-Das Spiel hat inzwischen eine eigene `export_presets.cfg` (Preset „Windows Desktop“). Ein Linux-Build entsteht nur, wenn dort auch ein Preset „Linux“ steht; Vorlage dafür in `fuer-spiel/export_presets.cfg`.
+Das Spiel braucht in seiner `export_presets.cfg` ein Preset „Windows Desktop“; daraus baut der Workflow die `KapselAutomat.pck`.
 
 ## Testen
 
