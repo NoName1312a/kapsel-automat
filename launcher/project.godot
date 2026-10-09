@@ -1,0 +1,24 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Kapsel-Automat Launcher"
+config/version="1.0.0"
+run/main_scene="res://launcher.tscn"
+config/features=PackedStringArray("4.4")
+config/icon="res://art/play.png"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=640
+window/size/resizable=false
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.16, 0.12, 0.24, 1)

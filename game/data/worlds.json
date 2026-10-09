@@ -1,0 +1,52 @@
+{
+ "worlds": [
+  {
+   "id": "stadt",
+   "name": "Spielhalle",
+   "desc": "Dein kleiner Laden in der Stadt. Hier fing alles an.",
+   "scale": 1.0,
+   "travel_cost": 0,
+   "travel_sets": 0,
+   "color": "#e8484f",
+   "bg": "bg/background.png",
+   "music": "game",
+   "value_scale": 1.0
+  },
+  {
+   "id": "insel",
+   "name": "Tropeninsel",
+   "desc": "Sonne, Strand und Piratenschätze. Kapseln mit Jackpots und Vulkanausbrüchen.",
+   "scale": 10000.0,
+   "travel_cost": 1000000000.0,
+   "travel_sets": 4,
+   "color": "#f0a35e",
+   "bg": "bg/world_insel.png",
+   "music": "insel",
+   "value_scale": 100.0
+  },
+  {
+   "id": "eis",
+   "name": "Eisgipfel",
+   "desc": "Schnee, Yetis und Nordlichter. Gefrorene Kapseln wollen geknackt werden.",
+   "scale": 100000000.0,
+   "travel_cost": 10000000000000.0,
+   "travel_sets": 4,
+   "color": "#7fb8e0",
+   "bg": "bg/world_eis.png",
+   "music": "eis",
+   "value_scale": 33333.333333333336
+  },
+  {
+   "id": "station",
+   "name": "Sternenstation",
+   "desc": "Roboter, Aliens und Quanten-Chaos. Hier wartet der Goldene Automat.",
+   "scale": 1000000000000.0,
+   "travel_cost": 1e+17,
+   "travel_sets": 4,
+   "color": "#5b5bd6",
+   "bg": "bg/world_station.png",
+   "music": "station",
+   "value_scale": 33333333.333333332
+  }
+ ]
+}

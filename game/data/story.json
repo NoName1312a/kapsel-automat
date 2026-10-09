@@ -1,0 +1,1089 @@
+{
+ "version": 2,
+ "lang": "de",
+ "doc": "Siehe story.md. Jeder Beat: id, trigger (Format des Spiel-Threads: new_game, world:<id>, machine:<id>, set:<id>, album:<welt>, legendary_first, prestige_first, golden; dazu after:<beat_id> und optionale figures:<n>, slots:<n>, machine_level:<n>), style (bubble/postcard/scene/cutscene), lines [{speaker, portrait, text}]. once=true: im Spielstand als gesehen merken. optional=true: nur wenn das Spiel diesen Trigger kennt.",
+ "characters": {
+  "gerda": {
+   "name": "Tante Gerda",
+   "color": "#ff7a59",
+   "portrait": "art/portraits/gerda.png"
+  },
+  "kruemel": {
+   "name": "Krümel",
+   "color": "#f2b84b",
+   "portrait": "art/portraits/kruemel.png",
+   "fallback_portrait": "art/props/hamster_0.png"
+  },
+  "blechmann": {
+   "name": "Direktor Blechmann",
+   "color": "#8a94a6",
+   "portrait": "art/portraits/blechmann.png"
+  },
+  "erzaehler": {
+   "name": "",
+   "color": "#e8e8e8",
+   "portrait": null
+  }
+ },
+ "assets": {
+  "postcard": "art/story/postcard.png",
+  "postcard_inner": [
+   9,
+   9,
+   190,
+   110
+  ]
+ },
+ "beats": [
+  {
+   "id": "intro",
+   "trigger": "new_game",
+   "style": "postcard",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Auf dem Tresen liegt eine Postkarte."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Liebling! Der Laden gehört jetzt dir. Ich bin auf Reisen."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Ich will den Goldenen Automaten wieder zum Laufen bringen. Er steht ganz weit weg."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Kurbel kräftig! Krümel weiß den Rest."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Hallo, ich bin Krümel. Ich weiß nicht den Rest. Aber wo die Münzen liegen. Kurbel mal!"
+    }
+   ]
+  },
+  {
+   "id": "legendary_first",
+   "trigger": "legendary_first",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "LEGENDÄR!"
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Ich muss mich kurz hinsetzen."
+    }
+   ],
+   "note": "Nach der Legendary-Animation zeigen."
+  },
+  {
+   "id": "prestige_first",
+   "trigger": "prestige_first",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Wir machen den Laden zu und schöner wieder auf!"
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Album und Welten bleiben. Und Kerne. Kerne bleiben immer."
+    }
+   ]
+  },
+  {
+   "id": "album_stadt",
+   "trigger": "album:stadt",
+   "style": "postcard",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Du hast dein erstes Album voll! Die ganze Spielhalle redet von dir."
+    }
+   ]
+  },
+  {
+   "id": "arrive_insel",
+   "trigger": "world:insel",
+   "style": "scene",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Am Strand steckt eine Postkarte im Sand."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Tropeninsel! Du hast mich knapp verpasst. Ich bin schon weiter in den Norden."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Sand in den Pfoten. Ich hasse Sand in den Pfoten. Aber guck, die Kapseln sind aus Muscheln!"
+    }
+   ]
+  },
+  {
+   "id": "album_insel",
+   "trigger": "album:insel",
+   "style": "postcard",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Die Insel-Leute schreiben mir, du hast ALLE ihre Figuren. Sogar Atlantis!"
+    }
+   ]
+  },
+  {
+   "id": "arrive_eis",
+   "trigger": "world:eis",
+   "style": "scene",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "An einer Eiszapfen-Spitze hängt eine Postkarte."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Brrr! Eisgipfel! Ich bin schon oben bei den Sternen. Zieh dich warm an!"
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Ich hab Fell. Ich bin vorbereitet. Ich zittere nur aus Begeisterung."
+    }
+   ]
+  },
+  {
+   "id": "album_eis",
+   "trigger": "album:eis",
+   "style": "postcard",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Ein volles Eis-Album? Die Yetis wollen dich zum Ehren-Yeti machen."
+    }
+   ]
+  },
+  {
+   "id": "arrive_station",
+   "trigger": "world:station",
+   "style": "scene",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "In der Luftschleuse schwebt eine Postkarte."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Du bist da! Ich bin ganz oben, beim Goldenen Automaten."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Er läuft mit Sammlerglück: 150 verschiedene Figuren. Bring sie mir!"
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Ich schwebe! Ich bin ein Weltraum-Hamster!"
+    }
+   ]
+  },
+  {
+   "id": "album_station",
+   "trigger": "album:station",
+   "style": "postcard",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Das komplette Sternen-Album. Liebling, das hab nicht mal ich geschafft."
+    }
+   ]
+  },
+  {
+   "id": "machine_glueck",
+   "trigger": "machine:glueck",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Neben dem Glücksautomaten steht ein Mann im grauen Anzug."
+    },
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Blechmann, Blechmann Automaten AG. Wir haben diesen Automaten optimiert."
+    },
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Jede dritte Kapsel enthält jetzt eine Quittung. Keine Überraschungen. Effizient."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "DAS sind also die Nieten! Wie langweilig ist DAS denn."
+    }
+   ]
+  },
+  {
+   "id": "machine_spuk",
+   "trigger": "machine:spuk",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Manche Kapseln hier sind verflucht, manche gesegnet."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Der Automat weiß es selbst nicht. Ich auch nicht. Spannend!"
+    }
+   ]
+  },
+  {
+   "id": "machine_muschel",
+   "trigger": "machine:muschel",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Ein Automat aus Muscheln! Er rauscht, wenn man kurbelt."
+    }
+   ]
+  },
+  {
+   "id": "machine_schatz",
+   "trigger": "machine:schatz",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Die Blechmann AG hat die Schatzkarte gekauft. Wir graben ab morgen."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Zu spät, Blechmann. Der Automat gibt die Schätze freiwillig raus. Manchmal."
+    },
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "…Manchmal ist keine Planungsgrundlage."
+    }
+   ]
+  },
+  {
+   "id": "machine_vulkan",
+   "trigger": "machine:vulkan",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Wenn der ausbricht, regnet es Gratis-Kapseln!"
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Ich stell mich mit dem Korb drunter."
+    }
+   ]
+  },
+  {
+   "id": "machine_schneekugel",
+   "trigger": "machine:schneekugel",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Schüttel ihn! Nein, nicht mich. Den Automaten."
+    }
+   ]
+  },
+  {
+   "id": "machine_frost",
+   "trigger": "machine:frost",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Gefrorene Kapseln halten länger. Weniger Verschleiß. Sehr effizient."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Und man muss dreimal draufhauen. Das ist das Beste daran!"
+    }
+   ]
+  },
+  {
+   "id": "machine_nordlicht",
+   "trigger": "machine:nordlicht",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Er leuchtet grün und lila. Ich glaube, er ist glücklich."
+    }
+   ]
+  },
+  {
+   "id": "machine_roboter",
+   "trigger": "machine:roboter",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Piep. Er hat mir zugepiept. Ich piepe zurück."
+    }
+   ]
+  },
+  {
+   "id": "machine_schwerkraft",
+   "trigger": "machine:schwerkraft",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Hier fallen Kapseln nach oben. Oder ich steh falsch rum."
+    }
+   ]
+  },
+  {
+   "id": "machine_quanten",
+   "trigger": "machine:quanten",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Ein Automat, bei dem man nicht weiß, was rauskommt? Das ist mein Albtraum."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Das ist JEDER Automat, Blechmann."
+    }
+   ]
+  },
+  {
+   "id": "set_obst",
+   "trigger": "set:obst",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Obst komplett! Ich hab nur EINE Kirsche probiert. Ehrlich."
+    }
+   ]
+  },
+  {
+   "id": "set_tiere",
+   "trigger": "set:tiere",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Alle Tiere da! Der Fuchs schaut meine Kerne komisch an."
+    }
+   ]
+  },
+  {
+   "id": "set_snacks",
+   "trigger": "set:snacks",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Snacks komplett. Ich hab Hunger. Ich hab immer Hunger."
+    }
+   ]
+  },
+  {
+   "id": "set_weltraum",
+   "trigger": "set:weltraum",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Weltraum-Set voll! Ich übe schon mal Schweben."
+    }
+   ]
+  },
+  {
+   "id": "set_meer",
+   "trigger": "set:meer",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Das Meer ist komplett. Der Kraken winkt mit allen acht Armen."
+    }
+   ]
+  },
+  {
+   "id": "set_spuk",
+   "trigger": "set:spuk",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Spuk-Set voll! Ich hatte keine Angst. Kaum."
+    }
+   ]
+  },
+  {
+   "id": "set_strand",
+   "trigger": "set:strand",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Strand komplett! Ich nehm den Sonnenschirm."
+    }
+   ]
+  },
+  {
+   "id": "set_dschungel",
+   "trigger": "set:dschungel",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Dschungel voll! Das Faultier hat es noch gar nicht gemerkt."
+    }
+   ]
+  },
+  {
+   "id": "set_piraten",
+   "trigger": "set:piraten",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Arrr! Piraten komplett. Ich bin jetzt Kapitän Krümel."
+    }
+   ]
+  },
+  {
+   "id": "set_vulkan",
+   "trigger": "set:vulkan",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Vulkan-Set voll. Meine Pfoten sind noch warm."
+    }
+   ]
+  },
+  {
+   "id": "set_tiefsee",
+   "trigger": "set:tiefsee",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Tiefsee komplett! Atlantis gibt es also doch."
+    }
+   ]
+  },
+  {
+   "id": "set_inselzauber",
+   "trigger": "set:inselzauber",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Inselzauber voll. Der Tiki hat mir zugezwinkert."
+    }
+   ]
+  },
+  {
+   "id": "set_polar",
+   "trigger": "set:polar",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Polartiere komplett! Das Mammut ist noch etwas verschlafen."
+    }
+   ]
+  },
+  {
+   "id": "set_winter",
+   "trigger": "set:winter",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Wintersport voll! Ich fahr Schlitten. Auf dir."
+    }
+   ]
+  },
+  {
+   "id": "set_kristall",
+   "trigger": "set:kristall",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Alle Kristalle! Es funkelt so, ich brauch eine Sonnenbrille."
+    }
+   ]
+  },
+  {
+   "id": "set_yeti",
+   "trigger": "set:yeti",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Die ganze Yeti-Familie! Sie wollen zum Essen bleiben."
+    }
+   ]
+  },
+  {
+   "id": "set_nordlicht",
+   "trigger": "set:nordlicht",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Nordlicht komplett. Ich bin ganz still. Es ist so schön."
+    }
+   ]
+  },
+  {
+   "id": "set_werkstatt",
+   "trigger": "set:werkstatt",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Wichtelwerkstatt voll! Die Wichtel wollen mich einstellen."
+    }
+   ]
+  },
+  {
+   "id": "set_roboter",
+   "trigger": "set:roboter",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Roboter komplett! Piep piep. Das heißt: Juhu."
+    }
+   ]
+  },
+  {
+   "id": "set_aliens",
+   "trigger": "set:aliens",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Alle Aliens! Sie kommen in Frieden. Und wollen Kerne."
+    }
+   ]
+  },
+  {
+   "id": "set_planeten",
+   "trigger": "set:planeten",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Alle Planeten. Ich hab das Sonnensystem in der Hosentasche."
+    }
+   ]
+  },
+  {
+   "id": "set_raumschiffe",
+   "trigger": "set:raumschiffe",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Raumschiffe komplett! Ich nehm das Warpschiff nach Hause."
+    }
+   ]
+  },
+  {
+   "id": "set_sternbilder",
+   "trigger": "set:sternbilder",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Alle Sternbilder! Eins sieht aus wie ein Hamster. Bestimmt."
+    }
+   ]
+  },
+  {
+   "id": "set_kosmos",
+   "trigger": "set:kosmos",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Den ganzen Kosmos gesammelt. Was kommt jetzt? Noch eine Kapsel."
+    }
+   ]
+  },
+  {
+   "id": "figures_150",
+   "trigger": "figures:150",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "150 Figuren! Der Goldene Automat da oben glüht schon."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Jetzt nur noch Münzen. Viele. SEHR viele."
+    }
+   ],
+   "optional": true
+  },
+  {
+   "id": "first_extra_slot",
+   "trigger": "slots:2",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Zwei Automaten gleichzeitig! Ich kurbel den zweiten."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "…Naja. Ich schau ihm beim Kurbeln zu."
+    }
+   ],
+   "optional": true
+  },
+  {
+   "id": "first_machine_level",
+   "trigger": "machine_level:2",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Der Automat hat einen Stern bekommen! Er ist ganz stolz."
+    }
+   ],
+   "optional": true
+  },
+  {
+   "id": "golden",
+   "trigger": "golden",
+   "style": "cutscene",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Der Goldene Automat summt. Auf der Karte leuchten alle Welten auf."
+    },
+    {
+     "speaker": "gerda",
+     "portrait": "gerda",
+     "text": "Da bist du ja! Ich wusste, dass du es schaffst."
+    },
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Hinter euch zischt die Luftschleuse. Blechmann steht da, eine Münze in der Hand."
+    },
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Ich… möchte bitte eine Kapsel."
+    },
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Er kurbelt. Die Kapsel springt auf. Er lächelt zum ersten Mal."
+    },
+    {
+     "speaker": "blechmann",
+     "portrait": "blechmann",
+     "text": "Das war… ineffizient. Noch eine, bitte."
+    },
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Willkommen im Club."
+    },
+    {
+     "speaker": "erzaehler",
+     "portrait": null,
+     "text": "Kapsel-Automat. Danke fürs Kurbeln."
+    }
+   ],
+   "reward": {
+    "figure": "blechmann",
+    "optional": true
+   }
+  },
+  {
+   "id": "after_golden",
+   "trigger": "after:golden",
+   "style": "bubble",
+   "once": true,
+   "lines": [
+    {
+     "speaker": "kruemel",
+     "portrait": "kruemel",
+     "text": "Und jetzt? Es gibt immer noch eine Kapsel. Und ein paar leere Album-Plätze."
+    }
+   ]
+  }
+ ],
+ "prestige_lines": [
+  "Neueröffnung! Neues Schild, gleiche Kerne.",
+  "Laden zu, Laden auf. Wie Kapseln, nur größer.",
+  "Die Kunden lieben eine Neueröffnung. Ich auch. Es gibt Kuchen.",
+  "Schon wieder neu? Ich hab den alten Laden noch nicht fertig angeknabbert.",
+  "Tante Gerda sagt: Jede Neueröffnung ist eine kleine Weltreise."
+ ],
+ "machine_flavor": {
+  "standard": "Tante Gerdas alter Automat. Klemmt ein bisschen. Läuft für immer.",
+  "golden": "Das Herz aller Kapsel-Welten. Summt, wenn man ihn ansieht."
+ },
+ "figure_flavor": {
+  "apfel": "Knackig, rot und das Erste, was Tante Gerda je verkauft hat.",
+  "birne": "Sieht aus wie ein Apfel, der zu lange gekurbelt hat.",
+  "kirsche": "Kommt immer zu zweit. Diese hier hat ihren Zwilling verloren.",
+  "ananas": "Trägt eine Krone und benimmt sich auch so.",
+  "drachenfrucht": "Speit kein Feuer. Hat es aber mal versucht.",
+  "frosch": "Quakt jedes Mal, wenn jemand eine Niete zieht.",
+  "ente": "Fährt im Urlaub auf die Tropeninsel. Mit Sonnenhut.",
+  "fuchs": "Hat schon dreimal versucht, Krümels Kerne zu klauen.",
+  "panda": "Schläft 20 Stunden am Tag. Kurbelt in den restlichen vier.",
+  "einhorn": "Gibt es eigentlich nicht. Trotzdem ist es hier.",
+  "brezel": "Zu salzig für Krümel. Er isst sie trotzdem.",
+  "donut": "Das Loch in der Mitte war ein Fehler. Jetzt ist es Kult.",
+  "taco": "Fällt immer auseinander. Ist aber trotzdem glücklich.",
+  "sushi": "Träumt vom Meer. Und von Wasabi.",
+  "goldburger": "Nicht essbar. Krümel hat es geprüft. Gründlich.",
+  "mond": "Behauptet, aus Käse zu sein. Krümel glaubt ihm.",
+  "rakete": "Fliegt nur, wenn man fest genug daran glaubt.",
+  "ufo": "Hupt zur Begrüßung. Hat kein Nummernschild.",
+  "komet": "War schneller im Album als jede andere Figur.",
+  "schwarzes_loch": "Hier sind alle verlorenen Socken und drei von Blechmanns Quittungen.",
+  "krabbe": "Läuft seitwärts, kommt aber trotzdem ans Ziel.",
+  "fisch": "Hat ein Gedächtnis von drei Sekunden. Liebt jede Kapsel wie die erste.",
+  "qualle": "Leuchtet im Dunkeln. Bitte nicht anfassen.",
+  "oktopus": "Kann vier Automaten gleichzeitig kurbeln.",
+  "kraken": "Hat acht Arme und trotzdem nie Kleingeld.",
+  "geist": "Buh! (Er übt noch.)",
+  "kuerbis": "Grinst immer. Niemand weiß, warum.",
+  "fledermaus": "Hängt kopfüber am Automaten und zählt die Münzen andersrum.",
+  "hexe": "Hat die Fluch-Kapseln erfunden. Tut ihr inzwischen leid.",
+  "geisterkoenig": "Herrscher der Spukecke. Mag Tee und Gesellschaft.",
+  "blechmann": "Hat endlich eine Kapsel geöffnet. Jetzt öffnet er nur noch Kapseln.",
+  "banane": "Immer gut gelaunt. Lässt sich aber nicht gern schälen.",
+  "erdbeere": "Hat 200 Samen auf der Haut und kennt jeden beim Namen.",
+  "wassermelone": "Zu 92 % Wasser, zu 8 % Sommer.",
+  "igel": "Will kuscheln. Es klappt nur nicht so richtig.",
+  "pinguin": "Trägt immer Frack. Für alle Fälle.",
+  "loewe": "König der Tiere. Schläft trotzdem 20 Stunden am Tag.",
+  "popcorn": "Ist aus Versehen aus seiner Kapsel gesprungen. Dreimal.",
+  "pizza": "Das letzte Stück. Niemand traut sich.",
+  "eisbecher": "Schmilzt bei jedem Kompliment ein bisschen.",
+  "stern": "Funkelt nur, wenn jemand hinschaut.",
+  "astronaut": "Hat Krümel einen Weltraum-Keks versprochen. Er wartet noch.",
+  "saturn": "Trägt seinen Ring seit Milliarden Jahren. Nie abgelegt.",
+  "seestern": "Hat fünf Arme und kein Gesicht. Ist trotzdem sehr nett.",
+  "seepferdchen": "Galoppiert langsam. Sehr langsam.",
+  "hai": "Sieht gefährlich aus. Isst am liebsten Seetang.",
+  "spinne": "Strickt Netze in acht Farben. Nimmt Bestellungen an.",
+  "mumie": "Ist gar nicht verletzt. Mag nur Verbände.",
+  "vampir": "Trinkt nur Kirschsaft. Ehrenwort.",
+  "sandburg": "Steht nur bis zur nächsten Welle. Lebt im Moment.",
+  "sonnenschirm": "Spendet Schatten. Und gute Laune.",
+  "strandball": "Wurde noch nie gefangen. Ist stolz darauf.",
+  "surfbrett": "Hat jede Welle der Insel geritten. Außer der einen.",
+  "eiswagen": "Bimmelt, sobald jemand Hunger hat. Krümel hört es immer.",
+  "leuchtturm": "Zeigt allen Schiffen den Weg. Und allen Hamstern.",
+  "rettungsboot": "Ist noch nie untergegangen. Hat es auch nicht vor.",
+  "goldene_muschel": "Wer reinhört, hört nicht das Meer, sondern Applaus.",
+  "papagei": "Kann 40 Wörter. Sagt am liebsten „Noch eine Kapsel!“",
+  "affe": "Hat Blechmann einmal den Zylinder geklaut. Gibt ihn nicht zurück.",
+  "tukan": "Der Schnabel ist größer als der Rest. Er findet das gut so.",
+  "chamaeleon": "Ist auf diesem Bild. Irgendwo.",
+  "faultier": "Ist vor drei Tagen in die Kapsel gestiegen. Fast fertig.",
+  "jaguar": "Schleicht so leise, dass er sich selbst erschreckt.",
+  "gorilla": "Trommelt sich auf die Brust. Meistens im Takt.",
+  "regenbogenschlange": "Erscheint nur nach Regen. Und nach sehr viel Glück.",
+  "kanone": "Schießt nur Konfetti. Die Piraten sind enttäuscht.",
+  "schatzkarte": "X markiert den Ort. Das X ist ein Kapsel-Automat.",
+  "holzfass": "Riecht nach Abenteuer. Und ein bisschen nach Gurken.",
+  "piratenhut": "Wer ihn trägt, sagt automatisch „Arrr“.",
+  "kompass": "Zeigt nicht nach Norden. Er zeigt zur nächsten Kapsel.",
+  "piratenschiff": "Segelt jede Nacht einmal um die Insel. Aus Gewohnheit.",
+  "kapitaen": "Kapitän Krake. Acht Arme, acht Säbel, null Feinde.",
+  "geisterschiff": "Hat keine Mannschaft. Das Steuer dreht sich trotzdem.",
+  "lavastein": "Noch warm. Bitte nicht anfassen.",
+  "salamander": "Nimmt ein Bad in Lava. Badezusatz: noch mehr Lava.",
+  "aschewolke": "Hat Höhenangst. Ironisch.",
+  "magmakaefer": "Krabbelt glühend über den Tresen und hinterlässt kleine Brandflecken.",
+  "obsidian": "So glatt, dass man sich darin spiegeln kann. Krümel übt Grimassen.",
+  "feuervogel": "Seine Federn wärmen das ganze Album.",
+  "lavagolem": "Sehr stark, sehr heiß, sehr schüchtern.",
+  "vulkandrache": "Schläft im Krater. Schnarcht Rauchringe.",
+  "anglerfisch": "Hat eine eigene Lampe. Liest damit nachts.",
+  "laternenfisch": "Bringt Licht in die Tiefe und in jede Sammlung.",
+  "seegurke": "Tut nicht viel. Macht das aber sehr gut.",
+  "riesenkalmar": "Hat Augen so groß wie Teller. Sieht alles.",
+  "u_boot": "Taucht so tief, dass sogar die Fische staunen.",
+  "perlenauster": "Rückt ihre Perle nur raus, wenn man nett fragt.",
+  "leuchtqualle": "Die Disco der Tiefsee. Eintritt frei.",
+  "atlantis": "Die versunkene Stadt. Hatte natürlich auch einen Kapsel-Automaten.",
+  "tiki": "Guckt grimmig. Ist innen ganz weich. Also, aus Holz, aber weich.",
+  "kokosnuss": "Fällt nie auf jemanden. Hat Prinzipien.",
+  "hula_puppe": "Tanzt, sobald der Automat kurbelt.",
+  "totem": "Vier Gesichter übereinander. Jedes hat eine eigene Meinung.",
+  "muschelhorn": "Wer reinbläst, ruft alle Inselgeister zum Abendessen.",
+  "inselgeist": "Bewacht die Insel. Und die Sonnenliegen.",
+  "uralte_schildkroete": "Ist 500 Jahre alt. Kannte Tante Gerda als Kind.",
+  "sonnengott": "Geht jeden Morgen auf. Ist dabei immer pünktlich.",
+  "robbe": "Klatscht bei jeder neuen Figur. Unermüdlich.",
+  "eisbaer": "Isst nur kalte Kapseln.",
+  "schneehase": "Im Winter weiß, im Sommer braun, immer flauschig.",
+  "walross": "Hat einen Schnurrbart, um den ihn Blechmann beneidet.",
+  "schneeeule": "Sieht nachts alles. Erzählt es niemandem.",
+  "narwal": "Das Einhorn des Meeres. Weiß das auch.",
+  "orca": "Schwarz, weiß, schlau. Spielt gern mit Eisschollen.",
+  "mammut": "Seit 10.000 Jahren eingefroren. Wacht langsam auf. Sehr langsam.",
+  "schlitten": "Fährt nur bergab. Zieht nie selbst.",
+  "ski": "Kommt immer zu zweit, wie die Kirschen.",
+  "schneemann": "Hat eine Karottennase. Krümel hat schon reingebissen.",
+  "eishockey": "Der Puck ist seit 1987 verschwunden. Gesucht wird weiter.",
+  "snowboard": "Macht einen Salto, wenn keiner hinsieht.",
+  "iglu": "Innen erstaunlich warm. Und mit WLAN.",
+  "schneepflug": "Räumt Wege frei. Auch die zum Automaten.",
+  "eisschloss": "Hat 100 Zimmer aus Eis. Heizen ist verboten.",
+  "eiszapfen": "Wächst jede Nacht ein kleines Stück.",
+  "schneeflocke": "Einzigartig. Wie jede andere auch.",
+  "frostblatt": "Ein Blatt, das sich gegen den Herbst entschieden hat.",
+  "eiskristall": "Zerbricht nie. Ist trotzdem empfindlich.",
+  "frostrose": "Blüht nur bei minus 20 Grad.",
+  "diamantzapfen": "Funkelt wie ein Diamant. Schmilzt aber wie ein Zapfen.",
+  "gletscherherz": "Schlägt einmal im Jahr. Dann klirrt der ganze Gipfel.",
+  "ewiges_eis": "Älter als die Berge. Kühler als Blechmann.",
+  "yeti_kind": "Hat zum ersten Mal Schnee geschmeckt. Will mehr.",
+  "schneeaffe": "Badet in heißen Quellen. Hat dabei immer recht.",
+  "bergziege": "Klettert überall hoch. Kommt nie wieder runter.",
+  "yeti_mama": "Strickt Schals für die ganze Welt. Fast fertig.",
+  "schneeleopard": "Unsichtbar im Schnee. Sichtbar im Album.",
+  "yeti_papa": "Hinterlässt große Fußspuren. Und große Postkarten.",
+  "berggeist": "Flüstert im Wind. Meistens Tipps.",
+  "yeti_koenig": "Der größte Yeti. Der weichste Yeti. Krümel will auf seinen Schoß.",
+  "sternschnuppe": "Hat schon 10.000 Wünsche erfüllt. Fast alle Kapseln.",
+  "lichtmotte": "Fliegt immer ins Nordlicht. Zum Glück ist es nicht heiß.",
+  "polarnacht": "Dauert ein halbes Jahr. Ist trotzdem gemütlich.",
+  "nordlichtfuchs": "Sein Schwanz malt grüne Streifen in den Himmel.",
+  "himmelswal": "Schwimmt durch die Wolken und singt ganz tief.",
+  "aurora_hirsch": "Sein Geweih leuchtet in allen Farben des Himmels.",
+  "lichtfee": "Bringt Glück, wenn man nicht zu laut kurbelt.",
+  "nordlicht_phoenix": "Brennt nicht mit Feuer, sondern mit Licht.",
+  "zuckerstange": "Gestreift, süß und immer im Weg.",
+  "lebkuchen": "Lebkuchenmann. Rennt weg, wenn Krümel kommt.",
+  "geschenk": "Was drin ist? Noch eine Kapsel.",
+  "spielzeugsoldat": "Steht stramm. Nur nicht, wenn er müde ist.",
+  "schaukelpferd": "Galoppiert nirgendwohin. Mit voller Begeisterung.",
+  "wichtel": "Baut Automaten im Akkord. Pfeift dabei.",
+  "rentier": "Fliegt nur einmal im Jahr. Übt den Rest der Zeit.",
+  "goldenes_rentier": "Führt den Schlitten an. Und das Album.",
+  "schraube": "Ist locker. Aber gut gelaunt.",
+  "zahnrad": "Greift in alles ein. Am liebsten in andere Zahnräder.",
+  "mini_bot": "Klein, schnell, piept bei jeder Kapsel.",
+  "putzroboter": "Hat den Laden einmal so sauber gemacht, dass Krümel ausgerutscht ist.",
+  "roboterhund": "Bringt das Stöckchen. Und eine Seriennummer.",
+  "mech": "Riesig, schwer, kann trotzdem tanzen.",
+  "androide": "Fragt jeden Tag: „Was ist Liebe?“ Krümel sagt: „Kerne.“",
+  "titanbot": "Der stärkste Roboter der Station. Kurbelt mit dem kleinen Finger.",
+  "gruenling": "Kommt in Frieden. Und mit Snacks.",
+  "schleimling": "Hinterlässt eine Spur. Entschuldigt sich jedes Mal.",
+  "augenwesen": "Ein einziges großes Auge. Zwinkern ist schwierig.",
+  "tentakler": "Begrüßt jeden mit allen Tentakeln gleichzeitig.",
+  "kristallalien": "Klingt wie ein Windspiel, wenn es spricht.",
+  "alienkoenigin": "Regiert drei Galaxien. Sammelt Kapseln in ihrer Freizeit.",
+  "gestaltwandler": "Sah gestern aus wie Krümel. Krümel war beleidigt.",
+  "ur_alien": "Das erste Alien überhaupt. Hat das Wort „Hallo“ erfunden.",
+  "mars": "Rot, staubig, voller Rover, die ihn besuchen.",
+  "jupiter": "So groß, dass der Rand nicht ins Album passt. Fast.",
+  "eisplanet": "Verwandt mit dem Eisgipfel. Schickt Grüße.",
+  "ringplanet": "Hat mehr Ringe als Saturn. Erzählt das gern.",
+  "lavaplanet": "Der Vulkan-Automat wäre hier sehr glücklich.",
+  "gasriese": "Riesig, aber leicht. Wie eine Zuckerwatte im All.",
+  "doppelplanet": "Zwei Planeten, die sich nicht trennen wollen.",
+  "supernova": "Ein Stern, der zum Schluss nochmal richtig aufdreht.",
+  "shuttle": "Fährt jeden Tag zur Station und zurück. Pünktlich.",
+  "satellit": "Hört alles mit. Hat Blechmann schon mehrfach verpetzt.",
+  "raumsonde": "Ist seit 50 Jahren unterwegs. Schickt Urlaubsfotos.",
+  "jaeger": "Schnell, wendig und ein bisschen angeberisch.",
+  "frachter": "Bringt Kapseln in alle Welten. Und Kerne für Krümel.",
+  "mutterschiff": "Hat 1.000 kleine Schiffe an Bord. Kennt alle beim Namen.",
+  "sternkreuzer": "Kreuzt zwischen den Sternen. Grüßt jeden.",
+  "warpschiff": "Ist schon angekommen, bevor es losgeflogen ist.",
+  "grosser_baer": "Ein Bär aus sieben Sternen. Brummt ganz leise.",
+  "skorpion": "Sticht nicht. Ist zu weit weg.",
+  "schwan": "Fliegt seit Jahrtausenden über die Milchstraße.",
+  "orion": "Der Jäger. Jagt heute nur noch seltene Kapseln.",
+  "sterndrache": "Wickelt sich um den Nordstern und hält ihn warm.",
+  "zwillinge": "Zwei Sterne, ein Gedanke.",
+  "sternphoenix": "Wird jede Nacht neu geboren.",
+  "sterneinhorn": "Das Einhorn aus der Spielhalle hat einen Cousin im All.",
+  "asteroid": "Ein Brocken auf Weltreise. Wie Tante Gerda.",
+  "nebel": "Hier werden Sterne geboren. Bitte leise sein.",
+  "wurmloch": "Eine Abkürzung. Wohin, weiß niemand so genau.",
+  "pulsar": "Blinkt im Takt. Perfekt zum Kurbeln.",
+  "quasar": "Heller als tausend Galaxien. Bitte Sonnenbrille.",
+  "galaxie": "Milliarden Sterne in einer Kapsel. Wie hat das gepasst?",
+  "zeitkristall": "Wer ihn hält, hat plötzlich mehr Zeit zum Kurbeln.",
+  "urknall": "Der Anfang von allem. Auch von der ersten Kapsel."
+ },
+ "kruemel_idle": [
+  "Kurbeln ist gut für die Pfoten. Sagt meine Physiotherapeutin.",
+  "Tipp: Volle Sets bringen Bonus. Und Ruhm. Hauptsächlich Bonus.",
+  "Ich hab heute 400 Runden im Rad gedreht. Bin trotzdem noch hier.",
+  "Blechmanns Automaten haben heute wieder nur Quittungen verteilt. Traurig.",
+  "Tante Gerda hat mal 3 Legendäre an einem Tag gezogen. Sagt sie.",
+  "Wenn du weg bist, kurbel ich weiter. Versprochen. Meistens.",
+  "Tipp: Fusion macht aus drei Gleichen eine Bessere. Wie bei Keksen. Nur nicht essbar.",
+  "Die Ente fragt, wann wir wieder auf die Insel fahren.",
+  "Ich hab einen Kern gefunden! Oh. Das ist eine Münze. Auch gut.",
+  "Kapseln sind wie Geschenke. Nur mit Kurbel.",
+  "Pssst. Ich glaube, der Kürbis bewegt sich nachts.",
+  "Das Album sieht heute besonders schön aus.",
+  "Tipp: Alte Automaten laufen nebenbei weiter. Die alten Alben füllen sich von allein.",
+  "Tipp: Eine Neueröffnung klingt traurig, macht aber stärker.",
+  "Ich hab mir den Mond angeschaut. Kein Käse. Ich bin enttäuscht.",
+  "Die Yetis haben eine Postkarte geschickt. Sie war nur ein großer Fußabdruck.",
+  "Blechmann hat heute zurückgewunken. Glaub ich. Oder er hat eine Fliege verscheucht.",
+  "Noch eine Kapsel? Noch eine Kapsel.",
+  "Ich bin nicht faul. Ich spare Energie fürs nächste Legendäre.",
+  "Tante Gerda ist immer eine Welt voraus. Wir holen sie ein!"
+ ],
+ "special_figures": [
+  {
+   "id": "blechmann",
+   "name": "Direktor Blechmann",
+   "rarity": "legendary",
+   "set": null,
+   "note": "Optional, Belohnung fürs Ende. Zählt nicht zu den Alben."
+  }
+ ]
+}

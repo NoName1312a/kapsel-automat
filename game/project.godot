@@ -1,0 +1,33 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Kapsel-Automat (Prototyp)"
+config/version="0.5.0"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="KapselAutomat"
+run/main_scene="res://menu.tscn"
+config/features=PackedStringArray("4.4")
+
+[autoload]
+
+Settings="*res://scripts/settings.gd"
+Art="*res://scripts/art.gd"
+Game="*res://scripts/game_state.gd"
+Sfx="*res://scripts/sfx.gd"
+Story="*res://scripts/story.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.16, 0.12, 0.24, 1)

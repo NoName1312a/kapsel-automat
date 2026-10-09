@@ -1,0 +1,446 @@
+{
+ "bonus_per_achievement": 0.02,
+ "achievements": [
+  {
+   "id": "first_capsule",
+   "name": "Erste Kapsel",
+   "desc": "Öffne deine erste Kapsel.",
+   "stat": "capsules_opened",
+   "value": 1
+  },
+  {
+   "id": "capsules_100",
+   "name": "Kapsel-Fan",
+   "desc": "Öffne 100 Kapseln.",
+   "stat": "capsules_opened",
+   "value": 100
+  },
+  {
+   "id": "capsules_1k",
+   "name": "Kapsel-Profi",
+   "desc": "Öffne 1.000 Kapseln.",
+   "stat": "capsules_opened",
+   "value": 1000
+  },
+  {
+   "id": "capsules_10k",
+   "name": "Kapsel-Legende",
+   "desc": "Öffne 10.000 Kapseln.",
+   "stat": "capsules_opened",
+   "value": 10000
+  },
+  {
+   "id": "earn_1k",
+   "name": "Taschengeld",
+   "desc": "Verdiene insgesamt 1.000 Münzen.",
+   "stat": "total_earned",
+   "value": 1000
+  },
+  {
+   "id": "earn_1m",
+   "name": "Millionär",
+   "desc": "Verdiene insgesamt 1 Mio Münzen.",
+   "stat": "total_earned",
+   "value": 1000000.0
+  },
+  {
+   "id": "earn_1b",
+   "name": "Milliardär",
+   "desc": "Verdiene insgesamt 1 Mrd Münzen.",
+   "stat": "total_earned",
+   "value": 1000000000.0
+  },
+  {
+   "id": "earn_1t",
+   "name": "Billionär",
+   "desc": "Verdiene insgesamt 1 Bio Münzen.",
+   "stat": "total_earned",
+   "value": 1000000000000.0
+  },
+  {
+   "id": "album_10",
+   "name": "Sammler",
+   "desc": "Sammle 10 verschiedene Figuren.",
+   "stat": "album_count",
+   "value": 10
+  },
+  {
+   "id": "album_20",
+   "name": "Großsammler",
+   "desc": "Sammle 20 verschiedene Figuren.",
+   "stat": "album_count",
+   "value": 20
+  },
+  {
+   "id": "album_30",
+   "name": "Spielhallen-Album",
+   "desc": "Sammle alle 48 Figuren der Spielhalle.",
+   "stat": "album_stadt",
+   "value": 48
+  },
+  {
+   "id": "set_1",
+   "name": "Erstes Set",
+   "desc": "Vervollständige ein Set.",
+   "stat": "sets_complete",
+   "value": 1
+  },
+  {
+   "id": "set_all",
+   "name": "Set-Meister",
+   "desc": "Vervollständige 24 Sets.",
+   "stat": "sets_complete",
+   "value": 24
+  },
+  {
+   "id": "legendary_1",
+   "name": "Legendär!",
+   "desc": "Ziehe eine legendäre Figur.",
+   "stat": "legendaries",
+   "value": 1
+  },
+  {
+   "id": "legendary_25",
+   "name": "Glückspilz",
+   "desc": "Ziehe 25 legendäre Figuren.",
+   "stat": "legendaries",
+   "value": 25
+  },
+  {
+   "id": "double_10",
+   "name": "Doppelt hält besser",
+   "desc": "Finde 10 Doppelkapseln.",
+   "stat": "doubles",
+   "value": 10
+  },
+  {
+   "id": "crit_25",
+   "name": "Volltreffer",
+   "desc": "Lande 25 Glückstreffer.",
+   "stat": "crits",
+   "value": 25
+  },
+  {
+   "id": "combo_10",
+   "name": "Kombo x10",
+   "desc": "Erreiche eine 10er-Kombo.",
+   "stat": "max_combo",
+   "value": 10
+  },
+  {
+   "id": "combo_25",
+   "name": "Fingerakrobat",
+   "desc": "Erreiche eine 25er-Kombo.",
+   "stat": "max_combo",
+   "value": 25
+  },
+  {
+   "id": "turns_1k",
+   "name": "Kurbelarm",
+   "desc": "Drehe die Kurbel 1.000-mal.",
+   "stat": "crank_turns",
+   "value": 1000
+  },
+  {
+   "id": "upgrades_50",
+   "name": "Tüftler",
+   "desc": "Kaufe 50 Upgrades.",
+   "stat": "upgrades_bought",
+   "value": 50
+  },
+  {
+   "id": "empty_10",
+   "name": "Pechvogel",
+   "desc": "Ziehe 10 leere Kapseln.",
+   "stat": "empties",
+   "value": 10
+  },
+  {
+   "id": "machine_2",
+   "name": "Glücksritter",
+   "desc": "Schalte den Glücksautomaten frei.",
+   "stat": "machines_unlocked",
+   "value": 2
+  },
+  {
+   "id": "machine_3",
+   "name": "Geisterstunde",
+   "desc": "Schalte den Spuk-Automaten frei.",
+   "stat": "machines_unlocked",
+   "value": 3
+  },
+  {
+   "id": "curse_5",
+   "name": "Verflucht",
+   "desc": "Erwische 5 Fluch-Kapseln.",
+   "stat": "curses",
+   "value": 5
+  },
+  {
+   "id": "prestige_1",
+   "name": "Neueröffnung",
+   "desc": "Eröffne deinen Laden neu.",
+   "stat": "prestiges",
+   "value": 1
+  },
+  {
+   "id": "prestige_5",
+   "name": "Franchise",
+   "desc": "Eröffne 5-mal neu.",
+   "stat": "prestiges",
+   "value": 5
+  },
+  {
+   "id": "fusion_1",
+   "name": "Alchemist",
+   "desc": "Fusioniere zum ersten Mal.",
+   "stat": "fusions",
+   "value": 1
+  },
+  {
+   "id": "fusion_25",
+   "name": "Fusionsmeister",
+   "desc": "Fusioniere 25-mal.",
+   "stat": "fusions",
+   "value": 25
+  },
+  {
+   "id": "golden",
+   "name": "Der Goldene Automat",
+   "desc": "Baue den Goldenen Automaten in der Sternenstation.",
+   "stat": "golden_built",
+   "value": 1
+  },
+  {
+   "id": "album_50",
+   "name": "Sammelwut",
+   "desc": "Sammle 50 verschiedene Figuren.",
+   "stat": "album_count",
+   "value": 50
+  },
+  {
+   "id": "album_100",
+   "name": "Hundert!",
+   "desc": "Sammle 100 verschiedene Figuren.",
+   "stat": "album_count",
+   "value": 100
+  },
+  {
+   "id": "album_150",
+   "name": "Fast alle",
+   "desc": "Sammle 150 verschiedene Figuren.",
+   "stat": "album_count",
+   "value": 150
+  },
+  {
+   "id": "album_192",
+   "name": "Das ganze Universum",
+   "desc": "Sammle alle 192 Figuren.",
+   "stat": "album_count",
+   "value": 192
+  },
+  {
+   "id": "album_insel_full",
+   "name": "Inselsammler",
+   "desc": "Sammle alle 48 Figuren der Tropeninsel.",
+   "stat": "album_insel",
+   "value": 48
+  },
+  {
+   "id": "album_eis_full",
+   "name": "Eissammler",
+   "desc": "Sammle alle 48 Figuren am Eisgipfel.",
+   "stat": "album_eis",
+   "value": 48
+  },
+  {
+   "id": "album_station_full",
+   "name": "Sternensammler",
+   "desc": "Sammle alle 48 Figuren der Sternenstation.",
+   "stat": "album_station",
+   "value": 48
+  },
+  {
+   "id": "set_6",
+   "name": "Set-Sammler",
+   "desc": "Vervollständige 6 Sets.",
+   "stat": "sets_complete",
+   "value": 6
+  },
+  {
+   "id": "set_12",
+   "name": "Set-Experte",
+   "desc": "Vervollständige 12 Sets.",
+   "stat": "sets_complete",
+   "value": 12
+  },
+  {
+   "id": "world_2",
+   "name": "Urlaubsreif",
+   "desc": "Reise zur Tropeninsel.",
+   "stat": "worlds_unlocked",
+   "value": 2
+  },
+  {
+   "id": "world_3",
+   "name": "Warm anziehen!",
+   "desc": "Reise zum Eisgipfel.",
+   "stat": "worlds_unlocked",
+   "value": 3
+  },
+  {
+   "id": "world_4",
+   "name": "Abheben",
+   "desc": "Reise zur Sternenstation.",
+   "stat": "worlds_unlocked",
+   "value": 4
+  },
+  {
+   "id": "machines_6",
+   "name": "Automatenpark",
+   "desc": "Schalte 6 Automaten gleichzeitig frei.",
+   "stat": "machines_unlocked",
+   "value": 6
+  },
+  {
+   "id": "machines_12",
+   "name": "Alle Automaten",
+   "desc": "Schalte alle 12 Automaten gleichzeitig frei.",
+   "stat": "machines_unlocked",
+   "value": 12
+  },
+  {
+   "id": "slots_2",
+   "name": "Zwei auf einmal",
+   "desc": "Stelle einen zweiten Automaten auf.",
+   "stat": "slots",
+   "value": 2
+  },
+  {
+   "id": "slots_6",
+   "name": "Großer Laden",
+   "desc": "Habe 6 Aufstellplätze.",
+   "stat": "slots",
+   "value": 6
+  },
+  {
+   "id": "bg_1k",
+   "name": "Läuft von allein",
+   "desc": "Nebenautomaten öffnen 1.000 Kapseln.",
+   "stat": "bg_capsules",
+   "value": 1000
+  },
+  {
+   "id": "bg_100k",
+   "name": "Fabrik",
+   "desc": "Nebenautomaten öffnen 100.000 Kapseln.",
+   "stat": "bg_capsules",
+   "value": 100000
+  },
+  {
+   "id": "mlevel_5",
+   "name": "Tuning",
+   "desc": "Bringe einen Automaten auf Stufe 5.",
+   "stat": "max_machine_level",
+   "value": 5
+  },
+  {
+   "id": "mlevel_10",
+   "name": "Meisterwerk",
+   "desc": "Bringe einen Automaten auf Stufe 10.",
+   "stat": "max_machine_level",
+   "value": 10
+  },
+  {
+   "id": "mupgrades_50",
+   "name": "Schrauber",
+   "desc": "Werte Automaten 50-mal auf.",
+   "stat": "machine_upgrades",
+   "value": 50
+  },
+  {
+   "id": "jackpot_1",
+   "name": "Jackpot!",
+   "desc": "Knacke einen Jackpot.",
+   "stat": "jackpots",
+   "value": 1
+  },
+  {
+   "id": "jackpot_50",
+   "name": "Schatzjäger",
+   "desc": "Knacke 50 Jackpots.",
+   "stat": "jackpots",
+   "value": 50
+  },
+  {
+   "id": "erupt_10",
+   "name": "Es brodelt",
+   "desc": "Erlebe 10 Vulkanausbrüche.",
+   "stat": "eruptions",
+   "value": 10
+  },
+  {
+   "id": "frozen_25",
+   "name": "Eisbrecher",
+   "desc": "Knacke 25 gefrorene Kapseln.",
+   "stat": "frozen_opened",
+   "value": 25
+  },
+  {
+   "id": "bless_50",
+   "name": "Gesegnet",
+   "desc": "Öffne 50 Segen-Kapseln.",
+   "stat": "blessings",
+   "value": 50
+  },
+  {
+   "id": "legendary_100",
+   "name": "Legendensammler",
+   "desc": "Ziehe 100 legendäre Figuren.",
+   "stat": "legendaries",
+   "value": 100
+  },
+  {
+   "id": "capsules_100k",
+   "name": "Kapsel-Imperium",
+   "desc": "Öffne 100.000 Kapseln.",
+   "stat": "capsules_opened",
+   "value": 100000
+  },
+  {
+   "id": "earn_1qa",
+   "name": "Billiardär",
+   "desc": "Verdiene insgesamt 1 Brd Münzen.",
+   "stat": "total_earned",
+   "value": 1000000000000000.0
+  },
+  {
+   "id": "earn_1e20",
+   "name": "Kapsel-Tycoon",
+   "desc": "Verdiene insgesamt 100 Trio Münzen.",
+   "stat": "total_earned",
+   "value": 1e+20
+  },
+  {
+   "id": "earn_1e25",
+   "name": "Unvorstellbar reich",
+   "desc": "Verdiene insgesamt 10 Quad Münzen.",
+   "stat": "total_earned",
+   "value": 1e+25
+  },
+  {
+   "id": "prestige_25",
+   "name": "Kette",
+   "desc": "Eröffne 25-mal neu.",
+   "stat": "prestiges",
+   "value": 25
+  },
+  {
+   "id": "fusion_100",
+   "name": "Großalchemist",
+   "desc": "Fusioniere 100-mal.",
+   "stat": "fusions",
+   "value": 100
+  }
+ ]
+}

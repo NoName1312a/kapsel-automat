@@ -1,0 +1,119 @@
+# Baut Spiel + Launcher und veröffentlicht ein GitHub-Release, sobald ein Versions-Tag gepusht wird.
+#   git tag v0.6.0 && git push origin v0.6.0
+# Erwartete Repo-Struktur:
+#   game/       Godot-Projekt des Spiels (mit export_presets.cfg)
+#   launcher/   Godot-Projekt des Launchers
+#   changelog/  optional: changelog/v0.6.0.md wird zur Release-Beschreibung,
+#               sonst die Commit-Nachrichten seit dem letzten Tag
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag, der veröffentlicht werden soll (z. B. v0.6.0, muss existieren)"
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.4.1"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tag bestimmen
+        id: tag
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Godot und Export-Vorlagen holen
+        run: |
+          set -e
+          V="$GODOT_VERSION"
+          cd "$RUNNER_TEMP"
+          curl -sSLo godot.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv "Godot_v${V}-stable_linux.x86_64" godot
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+          curl -sSLo tpl.tpz "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_export_templates.tpz"
+          DEST="$HOME/.local/share/godot/export_templates/${V}.stable"
+          mkdir -p "$DEST"
+          unzip -q -j tpl.tpz "templates/windows_release_x86_64.exe" "templates/linux_release.x86_64" "templates/version.txt" -d "$DEST"
+          rm tpl.tpz
+
+      - name: Versionsnummer ins Spiel schreiben
+        run: |
+          VER="${{ steps.tag.outputs.version }}"
+          F=game/project.godot
+          if grep -q '^config/version=' "$F"; then
+            sed -i "s/^config\/version=.*/config\/version=\"$VER\"/" "$F"
+          else
+            sed -i "s/^\[application\]$/[application]\n\nconfig\/version=\"$VER\"/" "$F"
+          fi
+          grep '^config/version=' "$F"
+
+      - name: Spiel exportieren
+        run: |
+          set -e
+          mkdir -p build/game-windows build/game-linux
+          godot --headless --path game --import || true
+          godot --headless --path game --export-release "Windows Desktop" "$PWD/build/game-windows/KapselAutomat.exe"
+          test -s build/game-windows/KapselAutomat.exe
+          # Linux nur, wenn das Spiel ein "Linux"-Preset hat
+          if grep -q '^name="Linux"' game/export_presets.cfg; then
+            godot --headless --path game --export-release "Linux" "$PWD/build/game-linux/KapselAutomat.x86_64"
+          fi
+
+      - name: Launcher exportieren
+        run: |
+          set -e
+          mkdir -p build/launcher-windows build/launcher-linux
+          godot --headless --path launcher --import || true
+          godot --headless --path launcher --export-release "Windows Desktop" "$PWD/build/launcher-windows/KapselLauncher.exe"
+          godot --headless --path launcher --export-release "Linux" "$PWD/build/launcher-linux/KapselLauncher.x86_64"
+          test -s build/launcher-windows/KapselLauncher.exe
+
+      - name: Pakete schnüren
+        run: |
+          set -e
+          TAG="${{ steps.tag.outputs.tag }}"
+          mkdir -p dist
+          (cd build/game-windows && zip -qr "../../dist/kapsel-automat-${TAG}-windows.zip" .)
+          if [ -n "$(ls -A build/game-linux)" ]; then
+            (cd build/game-linux && zip -qr "../../dist/kapsel-automat-${TAG}-linux.zip" .)
+          fi
+          (cd build/launcher-windows && zip -qr "../../dist/kapsel-launcher-windows.zip" .)
+          (cd build/launcher-linux && zip -qr "../../dist/kapsel-launcher-linux.zip" .)
+          ls -la dist
+
+      - name: Release-Text
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          if [ -f "changelog/${TAG}.md" ]; then
+            cp "changelog/${TAG}.md" notes.md
+          else
+            PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || true)
+            RANGE="${PREV:+$PREV..}${TAG}"
+            { echo "## Änderungen"; git log --no-merges --pretty='- %s' "$RANGE"; } > notes.md
+          fi
+          cat notes.md
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Kapsel-Automat ${{ steps.tag.outputs.tag }}
+          body_path: notes.md
+          prerelease: ${{ contains(steps.tag.outputs.tag, '-') }}
+          files: dist/*.zip

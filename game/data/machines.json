@@ -1,0 +1,351 @@
+{
+ "machines": [
+  {
+   "id": "standard",
+   "name": "Standard-Automat",
+   "desc": "Solide und günstig. Obst, Tiere, Snacks.",
+   "world": "stadt",
+   "cost": 8.0,
+   "unlock_cost": 0.0,
+   "sets": [
+    "obst",
+    "tiere",
+    "snacks"
+   ],
+   "weights": {
+    "common": 70,
+    "rare": 22,
+    "epic": 7,
+    "legendary": 1
+   },
+   "value_mult": 1.0,
+   "color": "#e8484f",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "glueck",
+   "name": "Glücksautomat",
+   "desc": "35 % Nieten, aber viel mehr Seltenes. Weltraum und Meer.",
+   "world": "stadt",
+   "cost": 120.0,
+   "unlock_cost": 250000.0,
+   "sets": [
+    "weltraum",
+    "meer"
+   ],
+   "weights": {
+    "common": 40,
+    "rare": 35,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 4.0,
+   "color": "#2f9e5b",
+   "empty_chance": 0.35,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "spuk",
+   "name": "Spuk-Automat",
+   "desc": "Fluch-Kapseln kosten Münzen, Segen-Kapseln zahlen das Dreifache. Spuk-Set.",
+   "world": "stadt",
+   "cost": 20000.0,
+   "unlock_cost": 100000000.0,
+   "sets": [
+    "spuk"
+   ],
+   "weights": {
+    "common": 45,
+    "rare": 30,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 30.0,
+   "color": "#6b3fa0",
+   "empty_chance": 0.0,
+   "curse_chance": 0.2,
+   "bless_chance": 0.12,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0,
+   "requires_prestige": "p_spuk"
+  },
+  {
+   "id": "muschel",
+   "name": "Muschel-Automat",
+   "desc": "Der Einstieg auf der Insel. Strand, Dschungel, Piraten.",
+   "world": "insel",
+   "cost": 80000.0,
+   "unlock_cost": 0.0,
+   "sets": [
+    "strand",
+    "dschungel",
+    "piraten"
+   ],
+   "weights": {
+    "common": 70,
+    "rare": 22,
+    "epic": 7,
+    "legendary": 1
+   },
+   "value_mult": 100.0,
+   "color": "#f0a35e",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "schatz",
+   "name": "Schatz-Automat",
+   "desc": "45 % Nieten, aber 4 % Chance auf einen Jackpot (x25). Tiefsee.",
+   "world": "insel",
+   "cost": 1500000.0,
+   "unlock_cost": 2500000000.0,
+   "sets": [
+    "tiefsee",
+    "piraten"
+   ],
+   "weights": {
+    "common": 42,
+    "rare": 33,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 400.0,
+   "color": "#d8a93b",
+   "empty_chance": 0.45,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.04,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "vulkan",
+   "name": "Vulkan-Automat",
+   "desc": "Bricht manchmal aus und spuckt 3 Gratis-Kapseln. Vulkan, Inselzauber.",
+   "world": "insel",
+   "cost": 200000000.0,
+   "unlock_cost": 1000000000000.0,
+   "sets": [
+    "vulkan",
+    "inselzauber"
+   ],
+   "weights": {
+    "common": 45,
+    "rare": 30,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 3000.0,
+   "color": "#c0392b",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.08,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "schneekugel",
+   "name": "Schneekugel-Automat",
+   "desc": "Gemütlich und günstig. Polartiere, Wintersport, Werkstatt.",
+   "world": "eis",
+   "cost": 800000000.0,
+   "unlock_cost": 0.0,
+   "sets": [
+    "polar",
+    "winter",
+    "werkstatt"
+   ],
+   "weights": {
+    "common": 70,
+    "rare": 22,
+    "epic": 7,
+    "legendary": 1
+   },
+   "value_mult": 33333.333333333336,
+   "color": "#7fb8e0",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "frost",
+   "name": "Frost-Automat",
+   "desc": "30 % gefrorene Kapseln: 3-mal klicken, dafür doppelter Wert. Kristalle, Yetis.",
+   "world": "eis",
+   "cost": 15000000000.0,
+   "unlock_cost": 25000000000000.0,
+   "sets": [
+    "kristall",
+    "yeti"
+   ],
+   "weights": {
+    "common": 42,
+    "rare": 33,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 133333.33333333334,
+   "color": "#5ec8e5",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.3,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "nordlicht",
+   "name": "Nordlicht-Automat",
+   "desc": "Viel Segen (x3), mehr Legendäres. Nordlicht, Yetis.",
+   "world": "eis",
+   "cost": 2000000000000.0,
+   "unlock_cost": 1e+16,
+   "sets": [
+    "nordlicht",
+    "yeti"
+   ],
+   "weights": {
+    "common": 40,
+    "rare": 32,
+    "epic": 19,
+    "legendary": 9
+   },
+   "value_mult": 1000000.0,
+   "color": "#3fbf7f",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.2,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 0
+  },
+  {
+   "id": "roboter",
+   "name": "Roboter-Automat",
+   "desc": "+15 % Doppelkapseln. Roboter, Raumschiffe, Planeten.",
+   "world": "station",
+   "cost": 8000000000000.0,
+   "unlock_cost": 0.0,
+   "sets": [
+    "roboter",
+    "raumschiffe",
+    "planeten"
+   ],
+   "weights": {
+    "common": 70,
+    "rare": 22,
+    "epic": 7,
+    "legendary": 1
+   },
+   "value_mult": 33333333.333333332,
+   "color": "#8a96a8",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.15,
+   "combo_bonus": 0
+  },
+  {
+   "id": "schwerkraft",
+   "name": "Schwerkraft-Automat",
+   "desc": "Kombos halten länger und gehen 10 Stufen höher. Aliens, Sternbilder.",
+   "world": "station",
+   "cost": 150000000000000.0,
+   "unlock_cost": 2.5e+17,
+   "sets": [
+    "aliens",
+    "sternbilder"
+   ],
+   "weights": {
+    "common": 42,
+    "rare": 33,
+    "epic": 18,
+    "legendary": 7
+   },
+   "value_mult": 133333333.33333333,
+   "color": "#5b5bd6",
+   "empty_chance": 0.0,
+   "curse_chance": 0.0,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.0,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.0,
+   "combo_bonus": 10
+  },
+  {
+   "id": "quanten",
+   "name": "Quanten-Automat",
+   "desc": "Reines Chaos: Nieten, Jackpots, Doppelkapseln und Flüche. Kosmos.",
+   "world": "station",
+   "cost": 2e+16,
+   "unlock_cost": 1e+20,
+   "sets": [
+    "kosmos",
+    "sternbilder"
+   ],
+   "weights": {
+    "common": 40,
+    "rare": 32,
+    "epic": 19,
+    "legendary": 9
+   },
+   "value_mult": 1000000000.0,
+   "color": "#b04fd0",
+   "empty_chance": 0.25,
+   "curse_chance": 0.08,
+   "bless_chance": 0.0,
+   "jackpot_chance": 0.05,
+   "erupt_chance": 0.0,
+   "frozen_chance": 0.0,
+   "double_bonus": 0.2,
+   "combo_bonus": 0
+  }
+ ],
+ "golden": {
+  "name": "Goldener Automat",
+  "desc": "Das große Ziel: der Automat aller Automaten in der Sternenstation. Braucht 150 verschiedene Figuren.",
+  "cost": 1e+21,
+  "album_needed": 150,
+  "world": "station"
+ }
+}

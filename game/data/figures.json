@@ -1,0 +1,1187 @@
+{
+ "set_bonus": 0.15,
+ "rarities": [
+  {
+   "id": "common",
+   "name": "Gewöhnlich",
+   "value": 4,
+   "income": 0.02,
+   "color": "#b8c0cc"
+  },
+  {
+   "id": "rare",
+   "name": "Selten",
+   "value": 12,
+   "income": 0.1,
+   "color": "#4aa3ff"
+  },
+  {
+   "id": "epic",
+   "name": "Episch",
+   "value": 40,
+   "income": 0.5,
+   "color": "#c06bff"
+  },
+  {
+   "id": "legendary",
+   "name": "Legendär",
+   "value": 200,
+   "income": 3.0,
+   "color": "#ffc23a"
+  }
+ ],
+ "sets": [
+  {
+   "id": "obst",
+   "name": "Obst",
+   "color": "#ff7a59",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "apfel",
+     "name": "Apfel",
+     "rarity": "common"
+    },
+    {
+     "id": "birne",
+     "name": "Birne",
+     "rarity": "common"
+    },
+    {
+     "id": "banane",
+     "name": "Banane",
+     "rarity": "common"
+    },
+    {
+     "id": "kirsche",
+     "name": "Kirsche",
+     "rarity": "rare"
+    },
+    {
+     "id": "erdbeere",
+     "name": "Erdbeere",
+     "rarity": "rare"
+    },
+    {
+     "id": "ananas",
+     "name": "Ananas",
+     "rarity": "epic"
+    },
+    {
+     "id": "wassermelone",
+     "name": "Wassermelone",
+     "rarity": "epic"
+    },
+    {
+     "id": "drachenfrucht",
+     "name": "Drachenfrucht",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "tiere",
+   "name": "Tiere",
+   "color": "#6fcf87",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "frosch",
+     "name": "Frosch",
+     "rarity": "common"
+    },
+    {
+     "id": "ente",
+     "name": "Ente",
+     "rarity": "common"
+    },
+    {
+     "id": "igel",
+     "name": "Igel",
+     "rarity": "common"
+    },
+    {
+     "id": "fuchs",
+     "name": "Fuchs",
+     "rarity": "rare"
+    },
+    {
+     "id": "pinguin",
+     "name": "Pinguin",
+     "rarity": "rare"
+    },
+    {
+     "id": "panda",
+     "name": "Panda",
+     "rarity": "epic"
+    },
+    {
+     "id": "loewe",
+     "name": "Löwe",
+     "rarity": "epic"
+    },
+    {
+     "id": "einhorn",
+     "name": "Einhorn",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "snacks",
+   "name": "Snacks",
+   "color": "#f2b84b",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "brezel",
+     "name": "Brezel",
+     "rarity": "common"
+    },
+    {
+     "id": "donut",
+     "name": "Donut",
+     "rarity": "common"
+    },
+    {
+     "id": "popcorn",
+     "name": "Popcorn",
+     "rarity": "common"
+    },
+    {
+     "id": "taco",
+     "name": "Taco",
+     "rarity": "rare"
+    },
+    {
+     "id": "pizza",
+     "name": "Pizza",
+     "rarity": "rare"
+    },
+    {
+     "id": "sushi",
+     "name": "Sushi",
+     "rarity": "epic"
+    },
+    {
+     "id": "eisbecher",
+     "name": "Eisbecher",
+     "rarity": "epic"
+    },
+    {
+     "id": "goldburger",
+     "name": "Goldener Burger",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "weltraum",
+   "name": "Weltraum",
+   "color": "#5b8cff",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "mond",
+     "name": "Mond",
+     "rarity": "common"
+    },
+    {
+     "id": "rakete",
+     "name": "Rakete",
+     "rarity": "common"
+    },
+    {
+     "id": "stern",
+     "name": "Stern",
+     "rarity": "common"
+    },
+    {
+     "id": "ufo",
+     "name": "Ufo",
+     "rarity": "rare"
+    },
+    {
+     "id": "astronaut",
+     "name": "Astronaut",
+     "rarity": "rare"
+    },
+    {
+     "id": "komet",
+     "name": "Komet",
+     "rarity": "epic"
+    },
+    {
+     "id": "saturn",
+     "name": "Saturn",
+     "rarity": "epic"
+    },
+    {
+     "id": "schwarzes_loch",
+     "name": "Schwarzes Loch",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "meer",
+   "name": "Meer",
+   "color": "#3cc6c9",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "krabbe",
+     "name": "Krabbe",
+     "rarity": "common"
+    },
+    {
+     "id": "fisch",
+     "name": "Fisch",
+     "rarity": "common"
+    },
+    {
+     "id": "seestern",
+     "name": "Seestern",
+     "rarity": "common"
+    },
+    {
+     "id": "qualle",
+     "name": "Qualle",
+     "rarity": "rare"
+    },
+    {
+     "id": "seepferdchen",
+     "name": "Seepferdchen",
+     "rarity": "rare"
+    },
+    {
+     "id": "oktopus",
+     "name": "Oktopus",
+     "rarity": "epic"
+    },
+    {
+     "id": "hai",
+     "name": "Hai",
+     "rarity": "epic"
+    },
+    {
+     "id": "kraken",
+     "name": "Kraken",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "spuk",
+   "name": "Spuk",
+   "color": "#a77bdb",
+   "world": "stadt",
+   "figures": [
+    {
+     "id": "geist",
+     "name": "Geist",
+     "rarity": "common"
+    },
+    {
+     "id": "kuerbis",
+     "name": "Kürbis",
+     "rarity": "common"
+    },
+    {
+     "id": "spinne",
+     "name": "Spinne",
+     "rarity": "common"
+    },
+    {
+     "id": "fledermaus",
+     "name": "Fledermaus",
+     "rarity": "rare"
+    },
+    {
+     "id": "mumie",
+     "name": "Mumie",
+     "rarity": "rare"
+    },
+    {
+     "id": "hexe",
+     "name": "Hexe",
+     "rarity": "epic"
+    },
+    {
+     "id": "vampir",
+     "name": "Vampir",
+     "rarity": "epic"
+    },
+    {
+     "id": "geisterkoenig",
+     "name": "Geisterkönig",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "strand",
+   "name": "Strand",
+   "color": "#f5c26b",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "sandburg",
+     "name": "Sandburg",
+     "rarity": "common"
+    },
+    {
+     "id": "sonnenschirm",
+     "name": "Sonnenschirm",
+     "rarity": "common"
+    },
+    {
+     "id": "strandball",
+     "name": "Strandball",
+     "rarity": "common"
+    },
+    {
+     "id": "surfbrett",
+     "name": "Surfbrett",
+     "rarity": "rare"
+    },
+    {
+     "id": "eiswagen",
+     "name": "Eiswagen",
+     "rarity": "rare"
+    },
+    {
+     "id": "leuchtturm",
+     "name": "Leuchtturm",
+     "rarity": "epic"
+    },
+    {
+     "id": "rettungsboot",
+     "name": "Rettungsboot",
+     "rarity": "epic"
+    },
+    {
+     "id": "goldene_muschel",
+     "name": "Goldene Muschel",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "dschungel",
+   "name": "Dschungel",
+   "color": "#4caf50",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "papagei",
+     "name": "Papagei",
+     "rarity": "common"
+    },
+    {
+     "id": "affe",
+     "name": "Affe",
+     "rarity": "common"
+    },
+    {
+     "id": "tukan",
+     "name": "Tukan",
+     "rarity": "common"
+    },
+    {
+     "id": "chamaeleon",
+     "name": "Chamäleon",
+     "rarity": "rare"
+    },
+    {
+     "id": "faultier",
+     "name": "Faultier",
+     "rarity": "rare"
+    },
+    {
+     "id": "jaguar",
+     "name": "Jaguar",
+     "rarity": "epic"
+    },
+    {
+     "id": "gorilla",
+     "name": "Gorilla",
+     "rarity": "epic"
+    },
+    {
+     "id": "regenbogenschlange",
+     "name": "Regenbogenschlange",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "piraten",
+   "name": "Piraten",
+   "color": "#8d5a3b",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "kanone",
+     "name": "Kanone",
+     "rarity": "common"
+    },
+    {
+     "id": "schatzkarte",
+     "name": "Schatzkarte",
+     "rarity": "common"
+    },
+    {
+     "id": "holzfass",
+     "name": "Rumfass",
+     "rarity": "common"
+    },
+    {
+     "id": "piratenhut",
+     "name": "Piratenhut",
+     "rarity": "rare"
+    },
+    {
+     "id": "kompass",
+     "name": "Kompass",
+     "rarity": "rare"
+    },
+    {
+     "id": "piratenschiff",
+     "name": "Piratenschiff",
+     "rarity": "epic"
+    },
+    {
+     "id": "kapitaen",
+     "name": "Kapitän Krake",
+     "rarity": "epic"
+    },
+    {
+     "id": "geisterschiff",
+     "name": "Geisterschiff",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "vulkan",
+   "name": "Vulkan",
+   "color": "#e2552b",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "lavastein",
+     "name": "Lavastein",
+     "rarity": "common"
+    },
+    {
+     "id": "salamander",
+     "name": "Feuersalamander",
+     "rarity": "common"
+    },
+    {
+     "id": "aschewolke",
+     "name": "Aschewolke",
+     "rarity": "common"
+    },
+    {
+     "id": "magmakaefer",
+     "name": "Magmakäfer",
+     "rarity": "rare"
+    },
+    {
+     "id": "obsidian",
+     "name": "Obsidian",
+     "rarity": "rare"
+    },
+    {
+     "id": "feuervogel",
+     "name": "Feuervogel",
+     "rarity": "epic"
+    },
+    {
+     "id": "lavagolem",
+     "name": "Lavagolem",
+     "rarity": "epic"
+    },
+    {
+     "id": "vulkandrache",
+     "name": "Vulkandrache",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "tiefsee",
+   "name": "Tiefsee",
+   "color": "#2b5fa8",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "anglerfisch",
+     "name": "Anglerfisch",
+     "rarity": "common"
+    },
+    {
+     "id": "laternenfisch",
+     "name": "Laternenfisch",
+     "rarity": "common"
+    },
+    {
+     "id": "seegurke",
+     "name": "Seegurke",
+     "rarity": "common"
+    },
+    {
+     "id": "riesenkalmar",
+     "name": "Riesenkalmar",
+     "rarity": "rare"
+    },
+    {
+     "id": "u_boot",
+     "name": "U-Boot",
+     "rarity": "rare"
+    },
+    {
+     "id": "perlenauster",
+     "name": "Perlenauster",
+     "rarity": "epic"
+    },
+    {
+     "id": "leuchtqualle",
+     "name": "Leuchtqualle",
+     "rarity": "epic"
+    },
+    {
+     "id": "atlantis",
+     "name": "Atlantis",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "inselzauber",
+   "name": "Inselzauber",
+   "color": "#d46fb0",
+   "world": "insel",
+   "figures": [
+    {
+     "id": "tiki",
+     "name": "Tiki",
+     "rarity": "common"
+    },
+    {
+     "id": "kokosnuss",
+     "name": "Kokosnuss",
+     "rarity": "common"
+    },
+    {
+     "id": "hula_puppe",
+     "name": "Hula-Puppe",
+     "rarity": "common"
+    },
+    {
+     "id": "totem",
+     "name": "Totem",
+     "rarity": "rare"
+    },
+    {
+     "id": "muschelhorn",
+     "name": "Muschelhorn",
+     "rarity": "rare"
+    },
+    {
+     "id": "inselgeist",
+     "name": "Inselgeist",
+     "rarity": "epic"
+    },
+    {
+     "id": "uralte_schildkroete",
+     "name": "Uralte Schildkröte",
+     "rarity": "epic"
+    },
+    {
+     "id": "sonnengott",
+     "name": "Sonnengott",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "polar",
+   "name": "Polartiere",
+   "color": "#9ad7f0",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "robbe",
+     "name": "Robbe",
+     "rarity": "common"
+    },
+    {
+     "id": "eisbaer",
+     "name": "Eisbär",
+     "rarity": "common"
+    },
+    {
+     "id": "schneehase",
+     "name": "Schneehase",
+     "rarity": "common"
+    },
+    {
+     "id": "walross",
+     "name": "Walross",
+     "rarity": "rare"
+    },
+    {
+     "id": "schneeeule",
+     "name": "Schneeeule",
+     "rarity": "rare"
+    },
+    {
+     "id": "narwal",
+     "name": "Narwal",
+     "rarity": "epic"
+    },
+    {
+     "id": "orca",
+     "name": "Orca",
+     "rarity": "epic"
+    },
+    {
+     "id": "mammut",
+     "name": "Mammut",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "winter",
+   "name": "Wintersport",
+   "color": "#e86a6a",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "schlitten",
+     "name": "Schlitten",
+     "rarity": "common"
+    },
+    {
+     "id": "ski",
+     "name": "Ski",
+     "rarity": "common"
+    },
+    {
+     "id": "schneemann",
+     "name": "Schneemann",
+     "rarity": "common"
+    },
+    {
+     "id": "eishockey",
+     "name": "Eishockey",
+     "rarity": "rare"
+    },
+    {
+     "id": "snowboard",
+     "name": "Snowboard",
+     "rarity": "rare"
+    },
+    {
+     "id": "iglu",
+     "name": "Iglu",
+     "rarity": "epic"
+    },
+    {
+     "id": "schneepflug",
+     "name": "Schneepflug",
+     "rarity": "epic"
+    },
+    {
+     "id": "eisschloss",
+     "name": "Eisschloss",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "kristall",
+   "name": "Kristalle",
+   "color": "#7fe0e8",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "eiszapfen",
+     "name": "Eiszapfen",
+     "rarity": "common"
+    },
+    {
+     "id": "schneeflocke",
+     "name": "Schneeflocke",
+     "rarity": "common"
+    },
+    {
+     "id": "frostblatt",
+     "name": "Frostblatt",
+     "rarity": "common"
+    },
+    {
+     "id": "eiskristall",
+     "name": "Eiskristall",
+     "rarity": "rare"
+    },
+    {
+     "id": "frostrose",
+     "name": "Frostrose",
+     "rarity": "rare"
+    },
+    {
+     "id": "diamantzapfen",
+     "name": "Diamantzapfen",
+     "rarity": "epic"
+    },
+    {
+     "id": "gletscherherz",
+     "name": "Gletscherherz",
+     "rarity": "epic"
+    },
+    {
+     "id": "ewiges_eis",
+     "name": "Ewiges Eis",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "yeti",
+   "name": "Yetis",
+   "color": "#c8c8e8",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "yeti_kind",
+     "name": "Yeti-Kind",
+     "rarity": "common"
+    },
+    {
+     "id": "schneeaffe",
+     "name": "Schneeaffe",
+     "rarity": "common"
+    },
+    {
+     "id": "bergziege",
+     "name": "Bergziege",
+     "rarity": "common"
+    },
+    {
+     "id": "yeti_mama",
+     "name": "Yeti-Mama",
+     "rarity": "rare"
+    },
+    {
+     "id": "schneeleopard",
+     "name": "Schneeleopard",
+     "rarity": "rare"
+    },
+    {
+     "id": "yeti_papa",
+     "name": "Yeti-Papa",
+     "rarity": "epic"
+    },
+    {
+     "id": "berggeist",
+     "name": "Berggeist",
+     "rarity": "epic"
+    },
+    {
+     "id": "yeti_koenig",
+     "name": "Yeti-König",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "nordlicht",
+   "name": "Nordlicht",
+   "color": "#7be38f",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "sternschnuppe",
+     "name": "Sternschnuppe",
+     "rarity": "common"
+    },
+    {
+     "id": "lichtmotte",
+     "name": "Lichtmotte",
+     "rarity": "common"
+    },
+    {
+     "id": "polarnacht",
+     "name": "Polarnacht",
+     "rarity": "common"
+    },
+    {
+     "id": "nordlichtfuchs",
+     "name": "Nordlichtfuchs",
+     "rarity": "rare"
+    },
+    {
+     "id": "himmelswal",
+     "name": "Himmelswal",
+     "rarity": "rare"
+    },
+    {
+     "id": "aurora_hirsch",
+     "name": "Aurora-Hirsch",
+     "rarity": "epic"
+    },
+    {
+     "id": "lichtfee",
+     "name": "Lichtfee",
+     "rarity": "epic"
+    },
+    {
+     "id": "nordlicht_phoenix",
+     "name": "Nordlicht-Phönix",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "werkstatt",
+   "name": "Wichtelwerkstatt",
+   "color": "#d9534f",
+   "world": "eis",
+   "figures": [
+    {
+     "id": "zuckerstange",
+     "name": "Zuckerstange",
+     "rarity": "common"
+    },
+    {
+     "id": "lebkuchen",
+     "name": "Lebkuchen",
+     "rarity": "common"
+    },
+    {
+     "id": "geschenk",
+     "name": "Geschenk",
+     "rarity": "common"
+    },
+    {
+     "id": "spielzeugsoldat",
+     "name": "Spielzeugsoldat",
+     "rarity": "rare"
+    },
+    {
+     "id": "schaukelpferd",
+     "name": "Schaukelpferd",
+     "rarity": "rare"
+    },
+    {
+     "id": "wichtel",
+     "name": "Wichtel",
+     "rarity": "epic"
+    },
+    {
+     "id": "rentier",
+     "name": "Rentier",
+     "rarity": "epic"
+    },
+    {
+     "id": "goldenes_rentier",
+     "name": "Goldenes Rentier",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "roboter",
+   "name": "Roboter",
+   "color": "#9aa5b1",
+   "world": "station",
+   "figures": [
+    {
+     "id": "schraube",
+     "name": "Schraube",
+     "rarity": "common"
+    },
+    {
+     "id": "zahnrad",
+     "name": "Zahnrad",
+     "rarity": "common"
+    },
+    {
+     "id": "mini_bot",
+     "name": "Mini-Bot",
+     "rarity": "common"
+    },
+    {
+     "id": "putzroboter",
+     "name": "Putzroboter",
+     "rarity": "rare"
+    },
+    {
+     "id": "roboterhund",
+     "name": "Roboterhund",
+     "rarity": "rare"
+    },
+    {
+     "id": "mech",
+     "name": "Mech",
+     "rarity": "epic"
+    },
+    {
+     "id": "androide",
+     "name": "Androide",
+     "rarity": "epic"
+    },
+    {
+     "id": "titanbot",
+     "name": "Titan-Bot",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "aliens",
+   "name": "Aliens",
+   "color": "#8be04e",
+   "world": "station",
+   "figures": [
+    {
+     "id": "gruenling",
+     "name": "Grünling",
+     "rarity": "common"
+    },
+    {
+     "id": "schleimling",
+     "name": "Schleimling",
+     "rarity": "common"
+    },
+    {
+     "id": "augenwesen",
+     "name": "Augenwesen",
+     "rarity": "common"
+    },
+    {
+     "id": "tentakler",
+     "name": "Tentakler",
+     "rarity": "rare"
+    },
+    {
+     "id": "kristallalien",
+     "name": "Kristall-Alien",
+     "rarity": "rare"
+    },
+    {
+     "id": "alienkoenigin",
+     "name": "Alien-Königin",
+     "rarity": "epic"
+    },
+    {
+     "id": "gestaltwandler",
+     "name": "Gestaltwandler",
+     "rarity": "epic"
+    },
+    {
+     "id": "ur_alien",
+     "name": "Ur-Alien",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "planeten",
+   "name": "Planeten",
+   "color": "#e0a050",
+   "world": "station",
+   "figures": [
+    {
+     "id": "mars",
+     "name": "Mars",
+     "rarity": "common"
+    },
+    {
+     "id": "jupiter",
+     "name": "Jupiter",
+     "rarity": "common"
+    },
+    {
+     "id": "eisplanet",
+     "name": "Eisplanet",
+     "rarity": "common"
+    },
+    {
+     "id": "ringplanet",
+     "name": "Ringplanet",
+     "rarity": "rare"
+    },
+    {
+     "id": "lavaplanet",
+     "name": "Lavaplanet",
+     "rarity": "rare"
+    },
+    {
+     "id": "gasriese",
+     "name": "Gasriese",
+     "rarity": "epic"
+    },
+    {
+     "id": "doppelplanet",
+     "name": "Doppelplanet",
+     "rarity": "epic"
+    },
+    {
+     "id": "supernova",
+     "name": "Supernova",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "raumschiffe",
+   "name": "Raumschiffe",
+   "color": "#5fa8e8",
+   "world": "station",
+   "figures": [
+    {
+     "id": "shuttle",
+     "name": "Shuttle",
+     "rarity": "common"
+    },
+    {
+     "id": "satellit",
+     "name": "Satellit",
+     "rarity": "common"
+    },
+    {
+     "id": "raumsonde",
+     "name": "Raumsonde",
+     "rarity": "common"
+    },
+    {
+     "id": "jaeger",
+     "name": "Raumjäger",
+     "rarity": "rare"
+    },
+    {
+     "id": "frachter",
+     "name": "Frachter",
+     "rarity": "rare"
+    },
+    {
+     "id": "mutterschiff",
+     "name": "Mutterschiff",
+     "rarity": "epic"
+    },
+    {
+     "id": "sternkreuzer",
+     "name": "Sternkreuzer",
+     "rarity": "epic"
+    },
+    {
+     "id": "warpschiff",
+     "name": "Warpschiff",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "sternbilder",
+   "name": "Sternbilder",
+   "color": "#c9b6ff",
+   "world": "station",
+   "figures": [
+    {
+     "id": "grosser_baer",
+     "name": "Großer Bär",
+     "rarity": "common"
+    },
+    {
+     "id": "skorpion",
+     "name": "Skorpion",
+     "rarity": "common"
+    },
+    {
+     "id": "schwan",
+     "name": "Schwan",
+     "rarity": "common"
+    },
+    {
+     "id": "orion",
+     "name": "Orion",
+     "rarity": "rare"
+    },
+    {
+     "id": "sterndrache",
+     "name": "Sterndrache",
+     "rarity": "rare"
+    },
+    {
+     "id": "zwillinge",
+     "name": "Zwillinge",
+     "rarity": "epic"
+    },
+    {
+     "id": "sternphoenix",
+     "name": "Sternen-Phönix",
+     "rarity": "epic"
+    },
+    {
+     "id": "sterneinhorn",
+     "name": "Sternen-Einhorn",
+     "rarity": "legendary"
+    }
+   ]
+  },
+  {
+   "id": "kosmos",
+   "name": "Kosmos",
+   "color": "#b05fd8",
+   "world": "station",
+   "figures": [
+    {
+     "id": "asteroid",
+     "name": "Asteroid",
+     "rarity": "common"
+    },
+    {
+     "id": "nebel",
+     "name": "Sternennebel",
+     "rarity": "common"
+    },
+    {
+     "id": "wurmloch",
+     "name": "Wurmloch",
+     "rarity": "common"
+    },
+    {
+     "id": "pulsar",
+     "name": "Pulsar",
+     "rarity": "rare"
+    },
+    {
+     "id": "quasar",
+     "name": "Quasar",
+     "rarity": "rare"
+    },
+    {
+     "id": "galaxie",
+     "name": "Galaxie",
+     "rarity": "epic"
+    },
+    {
+     "id": "zeitkristall",
+     "name": "Zeitkristall",
+     "rarity": "epic"
+    },
+    {
+     "id": "urknall",
+     "name": "Urknall",
+     "rarity": "legendary"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,759 @@
+{
+ "files": [
+  {
+   "name": "tick_1",
+   "file": "sfx/tick_1.wav",
+   "bus": "SFX",
+   "event": "Kurbel rastet ein (Ratsche), zufällige Variante",
+   "seconds": 0.09,
+   "channels": 1,
+   "lufs": -25.2,
+   "loop": false
+  },
+  {
+   "name": "tick_2",
+   "file": "sfx/tick_2.wav",
+   "bus": "SFX",
+   "event": "Kurbel rastet ein (Ratsche), zufällige Variante",
+   "seconds": 0.09,
+   "channels": 1,
+   "lufs": -26.7,
+   "loop": false
+  },
+  {
+   "name": "tick_3",
+   "file": "sfx/tick_3.wav",
+   "bus": "SFX",
+   "event": "Kurbel rastet ein (Ratsche), zufällige Variante",
+   "seconds": 0.09,
+   "channels": 1,
+   "lufs": -25.5,
+   "loop": false
+  },
+  {
+   "name": "clunk_1",
+   "file": "sfx/clunk_1.wav",
+   "bus": "SFX",
+   "event": "Kapsel fällt in die Schale (Aufprall bei 0,2 s passt zur Bounce-Animation)",
+   "seconds": 1.17,
+   "channels": 2,
+   "lufs": -22.2,
+   "loop": false
+  },
+  {
+   "name": "clunk_2",
+   "file": "sfx/clunk_2.wav",
+   "bus": "SFX",
+   "event": "Kapsel fällt in die Schale (Aufprall bei 0,2 s passt zur Bounce-Animation)",
+   "seconds": 1.13,
+   "channels": 2,
+   "lufs": -22.3,
+   "loop": false
+  },
+  {
+   "name": "clunk_3",
+   "file": "sfx/clunk_3.wav",
+   "bus": "SFX",
+   "event": "Kapsel fällt in die Schale (Aufprall bei 0,2 s passt zur Bounce-Animation)",
+   "seconds": 1.14,
+   "channels": 2,
+   "lufs": -22.5,
+   "loop": false
+  },
+  {
+   "name": "clunk_gold",
+   "file": "sfx/clunk_gold.wav",
+   "bus": "SFX",
+   "event": "Goldene (legendäre) Kapsel fällt: Aufprall + Glitzern",
+   "seconds": 2.07,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": false
+  },
+  {
+   "name": "pop_1",
+   "file": "sfx/pop_1.wav",
+   "bus": "SFX",
+   "event": "Kapsel aufdrehen + Plopp",
+   "seconds": 0.96,
+   "channels": 2,
+   "lufs": -20.0,
+   "loop": false
+  },
+  {
+   "name": "pop_2",
+   "file": "sfx/pop_2.wav",
+   "bus": "SFX",
+   "event": "Kapsel aufdrehen + Plopp (Variante)",
+   "seconds": 0.91,
+   "channels": 2,
+   "lufs": -20.0,
+   "loop": false
+  },
+  {
+   "name": "pop_gold",
+   "file": "sfx/pop_gold.wav",
+   "bus": "SFX",
+   "event": "Goldene Kapsel öffnen: kurzer Glitzer-Aufzug vor dem Plopp",
+   "seconds": 1.32,
+   "channels": 2,
+   "lufs": -20.0,
+   "loop": false
+  },
+  {
+   "name": "double",
+   "file": "sfx/double.wav",
+   "bus": "SFX",
+   "event": "Doppelkapsel: doppeltes Plopp mit Echo",
+   "seconds": 1.23,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": false
+  },
+  {
+   "name": "chime_common",
+   "file": "sfx/chime_common.wav",
+   "bus": "SFX",
+   "event": "Figur enthüllt: gewöhnlich",
+   "seconds": 1.15,
+   "channels": 2,
+   "lufs": -20.0,
+   "loop": false
+  },
+  {
+   "name": "chime_rare",
+   "file": "sfx/chime_rare.wav",
+   "bus": "SFX",
+   "event": "Figur enthüllt: selten",
+   "seconds": 2.67,
+   "channels": 2,
+   "lufs": -18.0,
+   "loop": false
+  },
+  {
+   "name": "chime_epic",
+   "file": "sfx/chime_epic.wav",
+   "bus": "SFX",
+   "event": "Figur enthüllt: episch",
+   "seconds": 3.28,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "chime_legendary",
+   "file": "sfx/chime_legendary.wav",
+   "bus": "SFX",
+   "event": "Figur enthüllt: legendär (große Fanfare)",
+   "seconds": 3.86,
+   "channels": 2,
+   "lufs": -16.0,
+   "loop": false
+  },
+  {
+   "name": "new_figure",
+   "file": "sfx/new_figure.wav",
+   "bus": "SFX",
+   "event": "\"NEU!\"-Stempel bei einer neuen Figur",
+   "seconds": 1.89,
+   "channels": 2,
+   "lufs": -20.0,
+   "loop": false
+  },
+  {
+   "name": "empty",
+   "file": "sfx/empty.wav",
+   "bus": "SFX",
+   "event": "Niete / leere Kapsel (kurz, weil im Glücksautomat häufig)",
+   "seconds": 1.39,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "curse",
+   "file": "sfx/curse.wav",
+   "bus": "SFX",
+   "event": "Fluch-Kapsel (Spuk-Automat): dunkles Grollen + Geister-Glissando",
+   "seconds": 3.13,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "bless",
+   "file": "sfx/bless.wav",
+   "bus": "SFX",
+   "event": "Segen-Kapsel (x3): Harfe aufwärts + Engelschor",
+   "seconds": 3.13,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "coin_1",
+   "file": "sfx/coin_1.wav",
+   "bus": "SFX",
+   "event": "Münzen gutgeschrieben (zweitönig, Variante)",
+   "seconds": 1.03,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "coin_2",
+   "file": "sfx/coin_2.wav",
+   "bus": "SFX",
+   "event": "Münzen gutgeschrieben (zweitönig, Variante)",
+   "seconds": 0.98,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "coin_3",
+   "file": "sfx/coin_3.wav",
+   "bus": "SFX",
+   "event": "Münzen gutgeschrieben (zweitönig, Variante)",
+   "seconds": 0.89,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "coin_big",
+   "file": "sfx/coin_big.wav",
+   "bus": "SFX",
+   "event": "Münzregen (großer Gewinn, Offline-Einnahmen, Verkauf)",
+   "seconds": 1.41,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "crit",
+   "file": "sfx/crit.wav",
+   "bus": "SFX",
+   "event": "Glückstreffer x5: Schlag + Münz-Klirren",
+   "seconds": 1.23,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "combo",
+   "file": "sfx/combo.wav",
+   "bus": "SFX",
+   "event": "Kombo steigt (Grundton C5; das Spiel erhöht die Tonhöhe pro Stufe)",
+   "seconds": 1.05,
+   "channels": 2,
+   "lufs": -21.0,
+   "loop": false
+  },
+  {
+   "name": "combo_break",
+   "file": "sfx/combo_break.wav",
+   "bus": "SFX",
+   "event": "Kombo bricht ab",
+   "seconds": 1.15,
+   "channels": 2,
+   "lufs": -23.0,
+   "loop": false
+  },
+  {
+   "name": "deny",
+   "file": "sfx/deny.wav",
+   "bus": "SFX",
+   "event": "Geht nicht: zu wenig Geld, Schale voll",
+   "seconds": 0.23,
+   "channels": 1,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "upgrade",
+   "file": "sfx/upgrade.wav",
+   "bus": "SFX",
+   "event": "Upgrade / Automat gekauft (Kassen-Kaching)",
+   "seconds": 1.09,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "set_complete",
+   "file": "sfx/set_complete.wav",
+   "bus": "SFX",
+   "event": "Set im Album komplett",
+   "seconds": 3.29,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "achievement",
+   "file": "sfx/achievement.wav",
+   "bus": "SFX",
+   "event": "Erfolg freigeschaltet",
+   "seconds": 2.87,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "prestige",
+   "file": "sfx/prestige.wav",
+   "bus": "SFX",
+   "event": "Neueröffnung (Prestige): Aufbau + großer Akkord",
+   "seconds": 4.71,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "golden",
+   "file": "sfx/golden.wav",
+   "bus": "SFX",
+   "event": "Goldener Automat gebaut (Finale)",
+   "seconds": 6.85,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "unlock",
+   "file": "sfx/unlock.wav",
+   "bus": "SFX",
+   "event": "Neuer Automat freigeschaltet: Motor läuft an + Lichter an",
+   "seconds": 2.43,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "machine_switch",
+   "file": "sfx/machine_switch.wav",
+   "bus": "SFX",
+   "event": "Automat wechseln",
+   "seconds": 1.11,
+   "channels": 2,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "fusion",
+   "file": "sfx/fusion.wav",
+   "bus": "SFX",
+   "event": "Fusion: drei Figuren verschmelzen zu einer",
+   "seconds": 3.68,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "offline_welcome",
+   "file": "sfx/offline_welcome.wav",
+   "bus": "SFX",
+   "event": "Begrüßung mit Offline-Einnahmen",
+   "seconds": 3.28,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "hamster_squeak",
+   "file": "sfx/hamster_squeak.wav",
+   "bus": "SFX",
+   "event": "Hamster quiekt (ab und zu, wenn der Kurbel-Hamster läuft)",
+   "seconds": 0.37,
+   "channels": 1,
+   "lufs": -26.0,
+   "loop": false
+  },
+  {
+   "name": "hamster_wheel",
+   "file": "sfx/hamster_wheel.wav",
+   "bus": "SFX",
+   "event": "Hamsterrad rattert leise (nahtloser Loop, 2 s, leise mischen)",
+   "seconds": 2.0,
+   "channels": 1,
+   "lufs": -32.0,
+   "loop": true
+  },
+  {
+   "name": "ui_hover",
+   "file": "sfx/ui_hover.wav",
+   "bus": "SFX",
+   "event": "Maus über Knopf (sehr leise)",
+   "seconds": 0.04,
+   "channels": 1,
+   "lufs": -23.9,
+   "loop": false
+  },
+  {
+   "name": "ui_click",
+   "file": "sfx/ui_click.wav",
+   "bus": "SFX",
+   "event": "Knopf geklickt",
+   "seconds": 0.08,
+   "channels": 1,
+   "lufs": -25.2,
+   "loop": false
+  },
+  {
+   "name": "ui_back",
+   "file": "sfx/ui_back.wav",
+   "bus": "SFX",
+   "event": "Zurück / Abbrechen / Schließen-Knopf",
+   "seconds": 0.16,
+   "channels": 1,
+   "lufs": -23.0,
+   "loop": false
+  },
+  {
+   "name": "ui_confirm",
+   "file": "sfx/ui_confirm.wav",
+   "bus": "SFX",
+   "event": "Bestätigen (\"Neues Spiel\", \"Spiel laden\", Kauf bestätigt)",
+   "seconds": 1.35,
+   "channels": 2,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "ui_tab",
+   "file": "sfx/ui_tab.wav",
+   "bus": "SFX",
+   "event": "Tab wechseln (Upgrades / Automaten / Neueröffnung / Album)",
+   "seconds": 0.1,
+   "channels": 1,
+   "lufs": -24.5,
+   "loop": false
+  },
+  {
+   "name": "ui_open",
+   "file": "sfx/ui_open.wav",
+   "bus": "SFX",
+   "event": "Fenster/Menü öffnen (Einstellungen, Album, Erfolge)",
+   "seconds": 1.13,
+   "channels": 2,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "ui_close",
+   "file": "sfx/ui_close.wav",
+   "bus": "SFX",
+   "event": "Fenster/Menü schließen",
+   "seconds": 1.13,
+   "channels": 2,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "ui_toggle_on",
+   "file": "sfx/ui_toggle_on.wav",
+   "bus": "SFX",
+   "event": "Schalter an (Einstellungen)",
+   "seconds": 0.82,
+   "channels": 1,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "ui_toggle_off",
+   "file": "sfx/ui_toggle_off.wav",
+   "bus": "SFX",
+   "event": "Schalter aus (Einstellungen)",
+   "seconds": 0.98,
+   "channels": 1,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "ui_slider",
+   "file": "sfx/ui_slider.wav",
+   "bus": "SFX",
+   "event": "Lautstärke-Regler (Vorhörton beim Ziehen, max. alle 80 ms abspielen)",
+   "seconds": 0.12,
+   "channels": 1,
+   "lufs": -26.0,
+   "loop": false
+  },
+  {
+   "name": "album_page",
+   "file": "sfx/album_page.wav",
+   "bus": "SFX",
+   "event": "Album umblättern / Album öffnen",
+   "seconds": 1.08,
+   "channels": 2,
+   "lufs": -23.0,
+   "loop": false
+  },
+  {
+   "name": "toast",
+   "file": "sfx/toast.wav",
+   "bus": "SFX",
+   "event": "Hinweis-Popup (\"Neues Upgrade\" usw.)",
+   "seconds": 1.56,
+   "channels": 2,
+   "lufs": -22.0,
+   "loop": false
+  },
+  {
+   "name": "menu_start",
+   "file": "sfx/menu_start.wav",
+   "bus": "SFX",
+   "event": "\"Neues Spiel\" gestartet: kurzer Start-Jingle",
+   "seconds": 2.84,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "music_menu",
+   "file": "music/menu.ogg",
+   "bus": "Music",
+   "event": "Hauptmenü (F-Dur, 88 BPM, gemütlich)",
+   "seconds": 87.27,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_game",
+   "file": "music/game.ogg",
+   "bus": "Music",
+   "event": "Im Spiel / Standard-Automat (C-Dur, 100 BPM, entspannt, 64 Takte)",
+   "seconds": 153.6,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_spuk",
+   "file": "music/spuk.ogg",
+   "bus": "Music",
+   "event": "Spuk-Automat: dieselbe Spielmusik in c-Moll mit Cembalo, Orgel, Theremin",
+   "seconds": 83.48,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_glueck",
+   "file": "music/glueck.ogg",
+   "bus": "Music",
+   "event": "Extra: Glücksautomat (G-Dur Swing, 120 BPM, Lounge/Weltraum)",
+   "seconds": 64.0,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_golden",
+   "file": "music/golden.ogg",
+   "bus": "Music",
+   "event": "Extra: Goldener Automat / nach dem Finale (D-Dur, 124 BPM, triumphal)",
+   "seconds": 61.94,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_spuk_walzer",
+   "file": "music/spuk_walzer.ogg",
+   "bus": "Music",
+   "event": "Extra: eigenständiger Spuk-Walzer (d-Moll, 3/4, Theremin), Alternative zu spuk",
+   "seconds": 41.74,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "jackpot",
+   "file": "sfx/jackpot.wav",
+   "bus": "SFX",
+   "event": "Jackpot x25 (Schatz-Automat): Alarmglocke, Münzflut, Fanfare",
+   "seconds": 4.43,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "erupt",
+   "file": "sfx/erupt.wav",
+   "bus": "SFX",
+   "event": "Vulkan bricht aus und spuckt 3 Kapseln",
+   "seconds": 3.35,
+   "channels": 2,
+   "lufs": -17.4,
+   "loop": false
+  },
+  {
+   "name": "ice_crack",
+   "file": "sfx/ice_crack.wav",
+   "bus": "SFX",
+   "event": "Klick auf gefrorene Kapsel: Eis knackt (wird 3x gespielt, Pitch leicht variieren)",
+   "seconds": 0.78,
+   "channels": 2,
+   "lufs": -22.9,
+   "loop": false
+  },
+  {
+   "name": "ice_break",
+   "file": "sfx/ice_break.wav",
+   "bus": "SFX",
+   "event": "Eis zerspringt (dritter Klick), Kapsel frei",
+   "seconds": 1.29,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "travel",
+   "file": "sfx/travel.wav",
+   "bus": "SFX",
+   "event": "Reise in eine neue Welt: Abflug-Wusch + Ankunfts-Glocken",
+   "seconds": 4.06,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "machine_levelup",
+   "file": "sfx/machine_levelup.wav",
+   "bus": "SFX",
+   "event": "Automat aufgewertet: 10 steigende Stufen (passend zu 10 Frames) + Abschluss bei 0,9 s, ~1,2 s",
+   "seconds": 2.14,
+   "channels": 2,
+   "lufs": -17.0,
+   "loop": false
+  },
+  {
+   "name": "slot_place",
+   "file": "sfx/slot_place.wav",
+   "bus": "SFX",
+   "event": "Automat auf einen Platz gestellt: schweres Absetzen + Klappern",
+   "seconds": 1.01,
+   "channels": 2,
+   "lufs": -20.3,
+   "loop": false
+  },
+  {
+   "name": "story_blip",
+   "file": "sfx/story_blip.wav",
+   "bus": "SFX",
+   "event": "Story-Text erscheint (sehr kurz; bei Zeichen-für-Zeichen max. alle 50 ms spielen)",
+   "seconds": 0.04,
+   "channels": 1,
+   "lufs": -25.0,
+   "loop": false
+  },
+  {
+   "name": "music_insel",
+   "file": "music/insel.ogg",
+   "bus": "Music",
+   "event": "Welt Tropeninsel (F-Dur Calypso, 104 BPM, Steel Pan)",
+   "seconds": 110.77,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_schatz",
+   "file": "music/schatz.ogg",
+   "bus": "Music",
+   "event": "Schatz-Automat: Insel-Thema mit Akkordeon, Tamburin und Münzgeklimper",
+   "seconds": 69.82,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_vulkan",
+   "file": "music/vulkan.ogg",
+   "bus": "Music",
+   "event": "Vulkan-Automat: Insel-Thema in f-Moll mit Trommeln und Grollen",
+   "seconds": 80.0,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_eis",
+   "file": "music/eis.ogg",
+   "bus": "Music",
+   "event": "Welt Eisgipfel (A-Dur, 76 BPM, Spieluhr + Harfe)",
+   "seconds": 151.58,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_frost",
+   "file": "music/frost.ogg",
+   "bus": "Music",
+   "event": "Frost-Automat: Eis-Thema mit Cembalo-Eiskristallen, etwas schneller",
+   "seconds": 91.43,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_nordlicht",
+   "file": "music/nordlicht.ogg",
+   "bus": "Music",
+   "event": "Nordlicht-Automat: Eis-Thema mit Chor, Vibraphon und Schimmer",
+   "seconds": 109.71,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_station",
+   "file": "music/station.ogg",
+   "bus": "Music",
+   "event": "Welt Sternenstation (h-Moll/D-Dur Synth, 100 BPM, Arpeggiator)",
+   "seconds": 115.2,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_schwerkraft",
+   "file": "music/schwerkraft.ogg",
+   "bus": "Music",
+   "event": "Schwerkraft-Automat: Stations-Thema halbes Tempo, schwerer Bass, Theremin",
+   "seconds": 96.0,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  },
+  {
+   "name": "music_quanten",
+   "file": "music/quanten.ogg",
+   "bus": "Music",
+   "event": "Quanten-Automat: Stations-Thema mit springenden Arpeggios und Glitch-Piepsern",
+   "seconds": 68.57,
+   "channels": 2,
+   "lufs": -19.0,
+   "loop": true,
+   "loop_offset": 0.0
+  }
+ ]
+}
