@@ -13,6 +13,8 @@ git tag v0.6.0
 git push origin v0.6.0
 ```
 
+Oder ohne Git-Befehle: auf GitHub unter **Actions → Release → Run workflow** die Version (z. B. `v0.6.0`) eintragen.
+
 GitHub Actions baut Spiel und Launcher und legt das Release an. Der Launcher bietet das Update beim nächsten Start an.
 
 ## Spielen

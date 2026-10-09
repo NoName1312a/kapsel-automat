@@ -1,5 +1,6 @@
 # Baut Spiel + Launcher und veröffentlicht ein GitHub-Release, sobald ein Versions-Tag gepusht wird.
 #   git tag v0.6.0 && git push origin v0.6.0
+# Oder ohne Git: GitHub → Actions → Release → "Run workflow", Version eintragen.
 # Erwartete Repo-Struktur:
 #   game/       Godot-Projekt des Spiels (mit export_presets.cfg)
 #   launcher/   Godot-Projekt des Launchers
@@ -13,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag, der veröffentlicht werden soll (z. B. v0.6.0, muss existieren)"
+        description: "Version, z. B. v0.6.0 (der Tag wird aus dem gewählten Branch angelegt, falls es ihn noch nicht gibt)"
         required: true
 
 permissions:
@@ -35,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ steps.tag.outputs.tag }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
 
       - name: Godot und Export-Vorlagen holen
@@ -104,8 +105,8 @@ jobs:
           if [ -f "changelog/${TAG}.md" ]; then
             cp "changelog/${TAG}.md" notes.md
           else
-            PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || true)
-            RANGE="${PREV:+$PREV..}${TAG}"
+            PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
+            RANGE="${PREV:+$PREV..}HEAD"
             { echo "## Änderungen"; git log --no-merges --pretty='- %s' "$RANGE"; } > notes.md
           fi
           cat notes.md
@@ -113,6 +114,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           name: Kapsel-Automat ${{ steps.tag.outputs.tag }}
           body_path: notes.md
           prerelease: ${{ contains(steps.tag.outputs.tag, '-') }}
