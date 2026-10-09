@@ -11,11 +11,13 @@ Kleiner Launcher (Godot 4.4), der Kapsel-Automat aus den GitHub-Releases install
 
 Spielstände liegen in einem eigenen Ordner des Spiels (`%APPDATA%\KapselAutomat` unter Windows), nicht im Installationsordner. Ein Update fasst sie nie an.
 
-## Nur eine EXE
+## Nur eine EXE, und die ist signiert
 
-Das Spiel hat keine eigene .exe mehr. Der Launcher lädt nur die Spieldaten (`game/KapselAutomat.pck`) und startet sie mit seinem eigenen Programm (`KapselLauncher.exe --main-pack game/KapselAutomat.pck`). Windows (SmartScreen, Smart App Control) muss dadurch nur ein einziges Programm zulassen, und Updates sind kleiner.
+`KapselLauncher.exe` ist die offizielle, digital signierte Godot-.exe von godotengine.org, nur umbenannt. Godot lädt automatisch die gleichnamige `KapselLauncher.pck` daneben, das ist unser Launcher. Das Spiel selbst kommt nur als Daten (`game/KapselAutomat.pck`) und läuft über dieselbe .exe (`--main-pack`).
 
-Wichtig: Launcher und Spiel müssen mit derselben Godot-Version gebaut sein. Das erledigt der Workflow. Wechselt ihr später die Godot-Version, muss jeder den Launcher einmal neu herunterladen.
+Warum so: Windows Smart App Control blockiert jede unsignierte .exe, und jede neu gebaute .exe wäre wieder neu und unbekannt. Die signierte Godot-.exe wird zugelassen. Sie darf deshalb nie verändert werden (kein eingebettetes .pck, kein Icon-Tausch), sonst ist die Signatur ungültig. Der Workflow prüft das bei jedem Release.
+
+Wichtig: Launcher, Spiel und .exe müssen dieselbe Godot-Version haben (`GODOT_VERSION` im Workflow). Wechselt ihr die Godot-Version, muss jeder den Launcher einmal neu herunterladen.
 
 ## Was der Launcher kann
 
@@ -29,7 +31,8 @@ Wichtig: Launcher und Spiel müssen mit derselben Godot-Version gebaut sein. Das
 
 ```
 Kapsel-Automat\
-  KapselLauncher.exe       <- diese Datei startest du
+  KapselLauncher.exe       <- diese Datei startest du (offizielle Godot-.exe)
+  KapselLauncher.pck       <- der Launcher selbst
   launcher_config.json     <- optional, überschreibt die eingebaute Einstellung
   game\                    <- legt der Launcher selbst an
     KapselAutomat.pck

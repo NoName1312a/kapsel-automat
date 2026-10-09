@@ -56,11 +56,18 @@ func load_config(path: String) -> void:
 	install_dir = _pick_install_dir()
 
 
+## true, wenn der Launcher aus einer .pck läuft (fertige Version), false im Projektordner.
+## Nicht OS.has_feature("editor") nehmen: Ausgeliefert wird die signierte offizielle Godot-.exe,
+## und die meldet immer "editor".
+static func runs_from_package() -> bool:
+	return ProjectSettings.globalize_path("res://") == ""
+
+
 ## Neben der Launcher-.exe (portabel), sonst im Benutzerordner des Launchers.
 func _pick_install_dir() -> String:
 	if config.has("install_dir") and str(config["install_dir"]) != "":
 		return str(config["install_dir"])
-	if not OS.has_feature("editor"):
+	if Updater.runs_from_package():
 		var exe_dir := OS.get_executable_path().get_base_dir()
 		if _is_writable(exe_dir):
 			return exe_dir

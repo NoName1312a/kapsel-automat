@@ -54,7 +54,9 @@ jobs:
           echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
 
       - if: steps.tag.outputs.skip != 'true'
-        name: Godot und Export-Vorlagen holen
+        name: Godot holen
+        # Export-Vorlagen braucht es nicht: Spiel und Launcher werden nur als .pck gebaut.
+        # Als Programm liefern wir die offizielle, von Godot signierte Windows-.exe aus.
         run: |
           set -e
           V="$GODOT_VERSION"
@@ -62,12 +64,9 @@ jobs:
           curl -sSLo godot.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_linux.x86_64.zip"
           unzip -q godot.zip
           mv "Godot_v${V}-stable_linux.x86_64" godot
+          curl -sSLo godot_win.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_win64.exe.zip"
+          unzip -q godot_win.zip "Godot_v${V}-stable_win64.exe"
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
-          curl -sSLo tpl.tpz "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_export_templates.tpz"
-          DEST="$HOME/.local/share/godot/export_templates/${V}.stable"
-          mkdir -p "$DEST"
-          unzip -q -j tpl.tpz "templates/windows_release_x86_64.exe" "templates/linux_release.x86_64" "templates/version.txt" -d "$DEST"
-          rm tpl.tpz
 
       - if: steps.tag.outputs.skip != 'true'
         name: Versionsnummer ins Spiel schreiben
@@ -97,14 +96,20 @@ jobs:
         run: sh launcher/tests/run_tests.sh godot
 
       - if: steps.tag.outputs.skip != 'true'
-        name: Launcher exportieren
+        name: Launcher bauen
+        # KapselLauncher.exe ist die unveränderte, signierte Godot-.exe (nur umbenannt).
+        # Godot lädt automatisch die gleichnamige KapselLauncher.pck daneben.
+        # Die .exe darf nicht verändert werden (kein rcedit, kein eingebettetes .pck),
+        # sonst ist die Signatur kaputt und Windows Smart App Control blockiert sie.
         run: |
           set -e
           mkdir -p build/launcher-windows build/launcher-linux
           godot --headless --path launcher --import || true
-          godot --headless --path launcher --export-release "Windows Desktop" "$PWD/build/launcher-windows/KapselLauncher.exe"
-          godot --headless --path launcher --export-release "Linux" "$PWD/build/launcher-linux/KapselLauncher.x86_64"
-          test -s build/launcher-windows/KapselLauncher.exe
+          godot --headless --path launcher --export-pack "Windows Desktop" "$PWD/build/launcher-windows/KapselLauncher.pck"
+          cp "$RUNNER_TEMP/Godot_v${GODOT_VERSION}-stable_win64.exe" build/launcher-windows/KapselLauncher.exe
+          cp build/launcher-windows/KapselLauncher.pck build/launcher-linux/KapselLauncher.pck
+          cp "$RUNNER_TEMP/godot" build/launcher-linux/KapselLauncher.x86_64
+          python3 launcher/tests/check_signature.py build/launcher-windows/KapselLauncher.exe
 
       - if: steps.tag.outputs.skip != 'true'
         name: Pakete schnüren

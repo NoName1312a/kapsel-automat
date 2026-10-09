@@ -1,7 +1,7 @@
 extends Control
 ## Launcher-Oberfläche: zeigt Version und Änderungen, aktualisiert und startet das Spiel.
 
-const LAUNCHER_VERSION := "1.1.0"
+const LAUNCHER_VERSION := "1.2.0"
 const CONFIG_NAME := "launcher_config.json"
 const GOLD_TEXT := Color("#3c1c14")
 const TITLE := Color("#ffd86b")
@@ -39,7 +39,7 @@ func _config_path() -> String:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--config="):
 			return a.trim_prefix("--config=")
-	if not OS.has_feature("editor"):
+	if Updater.runs_from_package():
 		var beside := OS.get_executable_path().get_base_dir().path_join(CONFIG_NAME)
 		if FileAccess.file_exists(beside):
 			return beside

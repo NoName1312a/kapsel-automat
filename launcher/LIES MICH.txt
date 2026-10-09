@@ -3,6 +3,7 @@ Kapsel-Automat (Testversion)
 
 1. Diesen Ordner irgendwohin entpacken, wo du schreiben darfst,
    z. B. Dokumente\Spiele\Kapsel-Automat (nicht nach C:\Programme).
+   KapselLauncher.exe und KapselLauncher.pck müssen zusammen im Ordner bleiben.
 2. KapselLauncher.exe starten.
 3. "Installieren" klicken, warten, dann "Spielen".
 
@@ -10,8 +11,5 @@ Neue Versionen bietet der Launcher beim Start automatisch an.
 Deine Spielstände bleiben bei Updates erhalten
 (sie liegen unter %APPDATA%\KapselAutomat).
 
-Windows-Warnung beim ersten Start?
-- "Der Computer wurde durch Windows geschützt": auf "Weitere Informationen"
-  und dann "Trotzdem ausführen" klicken.
-- Die Datei ist noch nicht digital signiert, deshalb fragt Windows nach.
-  Der Launcher ist das einzige Programm, das Spiel selbst sind nur Daten.
+KapselLauncher.exe ist das offizielle, digital signierte Programm der
+Godot Engine. Windows zeigt es deshalb als "Godot Engine" an.
