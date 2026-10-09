@@ -39,8 +39,13 @@ func load_config(path: String) -> void:
 		"repo": "NoName1312a/kapsel-automat",
 		"api_base": "https://api.github.com",
 		"asset_prefix": "kapsel-automat-",
-		"asset_suffix": {"Windows": "windows.zip", "Linux": "linux.zip", "macOS": "macos.zip"},
-		"game_exe": {"Windows": "KapselAutomat.exe", "Linux": "KapselAutomat.x86_64", "macOS": "KapselAutomat.app"},
+		"asset_suffix": "game.zip",
+		# Das Spiel kommt als .pck und läuft in der Launcher-.exe selbst (--main-pack).
+		# So muss Windows nur ein einziges Programm zulassen.
+		"game_pack": "KapselAutomat.pck",
+		"game_args": [],
+		# Alternative: eigene Spiel-.exe starten (nur wenn game_pack leer ist)
+		"game_exe": {"Windows": "KapselAutomat.exe", "Linux": "KapselAutomat.x86_64"},
 		"close_on_play": true,
 		"include_prereleases": false,
 	}
@@ -87,6 +92,17 @@ func game_exe_path() -> String:
 	return game_dir().path_join(_platform_value("game_exe"))
 
 
+func game_pack_path() -> String:
+	var pack := _platform_value("game_pack")
+	return game_dir().path_join(pack) if pack != "" else ""
+
+
+## Datei, deren Vorhandensein "installiert" bedeutet
+func game_main_file() -> String:
+	var pack := game_pack_path()
+	return pack if pack != "" else game_exe_path()
+
+
 # ---------------------------------------------------------------- Installierte Version
 
 func installed_tag() -> String:
@@ -100,7 +116,7 @@ func installed_tag() -> String:
 func is_installed() -> bool:
 	if installed_tag() == "":
 		return false
-	return FileAccess.file_exists(game_exe_path()) or DirAccess.dir_exists_absolute(game_exe_path())
+	return FileAccess.file_exists(game_main_file()) or DirAccess.dir_exists_absolute(game_main_file())
 
 
 func update_available() -> bool:
@@ -282,7 +298,10 @@ func _install_zip(zip_path: String) -> String:
 		out.store_buffer(zip.read_file(f))
 		out.close()
 	zip.close()
-	if OS.get_name() != "Windows":
+	if not FileAccess.file_exists(new_dir.path_join(game_main_file().get_file())):
+		_remove_tree(new_dir)
+		return "Im Download fehlt %s" % game_main_file().get_file()
+	if OS.get_name() != "Windows" and _platform_value("game_pack") == "":
 		var exe := new_dir.path_join(_platform_value("game_exe"))
 		if FileAccess.file_exists(exe):
 			OS.execute("chmod", ["+x", exe])
@@ -339,10 +358,18 @@ func installed_notes() -> String:
 # ---------------------------------------------------------------- Spiel starten
 
 func launch_game() -> bool:
+	var args := PackedStringArray()
+	for a in config.get("game_args", []):
+		args.append(str(a))
+	var pack := game_pack_path()
+	if pack != "":
+		# Gleiche .exe wie der Launcher, nur mit den Spieldaten
+		args.append_array(PackedStringArray(["--main-pack", pack]))
+		return OS.create_process(OS.get_executable_path(), args, false) > 0
 	var exe := game_exe_path()
 	var pid := -1
 	if OS.get_name() == "macOS" and exe.ends_with(".app"):
 		pid = OS.create_process("open", [exe])
 	else:
-		pid = OS.create_process(exe, [], false)
+		pid = OS.create_process(exe, args, false)
 	return pid > 0

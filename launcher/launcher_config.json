@@ -2,8 +2,8 @@
   "repo": "NoName1312a/kapsel-automat",
   "api_base": "https://api.github.com",
   "asset_prefix": "kapsel-automat-",
-  "asset_suffix": {"Windows": "windows.zip", "Linux": "linux.zip"},
-  "game_exe": {"Windows": "KapselAutomat.exe", "Linux": "KapselAutomat.x86_64"},
+  "asset_suffix": "game.zip",
+  "game_pack": "KapselAutomat.pck",
   "close_on_play": true,
   "include_prereleases": false
 }

@@ -1,6 +1,6 @@
 extends SceneTree
 ## Ende-zu-Ende-Test gegen tests/mock_github.py.
-## godot --headless --path launcher -s res://tests/test_updater.gd -- <port> <install_dir> <mock_dir>
+## Am einfachsten über tests/run_tests.sh starten.
 
 var fails := 0
 
@@ -40,7 +40,7 @@ func _run() -> void:
 
 	var u := Updater.new()
 	root.add_child(u)
-	var cfg := {"repo": "test/test", "api_base": "http://127.0.0.1:" + port, "install_dir": dir}
+	var cfg := {"repo": "test/test", "api_base": "http://127.0.0.1:" + port, "install_dir": dir, "game_args": ["--headless"]}
 	var cfg_path := dir.path_join("cfg.json")
 	DirAccess.make_dir_recursive_absolute(dir)
 	_write(cfg_path, JSON.stringify(cfg))
@@ -52,7 +52,7 @@ func _run() -> void:
 	u.check()
 	var r = await u.check_finished
 	ok(r, "Release gefunden: " + u.latest_tag)
-	ok(u.latest_asset_url.ends_with("linux.zip"), "richtige Datei für Linux gewählt")
+	ok(u.latest_asset_url.ends_with("-game.zip"), "Spieldaten gewählt, nicht der Launcher")
 	ok(u.update_available(), "Installation angeboten")
 	var ticks := [0]
 	u.progress.connect(func(_a, _b): ticks[0] += 1)
@@ -62,7 +62,7 @@ func _run() -> void:
 	await u.install_finished
 	ok(done[0], "installiert (%s)" % done[1])
 	ok(u.installed_tag() == "v0.5.0", "Version v0.5.0 gemerkt")
-	ok(FileAccess.file_exists(u.game_exe_path()), "Spiel-Datei liegt in game/ (Oberordner entfernt)")
+	ok(FileAccess.file_exists(u.game_pack_path()), "KapselAutomat.pck liegt in game/ (Oberordner entfernt)")
 	ok(ticks[0] > 0, "Fortschritt gemeldet")
 	u.check()
 	await u.check_finished
@@ -84,9 +84,15 @@ func _run() -> void:
 	ok(not DirAccess.dir_exists_absolute(dir.path_join("game_old")) and not DirAccess.dir_exists_absolute(dir.path_join("game_new")), "keine Reste")
 
 	print("Spiel starten")
-	ok(u.launch_game(), "Prozess gestartet")
-	await create_timer(1.0).timeout
-	ok(FileAccess.file_exists(dir.path_join("gestartet.txt")), "Spiel lief")
+	# Das Testspiel schreibt in seinen eigenen Benutzerordner, nicht in den des Launchers
+	var marker := OS.get_user_data_dir().get_base_dir().path_join("Fake-Spiel/gestartet.txt")
+	DirAccess.remove_absolute(marker)
+	ok(u.launch_game(), "Launcher-Programm mit Spieldaten gestartet")
+	for i in 40:
+		if FileAccess.file_exists(marker):
+			break
+		await create_timer(0.25).timeout
+	ok(FileAccess.get_file_as_string(marker) == "Fake-Spiel", "Spiel lief mit seinen eigenen Projektdaten")
 
 	print("Offline")
 	cfg["api_base"] = "http://127.0.0.1:1"

@@ -1,7 +1,7 @@
 extends Control
 ## Launcher-Oberfläche: zeigt Version und Änderungen, aktualisiert und startet das Spiel.
 
-const LAUNCHER_VERSION := "1.0.0"
+const LAUNCHER_VERSION := "1.1.0"
 const CONFIG_NAME := "launcher_config.json"
 const GOLD_TEXT := Color("#3c1c14")
 const TITLE := Color("#ffd86b")
@@ -131,7 +131,7 @@ func _on_install_finished(ok: bool, message: String) -> void:
 
 func _play() -> void:
 	if not updater.launch_game():
-		_status_lbl.text = "Spiel konnte nicht gestartet werden: %s" % updater.game_exe_path()
+		_status_lbl.text = "Spiel konnte nicht gestartet werden: %s" % updater.game_main_file()
 		return
 	_status_lbl.text = "Viel Spaß!"
 	if updater.config.get("close_on_play", true):

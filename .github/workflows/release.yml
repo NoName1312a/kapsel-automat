@@ -83,16 +83,18 @@ jobs:
 
       - if: steps.tag.outputs.skip != 'true'
         name: Spiel exportieren
+        # Das Spiel wird nur als .pck (Spieldaten) gebaut. Der Launcher startet es mit
+        # seiner eigenen .exe, so muss Windows nur ein einziges Programm zulassen.
         run: |
           set -e
-          mkdir -p build/game-windows build/game-linux
+          mkdir -p build/game
           godot --headless --path game --import || true
-          godot --headless --path game --export-release "Windows Desktop" "$PWD/build/game-windows/KapselAutomat.exe"
-          test -s build/game-windows/KapselAutomat.exe
-          # Linux nur, wenn das Spiel ein "Linux"-Preset hat
-          if grep -q '^name="Linux"' game/export_presets.cfg; then
-            godot --headless --path game --export-release "Linux" "$PWD/build/game-linux/KapselAutomat.x86_64"
-          fi
+          godot --headless --path game --export-pack "Windows Desktop" "$PWD/build/game/KapselAutomat.pck"
+          test -s build/game/KapselAutomat.pck
+
+      - if: steps.tag.outputs.skip != 'true'
+        name: Launcher testen
+        run: sh launcher/tests/run_tests.sh godot
 
       - if: steps.tag.outputs.skip != 'true'
         name: Launcher exportieren
@@ -110,10 +112,8 @@ jobs:
           set -e
           TAG="${{ steps.tag.outputs.tag }}"
           mkdir -p dist
-          (cd build/game-windows && zip -qr "../../dist/kapsel-automat-${TAG}-windows.zip" .)
-          if [ -n "$(ls -A build/game-linux)" ]; then
-            (cd build/game-linux && zip -qr "../../dist/kapsel-automat-${TAG}-linux.zip" .)
-          fi
+          (cd build/game && zip -qr "../../dist/kapsel-automat-${TAG}-game.zip" .)
+          cp "launcher/LIES MICH.txt" build/launcher-windows/
           (cd build/launcher-windows && zip -qr "../../dist/kapsel-launcher-windows.zip" .)
           (cd build/launcher-linux && zip -qr "../../dist/kapsel-launcher-linux.zip" .)
           ls -la dist

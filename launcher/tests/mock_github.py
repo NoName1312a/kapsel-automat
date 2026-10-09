@@ -12,13 +12,12 @@ class H(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/repos/") and self.path.endswith("/releases/latest"):
             tag = open(os.path.join(ROOT, "current_tag.txt")).read().strip()
-            name = f"kapsel-automat-{tag}-linux.zip"
+            name = f"kapsel-automat-{tag}-game.zip"
             size = os.path.getsize(os.path.join(ROOT, name))
             body = json.dumps({"tag_name": tag, "name": f"Kapsel-Automat {tag}", "draft": False,
                 "published_at": "2026-10-09T17:00:00Z",
                 "body": f"## Neu in {tag}\n- **Neue Welt** freigeschaltet\n- Fehler im [Album](https://x) behoben\n  - Unterpunkt mit `code`",
-                "assets": [{"name": "kapsel-launcher-linux.zip", "size": 1, "browser_download_url": "http://127.0.0.1:%d/dl/x" % PORT},
-                           {"name": f"kapsel-automat-{tag}-windows.zip", "size": 1, "browser_download_url": "http://127.0.0.1:%d/dl/x" % PORT},
+                "assets": [{"name": "kapsel-launcher-windows.zip", "size": 1, "browser_download_url": "http://127.0.0.1:%d/dl/x" % PORT},
                            {"name": name, "size": size, "browser_download_url": "http://127.0.0.1:%d/dl/%s" % (PORT, name)}]}).encode()
             self.send_response(200); self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
