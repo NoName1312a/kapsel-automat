@@ -56,6 +56,7 @@ var story_name: Label
 var story_portrait: TextureRect
 var story_catcher: Control
 var welcome_panel: PanelContainer
+var welcome_dim: ColorRect
 var welcome_text: Label
 var welcome_amount: Label
 var _story_tween: Tween
@@ -470,9 +471,10 @@ func _build_sidebar() -> void:
 	tabs = TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	# Vier Reiter müssen in 380 px passen
-	tabs.add_theme_font_size_override("font_size", 15)
+	tabs.add_theme_font_size_override("font_size", 14)
 	tabs.add_theme_constant_override("side_margin", 0)
-	tabs.clip_tabs = false
+	# Reiter dürfen notfalls gekürzt werden, aber nie die Leiste breiter machen
+	tabs.clip_tabs = true
 	box.add_child(tabs)
 	_build_upgrade_tab(_scroll_tab(tabs, "Upgrades"))
 	_build_machine_tab(_scroll_tab(tabs, "Automaten"))
@@ -489,7 +491,9 @@ func _build_sidebar() -> void:
 func _scroll_tab(tc: TabContainer, title: String) -> VBoxContainer:
 	var sc := ScrollContainer.new()
 	sc.name = title
-	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# SHOW_NEVER statt DISABLED: zu breiter Inhalt wird abgeschnitten, statt die ganze Seitenleiste
+	# über den Fensterrand hinaus aufzublähen
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	tc.add_child(sc)
 	var v := VBoxContainer.new()
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -592,7 +596,7 @@ func _upgrade_row(v: VBoxContainer, u: Dictionary) -> void:
 
 
 func _build_machine_tab(v: VBoxContainer) -> void:
-	slots_label = _wrap_label("", 13, DIM_TEXT, 350)
+	slots_label = _wrap_label("", 13, DIM_TEXT, 200)
 	v.add_child(slots_label)
 	for m in Game.machines:
 		var id: String = m["id"]
@@ -608,8 +612,8 @@ func _build_machine_tab(v: VBoxContainer) -> void:
 		row.add_child(cv)
 		var title := _label(m["name"], 15)
 		cv.add_child(title)
-		cv.add_child(_wrap_label(m["desc"], 12, DIM_TEXT, 290))
-		var info := _label("", 12, MINT)
+		cv.add_child(_wrap_label(m["desc"], 12, DIM_TEXT, 150))
+		var info := _wrap_label("", 12, MINT, 150)
 		cv.add_child(info)
 		var btns := HBoxContainer.new()
 		btns.add_theme_constant_override("separation", 4)
@@ -640,11 +644,16 @@ func _build_machine_tab(v: VBoxContainer) -> void:
 				say("Kein freier Platz: mehr Plätze gibt es mit „Anbau“."))
 		place_b.add_theme_font_size_override("font_size", 13)
 		btns.add_child(place_b)
+		# Lange Preise dürfen die Zeile nicht breiter als die Seitenleiste machen
+		for bb in [main_b, lvl_b, place_b]:
+			bb.clip_text = true
+			bb.custom_minimum_size.x = 48
+			bb.tooltip_text = ""
 		machine_rows[id] = {"row": card, "title": title, "info": info, "main": main_b, "level": lvl_b, "place": place_b}
 
 
 func _build_world_tab(v: VBoxContainer) -> void:
-	v.add_child(_wrap_label("Jede Welt hat ein eigenes Album und eigene Automaten. Wer genug Sets einer Welt komplett hat, kann weiterreisen. Bekannte Welten bleiben auch nach einer Neueröffnung offen.", 12, DIM_TEXT, 350))
+	v.add_child(_wrap_label("Jede Welt hat ein eigenes Album und eigene Automaten. Wer genug Sets einer Welt komplett hat, kann weiterreisen. Bekannte Welten bleiben auch nach einer Neueröffnung offen.", 12, DIM_TEXT, 200))
 	for w in Game.worlds:
 		var id: String = w["id"]
 		var card := _card()
@@ -659,7 +668,7 @@ func _build_world_tab(v: VBoxContainer) -> void:
 		cv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(cv)
 		cv.add_child(_label(w["name"], 16, Color(w["color"]).lightened(0.3)))
-		cv.add_child(_wrap_label(w["desc"], 12, DIM_TEXT, 290))
+		cv.add_child(_wrap_label(w["desc"], 12, DIM_TEXT, 150))
 		var info := _label("", 12, MINT)
 		cv.add_child(info)
 		var b := _button("", func() -> void:
@@ -674,7 +683,7 @@ func _build_world_tab(v: VBoxContainer) -> void:
 		cv.add_child(b)
 		world_rows[id] = {"row": card, "info": info, "button": b}
 	v.add_child(HSeparator.new())
-	golden_label = _wrap_label("", 14, GOLD, 350)
+	golden_label = _wrap_label("", 14, GOLD, 200)
 	v.add_child(golden_label)
 	golden_btn = _button("", func() -> void:
 		if Game.build_golden():
@@ -687,7 +696,7 @@ func _build_world_tab(v: VBoxContainer) -> void:
 
 
 func _build_prestige_tab(v: VBoxContainer) -> void:
-	prestige_info = _wrap_label("", 13, Color.WHITE, 350)
+	prestige_info = _wrap_label("", 13, Color.WHITE, 200)
 	v.add_child(prestige_info)
 	prestige_btn = _button("", func() -> void:
 		var gain := Game.prestige_gain()
@@ -701,6 +710,7 @@ func _build_prestige_tab(v: VBoxContainer) -> void:
 			toast("Neueröffnung!", "+%d Goldmarken" % gain)))
 	prestige_btn.theme_type_variation = "BigButton"
 	prestige_btn.custom_minimum_size = Vector2(0, 46)
+	prestige_btn.clip_text = true
 	v.add_child(prestige_btn)
 	var gm_row := HBoxContainer.new()
 	v.add_child(gm_row)
@@ -724,13 +734,13 @@ func _build_prestige_tab(v: VBoxContainer) -> void:
 		row.add_child(tv)
 		var name_l := _label("", 15)
 		tv.add_child(name_l)
-		tv.add_child(_wrap_label(p["desc"], 12, DIM_TEXT, 200))
+		tv.add_child(_wrap_label(p["desc"], 12, DIM_TEXT, 130))
 		var b := _button("", func() -> void:
 			if Game.buy_prestige(id):
 				Sfx.play("bless")
 			else:
 				Sfx.play("deny"))
-		b.custom_minimum_size = Vector2(96, 40)
+		b.custom_minimum_size = Vector2(84, 36)
 		b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		b.add_theme_font_size_override("font_size", 13)
 		row.add_child(b)
@@ -992,6 +1002,13 @@ func _show_offline_report() -> void:
 ## "Willkommen zurück" mit Bild: art/ui/welcome_back.png (vom Grafik-Thread), sonst Krümel + Münzen.
 func _open_welcome(r: Dictionary) -> void:
 	if welcome_panel == null:
+		# Eigene Abdunklung: die gemeinsame "dim" darf nicht nach oben wandern, sonst liegt sie
+		# später über dem Einstellungs-Fenster und schluckt alle Klicks (Bug in v0.6.1)
+		welcome_dim = ColorRect.new()
+		welcome_dim.color = Color(0, 0, 0, 0.6)
+		welcome_dim.size = Vector2(1280, 720)
+		welcome_dim.mouse_filter = Control.MOUSE_FILTER_STOP
+		add_child(welcome_dim)
 		welcome_panel = PanelContainer.new()
 		_themed(welcome_panel)
 		var wsb: StyleBox = Art.stylebox("ui/welcome/panel_9slice.png", 10, 3, 18.0)
@@ -1040,7 +1057,7 @@ func _open_welcome(r: Dictionary) -> void:
 		v.add_child(welcome_amount)
 		var ok := _button("Einsammeln", func() -> void:
 			welcome_panel.visible = false
-			dim.visible = false
+			welcome_dim.visible = false
 			Sfx.play_pref(["coin_big", "coin"]))
 		ok.theme_type_variation = "BigButton"
 		ok.custom_minimum_size = Vector2(240, 48)
@@ -1048,8 +1065,8 @@ func _open_welcome(r: Dictionary) -> void:
 		v.add_child(ok)
 	welcome_text.text = "Du warst %s weg. Krümel hat aufgepasst,\ndie Vitrinen haben in der Zeit verdient:" % Fmt.duration(r["seconds"])
 	welcome_amount.text = "+%s Münzen" % Fmt.num(r["amount"])
-	dim.visible = true
-	move_child(dim, -1)
+	welcome_dim.visible = true
+	move_child(welcome_dim, -1)
 	move_child(welcome_panel, -1)
 	welcome_panel.visible = true
 	welcome_panel.reset_size()
@@ -1356,7 +1373,7 @@ func refresh() -> void:
 			lb.text = "Stufe Max"
 			lb.disabled = true
 		else:
-			lb.text = "Aufwerten: %s" % Fmt.num(Game.machine_level_cost(id))
+			lb.text = "Stufe+ %s" % Fmt.num(Game.machine_level_cost(id))
 			lb.disabled = not Game.can_level_machine(id)
 		pb.text = "Abbauen" if id in Game.placed else "Aufstellen"
 		pb.disabled = id == Game.current_machine or (not id in Game.placed and Game.placed.size() >= Game.slot_count())
@@ -1402,7 +1419,7 @@ func refresh() -> void:
 	var gain := Game.prestige_gain()
 	prestige_info.text = ("Neueröffnung: Münzen, Upgrades, Automaten und ihre Stufen starten von vorn. " +
 		"Album, Erfolge, Welten und Goldmarken bleiben. Jede jemals verdiente Goldmarke bringt dauerhaft +%d %% Münzen.") % [int(Game.GOLDMARKE_BONUS * 100)]
-	prestige_btn.text = "Neu eröffnen: +%d Goldmarken" % gain if gain >= 1 else "Neu eröffnen (noch zu wenig verdient)"
+	prestige_btn.text = "Neu eröffnen: +%d Goldmarken" % gain if gain >= 1 else "Neu eröffnen (noch zu wenig)"
 	prestige_btn.disabled = gain < 1
 	goldmarken_label.text = "%d Goldmarken  (gesamt %d → +%s %%)" % [Game.goldmarken, Game.goldmarken_total, Fmt.num(roundf(Game.goldmarken_total * Game.GOLDMARKE_BONUS * 100))]
 	for p in Game.prestige_upgrades:

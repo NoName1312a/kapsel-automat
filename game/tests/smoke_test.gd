@@ -172,7 +172,13 @@ func _run() -> void:
 	main.ui._open_welcome({"seconds": 600.0, "amount": 12345.0})
 	check(main.ui.welcome_panel.visible and main.ui.is_blocking(), "Willkommen-zurück-Fenster")
 	main.ui.welcome_panel.visible = false
-	main.ui.dim.visible = false
+	main.ui.welcome_dim.visible = false
+	# Regression v0.6.1: nach dem Willkommen-Fenster lag die Abdunklung über den Einstellungen
+	main.ui.open_settings()
+	await process_frame
+	check(main.ui.settings_panel.get_index() > main.ui.dim.get_index(), "Einstellungen liegen über der Abdunklung")
+	main.ui.settings_panel.close()
+	await process_frame
 
 	# Menüs, Einstellungen, Sounds
 	main.ui.toggle_pause()
