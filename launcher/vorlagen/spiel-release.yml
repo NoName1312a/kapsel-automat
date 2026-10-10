@@ -1,0 +1,76 @@
+# Vorlage für ein NEUES Spiel in einem eigenen Repo, damit die Spielebibliothek es installieren kann.
+# Kopieren nach <neues-repo>/.github/workflows/release.yml und oben SPIEL_ID und PACK anpassen.
+# Release auslösen: Versionsnummer in die Datei VERSION schreiben (z. B. 0.1.0) und nach main pushen.
+#
+# Wichtig: Das Spiel läuft mit der .exe des Launchers. Es muss deshalb mit derselben
+# Godot-Version gebaut werden (GODOT_VERSION) und braucht in export_presets.cfg
+# ein Preset "Windows Desktop". Erwartete Repo-Struktur: Godot-Projekt im Ordner game/.
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths: ["VERSION"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.4.1"
+  SPIEL_ID: "mein-spiel"        # muss zur "id" in launcher/games.json passen
+  PACK: "MeinSpiel.pck"         # muss zu "pack" in launcher/games.json passen
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag bestimmen
+        id: tag
+        run: |
+          TAG="v$(tr -d ' \r\n' < VERSION)"; TAG="v${TAG#vv}"; TAG="v${TAG#v}"
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "Release $TAG gibt es schon, nichts zu tun."; echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - if: steps.tag.outputs.skip != 'true'
+        name: Godot holen
+        run: |
+          set -e
+          V="$GODOT_VERSION"; cd "$RUNNER_TEMP"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o godot.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_linux.x86_64.zip"
+          unzip -q godot.zip && mv "Godot_v${V}-stable_linux.x86_64" godot
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      - if: steps.tag.outputs.skip != 'true'
+        name: Spiel als .pck bauen
+        run: |
+          set -e
+          mkdir -p build dist
+          godot --headless --path game --import || true
+          godot --headless --path game --export-pack "Windows Desktop" "$PWD/build/$PACK"
+          test -s "build/$PACK"
+          (cd build && zip -qr "../dist/${SPIEL_ID}-${{ steps.tag.outputs.tag }}-game.zip" .)
+
+      - if: steps.tag.outputs.skip != 'true'
+        name: Release-Text
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          if [ -f "changelog/${TAG}.md" ]; then cp "changelog/${TAG}.md" notes.md
+          else
+            PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
+            { echo "## Änderungen"; git log --no-merges --pretty='- %s' "${PREV:+$PREV..}HEAD"; } > notes.md
+          fi
+
+      - if: steps.tag.outputs.skip != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          body_path: notes.md
+          files: dist/*.zip

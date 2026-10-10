@@ -3,7 +3,7 @@
 Gacha-Kapsel-Incremental in Godot 4.4.
 
 - `game/`: das Spiel
-- `launcher/`: Launcher, der das Spiel aus den GitHub-Releases installiert und aktualisiert (siehe `launcher/README.md`)
+- `launcher/`: Spielebibliothek (Launcher wie Steam), installiert, aktualisiert und startet alle Spiele aus `launcher/games.json` (siehe `launcher/README.md`)
 - `changelog/`: optionale Release-Texte, `changelog/v0.6.0.md` wird zur Beschreibung von Release v0.6.0
 
 ## Neue Version veröffentlichen

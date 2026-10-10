@@ -1,15 +1,22 @@
-Kapsel-Automat (Testversion)
-============================
+Spielebibliothek (Testversion)
+==============================
 
 1. Diesen Ordner irgendwohin entpacken, wo du schreiben darfst,
-   z. B. Dokumente\Spiele\Kapsel-Automat (nicht nach C:\Programme).
+   z. B. Dokumente\Spiele\Bibliothek (nicht nach C:\Programme).
    KapselLauncher.exe und KapselLauncher.pck müssen zusammen im Ordner bleiben.
 2. KapselLauncher.exe starten.
-3. "Installieren" klicken, warten, dann "Spielen".
+3. Links ein Spiel wählen, "Installieren" klicken, warten, dann "Spielen".
 
-Neue Versionen bietet der Launcher beim Start automatisch an.
+Beim Spielen verkleinert sich die Bibliothek und kommt wieder,
+sobald du das Spiel beendest.
+
+Neue Spielversionen und neue Spiele bietet die Bibliothek beim Start
+automatisch an. Sie aktualisiert sich auch selbst (Knopf "neu starten" oben).
 Deine Spielstände bleiben bei Updates erhalten
-(sie liegen unter %APPDATA%\KapselAutomat).
+(Kapsel-Automat speichert unter %APPDATA%\KapselAutomat).
+
+Hattest du schon den alten Launcher? Einfach in denselben Ordner
+entpacken und Dateien ersetzen. Das installierte Spiel wird übernommen.
 
 KapselLauncher.exe ist das offizielle, digital signierte Programm der
 Godot Engine. Windows zeigt es deshalb als "Godot Engine" an.

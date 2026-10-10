@@ -1,7 +1,8 @@
-class_name Updater
 extends Node
-## Prüft das neueste GitHub-Release, lädt das Spiel herunter und installiert es.
-## Spielstände liegen im Godot-Benutzerordner (user:// des Spiels) und werden nie angefasst.
+## Ein Spiel der Bibliothek: prüft sein neuestes GitHub-Release, lädt es herunter und installiert es
+## nach <basis>/games/<id>/. Spielstände liegen im Benutzerordner des Spiels und werden nie angefasst.
+## Bewusst ohne class_name: Launcher-Updates werden als .pck nachgeladen, und neue Klassennamen
+## würden dabei nicht registriert. Andere Skripte laden diese Datei per preload().
 
 signal check_finished(ok: bool)          # nach check(): latest_* ist gefüllt, wenn ok
 signal progress(done: int, total: int)   # während des Downloads (total = -1, wenn unbekannt)
@@ -10,7 +11,7 @@ signal install_finished(ok: bool, message: String)
 const VERSION_FILE := ".launcher_version.json"
 
 var config := {}
-var install_dir := ""           # Ordner, in dem game/ liegt
+var install_dir := ""           # Basisordner, in dem games/ liegt
 var latest_tag := ""
 var latest_name := ""
 var latest_notes := ""
@@ -34,26 +35,31 @@ func _ready() -> void:
 
 # ---------------------------------------------------------------- Konfiguration
 
-func load_config(path: String) -> void:
-	config = {
-		"repo": "NoName1312a/kapsel-automat",
-		"api_base": "https://api.github.com",
-		"asset_prefix": "kapsel-automat-",
-		"asset_suffix": "game.zip",
-		# Das Spiel kommt als .pck und läuft in der Launcher-.exe selbst (--main-pack).
-		# So muss Windows nur ein einziges Programm zulassen.
-		"game_pack": "KapselAutomat.pck",
-		"game_args": [],
-		# Alternative: eigene Spiel-.exe starten (nur wenn game_pack leer ist)
-		"game_exe": {"Windows": "KapselAutomat.exe", "Linux": "KapselAutomat.x86_64"},
-		"close_on_play": true,
-		"include_prereleases": false,
-	}
-	if FileAccess.file_exists(path):
-		var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
-		if parsed is Dictionary:
-			config.merge(parsed, true)
-	install_dir = _pick_install_dir()
+const DEFAULTS := {
+	"api_base": "https://api.github.com",
+	"asset_suffix": "game.zip",
+	# Das Spiel kommt als .pck und läuft in der signierten Launcher-.exe selbst (--main-pack).
+	# So muss Windows nur ein einziges Programm zulassen.
+	"pack": "",
+	"game_args": [],
+	# Alternative: eigene Spiel-.exe starten (nur wenn pack leer ist)
+	"game_exe": "",
+	"include_prereleases": false,
+}
+
+
+## settings: globale Launcher-Einstellungen (api_base, token …), game: Eintrag aus games.json.
+func setup(settings: Dictionary, game: Dictionary, base_dir: String) -> void:
+	config = DEFAULTS.duplicate(true)
+	config.merge(settings, true)
+	config.merge(game, true)
+	if not config.has("asset_prefix"):
+		config["asset_prefix"] = str(config.get("id", "")) + "-"
+	install_dir = base_dir
+
+
+func game_id() -> String:
+	return str(config.get("id", "spiel"))
 
 
 ## true, wenn der Launcher aus einer .pck läuft (fertige Version), false im Projektordner.
@@ -64,17 +70,17 @@ static func runs_from_package() -> bool:
 
 
 ## Neben der Launcher-.exe (portabel), sonst im Benutzerordner des Launchers.
-func _pick_install_dir() -> String:
-	if config.has("install_dir") and str(config["install_dir"]) != "":
-		return str(config["install_dir"])
-	if Updater.runs_from_package():
+static func pick_base_dir(override := "") -> String:
+	if override != "":
+		return override
+	if runs_from_package():
 		var exe_dir := OS.get_executable_path().get_base_dir()
 		if _is_writable(exe_dir):
 			return exe_dir
 	return OS.get_user_data_dir()
 
 
-func _is_writable(dir: String) -> bool:
+static func _is_writable(dir: String) -> bool:
 	var probe := dir.path_join(".launcher_write_test")
 	var f := FileAccess.open(probe, FileAccess.WRITE)
 	if f == null:
@@ -92,7 +98,7 @@ func _platform_value(key: String) -> String:
 
 
 func game_dir() -> String:
-	return install_dir.path_join("game")
+	return install_dir.path_join("games").path_join(game_id())
 
 
 func game_exe_path() -> String:
@@ -100,7 +106,7 @@ func game_exe_path() -> String:
 
 
 func game_pack_path() -> String:
-	var pack := _platform_value("game_pack")
+	var pack := _platform_value("pack")
 	return game_dir().path_join(pack) if pack != "" else ""
 
 
@@ -240,7 +246,8 @@ func install_latest() -> void:
 	if _busy or latest_asset_url == "":
 		return
 	_busy = true
-	var zip_path := install_dir.path_join("download.zip.part")
+	DirAccess.make_dir_recursive_absolute(install_dir.path_join("games"))
+	var zip_path := install_dir.path_join("games").path_join(game_id() + ".zip.part")
 	DirAccess.remove_absolute(zip_path)
 	_http.download_file = zip_path
 	var headers := PackedStringArray(["User-Agent: Kapsel-Launcher", "Accept: application/octet-stream"])
@@ -284,8 +291,8 @@ func _install_zip(zip_path: String) -> String:
 		zip.close()
 		return "ZIP ist leer"
 	var prefix := _common_root(files)
-	var new_dir := install_dir.path_join("game_new")
-	var old_dir := install_dir.path_join("game_old")
+	var new_dir := game_dir() + ".neu"
+	var old_dir := game_dir() + ".alt"
 	_remove_tree(new_dir)
 	_remove_tree(old_dir)
 	DirAccess.make_dir_recursive_absolute(new_dir)
@@ -308,7 +315,7 @@ func _install_zip(zip_path: String) -> String:
 	if not FileAccess.file_exists(new_dir.path_join(game_main_file().get_file())):
 		_remove_tree(new_dir)
 		return "Im Download fehlt %s" % game_main_file().get_file()
-	if OS.get_name() != "Windows" and _platform_value("game_pack") == "":
+	if OS.get_name() != "Windows" and _platform_value("pack") == "":
 		var exe := new_dir.path_join(_platform_value("game_exe"))
 		if FileAccess.file_exists(exe):
 			OS.execute("chmod", ["+x", exe])
@@ -364,19 +371,19 @@ func installed_notes() -> String:
 
 # ---------------------------------------------------------------- Spiel starten
 
-func launch_game() -> bool:
+## Startet das Spiel als eigenen Prozess und gibt die Prozess-ID zurück (-1 bei Fehler).
+func launch_game() -> int:
 	var args := PackedStringArray()
 	for a in config.get("game_args", []):
 		args.append(str(a))
 	var pack := game_pack_path()
 	if pack != "":
-		# Gleiche .exe wie der Launcher, nur mit den Spieldaten
+		# Gleiche signierte .exe wie der Launcher, nur mit den Spieldaten
 		args.append_array(PackedStringArray(["--main-pack", pack]))
-		return OS.create_process(OS.get_executable_path(), args, false) > 0
-	var exe := game_exe_path()
-	var pid := -1
-	if OS.get_name() == "macOS" and exe.ends_with(".app"):
-		pid = OS.create_process("open", [exe])
-	else:
-		pid = OS.create_process(exe, args, false)
-	return pid > 0
+		return OS.create_process(OS.get_executable_path(), args, false)
+	return OS.create_process(game_exe_path(), args, false)
+
+
+## Löscht die installierten Spieldateien (nicht die Spielstände).
+func uninstall() -> void:
+	_remove_tree(game_dir())

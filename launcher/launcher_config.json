@@ -1,9 +1,6 @@
 {
-  "repo": "NoName1312a/kapsel-automat",
   "api_base": "https://api.github.com",
-  "asset_prefix": "kapsel-automat-",
-  "asset_suffix": "game.zip",
-  "game_pack": "KapselAutomat.pck",
-  "close_on_play": true,
-  "include_prereleases": false
+  "catalog_url": "https://raw.githubusercontent.com/NoName1312a/kapsel-automat/main/launcher/games.json",
+  "launcher_repo": "NoName1312a/kapsel-automat",
+  "minimize_on_play": true
 }

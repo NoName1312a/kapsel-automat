@@ -61,10 +61,10 @@ jobs:
           set -e
           V="$GODOT_VERSION"
           cd "$RUNNER_TEMP"
-          curl -sSLo godot.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_linux.x86_64.zip"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o godot.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_linux.x86_64.zip"
           unzip -q godot.zip
           mv "Godot_v${V}-stable_linux.x86_64" godot
-          curl -sSLo godot_win.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_win64.exe.zip"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o godot_win.zip "https://github.com/godotengine/godot/releases/download/${V}-stable/Godot_v${V}-stable_win64.exe.zip"
           unzip -q godot_win.zip "Godot_v${V}-stable_win64.exe"
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
@@ -110,6 +110,12 @@ jobs:
           cp build/launcher-windows/KapselLauncher.pck build/launcher-linux/KapselLauncher.pck
           cp "$RUNNER_TEMP/godot" build/launcher-linux/KapselLauncher.x86_64
           python3 launcher/tests/check_signature.py build/launcher-windows/KapselLauncher.exe
+          # Dieselbe .pck noch einmal als Selbst-Update: installierte Launcher laden sie beim Start
+          # nach, wenn die Version in launcher/scripts/version.gd neuer ist als ihre eigene.
+          LV=$(sed -n 's/^const VERSION := "\(.*\)"$/\1/p' launcher/scripts/version.gd)
+          test -n "$LV"
+          echo "Launcher-Version: $LV"
+          cp build/launcher-windows/KapselLauncher.pck "build/launcher-app-${LV}.pck"
 
       - if: steps.tag.outputs.skip != 'true'
         name: Pakete schnüren
@@ -121,6 +127,7 @@ jobs:
           cp "launcher/LIES MICH.txt" build/launcher-windows/
           (cd build/launcher-windows && zip -qr "../../dist/kapsel-launcher-windows.zip" .)
           (cd build/launcher-linux && zip -qr "../../dist/kapsel-launcher-linux.zip" .)
+          cp build/launcher-app-*.pck dist/
           ls -la dist
 
       - if: steps.tag.outputs.skip != 'true'
@@ -144,4 +151,6 @@ jobs:
           name: Kapsel-Automat ${{ steps.tag.outputs.tag }}
           body_path: notes.md
           prerelease: ${{ contains(steps.tag.outputs.tag, '-') }}
-          files: dist/*.zip
+          files: |
+            dist/*.zip
+            dist/*.pck

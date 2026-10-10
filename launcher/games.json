@@ -1,0 +1,14 @@
+{
+  "games": [
+    {
+      "id": "kapsel-automat",
+      "name": "Kapsel-Automat",
+      "repo": "NoName1312a/kapsel-automat",
+      "asset_prefix": "kapsel-automat-",
+      "asset_suffix": "game.zip",
+      "pack": "KapselAutomat.pck",
+      "description": "Kurbeln, Kapseln öffnen, Figuren sammeln: ein Gacha-Incremental mit vier Welten und zwölf Automaten.",
+      "cover": "res://art/covers/kapsel-automat.png"
+    }
+  ]
+}
