@@ -27,7 +27,7 @@ func _ready() -> void:
 	_build_buttons()
 	_build_socials()
 
-	var ver := _label("Version %s" % ProjectSettings.get_setting("application/config/version", "?"), 14, Color(1, 1, 1, 0.45))
+	var ver := _label(Loc.t("Version %s") % ProjectSettings.get_setting("application/config/version", "?"), 14, Color(1, 1, 1, 0.45))
 	ver.position = Vector2(16, 694)
 	add_child(ver)
 	hint = _label("", 18, GOLD)
@@ -46,10 +46,10 @@ func _ready() -> void:
 	settings_panel.closed.connect(func() -> void: dim.visible = false)
 
 	confirm = ConfirmationDialog.new()
-	confirm.title = "Neues Spiel"
-	confirm.dialog_text = "Es gibt schon einen Spielstand.\nNeues Spiel starten und ihn überschreiben?"
-	confirm.ok_button_text = "Neues Spiel"
-	confirm.cancel_button_text = "Abbrechen"
+	confirm.title = Loc.t("Neues Spiel")
+	confirm.dialog_text = Loc.t("Es gibt schon einen Spielstand.\nNeues Spiel starten und ihn überschreiben?")
+	confirm.ok_button_text = Loc.t("Neues Spiel")
+	confirm.cancel_button_text = Loc.t("Abbrechen")
 	confirm.confirmed.connect(_start_new)
 	add_child(confirm)
 
@@ -145,11 +145,11 @@ func _build_logo() -> void:
 	else:
 		var box := VBoxContainer.new()
 		box.size = Vector2(1280, 170)
-		var t := _label("KAPSEL-AUTOMAT", 72, GOLD)
+		var t := _label("TWISTY TURVY", 72, GOLD)
 		t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		t.add_theme_constant_override("outline_size", 14)
 		box.add_child(t)
-		var sub := _label("Kurbeln. Öffnen. Sammeln.", 24, Color("#9fffcb"))
+		var sub := _label(Loc.t("Kurbeln. Öffnen. Sammeln."), 24, Color("#9fffcb"))
 		sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(sub)
 		logo = box
@@ -177,30 +177,30 @@ func _build_buttons() -> void:
 	v.position = Vector2(450, 270)
 	v.size = Vector2(380, 0)
 	add_child(v)
-	v.add_child(_menu_button("Neues Spiel", "icons/play.png", func() -> void:
+	v.add_child(_menu_button(Loc.t("Neues Spiel"), "icons/play.png", func() -> void:
 		if Game.has_save():
 			confirm.popup_centered()
 		else:
 			_start_new()))
-	load_btn = _menu_button("Spiel laden", "icons/load.png", _start_loaded)
+	load_btn = _menu_button(Loc.t("Spiel laden"), "icons/load.png", _start_loaded)
 	load_btn.disabled = not Game.has_save()
 	if load_btn.disabled:
-		load_btn.tooltip_text = "Noch kein Spielstand vorhanden"
+		load_btn.tooltip_text = Loc.t("Noch kein Spielstand vorhanden")
 	v.add_child(load_btn)
-	v.add_child(_menu_button("Einstellungen", "icons/settings.png", func() -> void:
+	v.add_child(_menu_button(Loc.t("Einstellungen"), "icons/settings.png", func() -> void:
 		dim.visible = true
 		settings_panel.open()))
-	var wish := _menu_button("Auf Steam wunschlisten", "icons/social/steam_24.png", func() -> void: _open_link("steam_wishlist"))
+	var wish := _menu_button(Loc.t("Auf Steam wunschlisten"), "icons/social/steam_24.png", func() -> void: _open_link("steam_wishlist"))
 	wish.theme_type_variation = "SteamButton"
 	v.add_child(wish)
-	v.add_child(_menu_button("Beenden", "icons/quit.png", func() -> void: get_tree().quit()))
+	v.add_child(_menu_button(Loc.t("Beenden"), "icons/quit.png", func() -> void: get_tree().quit()))
 
 
 func _build_socials() -> void:
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", 12)
 	add_child(h)
-	for s in [["discord", "Discord"], ["reddit", "Reddit"], ["x", "X"]]:
+	for s in [["discord", Loc.t("Discord")], ["reddit", Loc.t("Reddit")], ["x", Loc.t("X")]]:
 		var key: String = s[0]
 		var b := Button.new()
 		b.focus_mode = Control.FOCUS_NONE

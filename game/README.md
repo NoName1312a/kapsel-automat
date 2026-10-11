@@ -1,4 +1,8 @@
-# Kapsel-Automat – Prototyp v0.6 (Godot 4.4)
+# Twisty Turvy (früher Kapsel-Automat) – Prototyp v0.6 (Godot 4.4)
+
+## Sprachen (ab v0.6.5)
+
+Englisch (Standard) und Deutsch, umschaltbar in den Einstellungen. Der Quelltext bleibt Deutsch: Texte im Code laufen durch `Loc.t("…")` (scripts/loc.gd), Spieldaten (Figuren, Upgrades, Story …) werden beim Laden mit `Loc.translate_data()` übersetzt. Alle Übersetzungen stehen in `data/lang_en.json` als `{"deutsch": "english"}`; fehlt ein Eintrag, erscheint der deutsche Text. Neue Texte also dort ergänzen. Zahlen auf Englisch: 1.23K, 4.50M, 2.00B (scripts/fmt.gd). Sprachwechsel baut die Szene neu auf, der Spielstand bleibt.
 
 Kurbel drehen → Kapsel fällt → öffnen → Figur ins Album. Dazu Wirtschaft mit passivem Einkommen, 3 Automaten, Neueröffnung (Prestige), Fusion und 30 Erfolge.
 **v3: mit Pixel-Art** aus dem Grafik-Thread (Ordner `art/`, Details in `art/manifest.md`): 4 Automaten-Skins, 30 Figuren, Hintergrund, Kapseln inkl. Fluch/Segen, Hamster, Upgrade-Icons, Album-Kacheln mit Silhouetten, Pokale, Set-Abzeichen, Knöpfe und Rahmen. Alles wird ×2 bzw. ×3 mit Nearest-Filter dargestellt.

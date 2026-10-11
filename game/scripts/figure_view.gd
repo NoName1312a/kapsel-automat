@@ -79,7 +79,7 @@ func _draw_placeholder(c: Vector2, rc: Color, sc: Color) -> void:
 func _draw_labels(rc: Color) -> void:
 	var font := ThemeDB.fallback_font
 	draw_string(font, Vector2(-160, 120), figure["name"], HORIZONTAL_ALIGNMENT_CENTER, 320, 28, Color.WHITE)
-	draw_string(font, Vector2(-160, 148), "%s · %s" % [figure["rarity_name"], figure["set_name"]], HORIZONTAL_ALIGNMENT_CENTER, 320, 18, rc)
+	draw_string(font, Vector2(-160, 148), Loc.t("%s · %s") % [figure["rarity_name"], figure["set_name"]], HORIZONTAL_ALIGNMENT_CENTER, 320, 18, rc)
 	var stamp := Art.tex("ui/new_stamp.png")
 	if is_new and stamp:
 		var pulse := 1.0 + 0.06 * sin(_t * 8.0)
@@ -89,5 +89,5 @@ func _draw_labels(rc: Color) -> void:
 	elif is_new:
 		var pulse := 1.0 + 0.08 * sin(_t * 8.0)
 		draw_set_transform(Vector2(0, -100), -0.12, Vector2(pulse, pulse))
-		draw_string(font, Vector2(-80, 0), "NEU!", HORIZONTAL_ALIGNMENT_CENTER, 160, 30, Color("#ffe14d"))
+		draw_string(font, Vector2(-80, 0), Loc.t("NEU!"), HORIZONTAL_ALIGNMENT_CENTER, 160, 30, Color("#ffe14d"))
 		draw_set_transform(Vector2.ZERO)

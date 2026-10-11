@@ -2,7 +2,7 @@
   "games": [
     {
       "id": "kapsel-automat",
-      "name": "Kapsel-Automat",
+      "name": "Twisty Turvy",
       "repo": "NoName1312a/kapsel-automat",
       "asset_prefix": "kapsel-automat-",
       "asset_suffix": "game.zip",

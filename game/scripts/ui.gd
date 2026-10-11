@@ -77,9 +77,9 @@ func _ready() -> void:
 	_build_topbar()
 	_build_strip()
 	_build_sidebar()
-	album_panel = _build_overlay("Sammelalbum")
+	album_panel = _build_overlay(Loc.t("Sammelalbum"))
 	album_list = album_panel.get_meta("list")
-	ach_panel = _build_overlay("Erfolge & Statistik")
+	ach_panel = _build_overlay(Loc.t("Erfolge & Statistik"))
 	ach_list = ach_panel.get_meta("list")
 	_build_pause_menu()
 	_build_story()
@@ -88,10 +88,10 @@ func _ready() -> void:
 	Game.achievement_unlocked.connect(_on_achievement)
 	Game.upgrade_revealed.connect(func(u: Dictionary) -> void:
 		Sfx.play_first(["toast"], 1.0, -4.0)
-		toast("Neues Upgrade", u["name"]))
+		toast(Loc.t("Neues Upgrade"), u["name"]))
 	Game.background_opened.connect(_on_background_opened)
 	Game.world_unlocked.connect(func(w: String) -> void:
-		toast("Neue Welt: " + Game.world_by_id[w]["name"], Game.world_by_id[w]["desc"]))
+		toast(Loc.t("Neue Welt: ") + Game.world_by_id[w]["name"], Game.world_by_id[w]["desc"]))
 	Game.story_event.connect(_on_story_event)
 	var t := Timer.new()
 	t.wait_time = 0.2
@@ -118,7 +118,7 @@ func _process(delta: float) -> void:
 		_idle_timer = randf_range(120.0, 200.0)
 		var line := Story.random_idle_line()
 		if line != "" and not is_blocking() and Game.active:
-			say("Krümel: " + line)
+			say(Loc.t("Krümel: ") + line)
 			status_timer = 6.0
 
 
@@ -209,7 +209,7 @@ func _next_toast() -> void:
 
 func _on_achievement(a: Dictionary) -> void:
 	Sfx.play("achievement")
-	toast("Erfolg: " + a["name"], "%s  (+%d %% Münzen)" % [a["desc"], int(Game.achievement_bonus * 100)])
+	toast(Loc.t("Erfolg: ") + a["name"], Loc.t("%s  (+%d %% Münzen)") % [a["desc"], int(Game.achievement_bonus * 100)])
 
 
 ## Nebenautomaten melden nur Besonderes, und höchstens alle paar Sekunden.
@@ -221,8 +221,8 @@ func _on_background_opened(machine_id: String, res: Dictionary) -> void:
 		if f["rarity"] == "legendary" or f["id"] in res.get("new", []):
 			_bg_toast_cooldown = 4.0
 			Sfx.play_first(["new_figure"], 1.0, -8.0)
-			toast("%s: %s" % [m["name"], "Legendär!" if f["rarity"] == "legendary" else "Neue Figur"],
-				"%s (%s) fürs Album" % [f["name"], f["rarity_name"]])
+			toast(Loc.t("%s: %s") % [m["name"], Loc.t("Legendär!") if f["rarity"] == "legendary" else Loc.t("Neue Figur")],
+				Loc.t("%s (%s) fürs Album") % [f["name"], f["rarity_name"]])
 			return
 
 
@@ -306,7 +306,7 @@ func _trophy_tier(a: Dictionary) -> String:
 
 
 func _build_hud() -> void:
-	var hint := _label("Kurbeln: halten oder LEERTASTE  ·  Öffnen: Klick oder E  ·  A: alle  ·  M: Mini  ·  Esc: Menü", 14, Color(1, 1, 1, 0.55))
+	var hint := _label(Loc.t("Kurbeln: halten oder LEERTASTE  ·  Öffnen: Klick oder E  ·  A: alle  ·  M: Mini  ·  Esc: Menü"), 14, Color(1, 1, 1, 0.55))
 	hint.position = Vector2(120, 694)
 	add_child(hint)
 
@@ -347,12 +347,12 @@ func _build_topbar() -> void:
 		gear.icon = gt
 		gear.add_theme_constant_override("icon_max_width", 28)
 	else:
-		gear.text = "Einst."
-	gear.tooltip_text = "Einstellungen"
+		gear.text = Loc.t("Einst.")
+	gear.tooltip_text = Loc.t("Einstellungen")
 	h.add_child(gear)
 
 	world_btn = _button("", func() -> void: tabs.current_tab = 2)
-	world_btn.tooltip_text = "Welten"
+	world_btn.tooltip_text = Loc.t("Welten")
 	world_btn.add_theme_font_size_override("font_size", 16)
 	world_btn.custom_minimum_size = Vector2(190, 0)
 	h.add_child(world_btn)
@@ -380,14 +380,14 @@ func _build_topbar() -> void:
 	var spacer2 := Control.new()
 	spacer2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	h.add_child(spacer2)
-	var mini_b := _button("Mini", func() -> void: mini_requested.emit())
-	mini_b.tooltip_text = "Mini-Modus: kleines Fenster über der Taskleiste, weiterspielen nebenbei (M)"
+	var mini_b := _button(Loc.t("Mini"), func() -> void: mini_requested.emit())
+	mini_b.tooltip_text = Loc.t("Mini-Modus: kleines Fenster über der Taskleiste, weiterspielen nebenbei (M)")
 	mini_b.custom_minimum_size = Vector2(70, 0)
 	mini_b.add_theme_font_size_override("font_size", 16)
 	h.add_child(mini_b)
-	for e in [["Album", func() -> void: _toggle_overlay(album_panel)],
-			["Erfolge", func() -> void: _toggle_overlay(ach_panel)],
-			["Menü", toggle_pause]]:
+	for e in [[Loc.t("Album"), func() -> void: _toggle_overlay(album_panel)],
+			[Loc.t("Erfolge"), func() -> void: _toggle_overlay(ach_panel)],
+			[Loc.t("Menü"), toggle_pause]]:
 		var b := _button(e[0], e[1])
 		b.custom_minimum_size = Vector2(92, 0)
 		b.add_theme_font_size_override("font_size", 16)
@@ -404,9 +404,9 @@ func _build_strip() -> void:
 
 
 func _rebuild_strip() -> void:
-	var key := "%s|%s|%d" % [str(Game.placed), Game.current_machine, Game.slot_count()]
+	var key := Loc.t("%s|%s|%d") % [str(Game.placed), Game.current_machine, Game.slot_count()]
 	for id in Game.placed:
-		key += "|%d" % Game.machine_level(id)
+		key += Loc.t("|%d") % Game.machine_level(id)
 	if key == _strip_key:
 		return
 	_strip_key = key
@@ -414,7 +414,7 @@ func _rebuild_strip() -> void:
 		c.queue_free()
 	if Game.slot_count() <= 1 and Game.unlocked_machines.size() <= 1:
 		return
-	strip.add_child(_label("Plätze %d/%d" % [Game.placed.size(), Game.slot_count()], 13, DIM_TEXT))
+	strip.add_child(_label(Loc.t("Plätze %d/%d") % [Game.placed.size(), Game.slot_count()], 13, DIM_TEXT))
 	for id in Game.placed:
 		var m: Dictionary = Game.machine_by_id[id]
 		var mid: String = id
@@ -427,16 +427,16 @@ func _rebuild_strip() -> void:
 		b.add_theme_constant_override("icon_max_width", 40)
 		b.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
-		b.text = "%s\n%s" % [_short_name(m), "★%d" % Game.machine_level(id) if Game.machine_level(id) > 0 else ""]
+		b.text = Loc.t("%s\n%s") % [_short_name(m), Loc.t("★%d") % Game.machine_level(id) if Game.machine_level(id) > 0 else ""]
 		b.add_theme_font_size_override("font_size", 12)
-		b.tooltip_text = "%s%s" % [m["name"], "  (wird gezeigt)" if id == Game.current_machine else "  (läuft nebenbei, %s Kapseln/s)" % Fmt.rate(Game.background_rate(id))]
+		b.tooltip_text = "%s%s" % [m["name"], Loc.t("  (wird gezeigt)") if id == Game.current_machine else Loc.t("  (läuft nebenbei, %s Kapseln/s)") % Fmt.rate(Game.background_rate(id))]
 		if id == Game.current_machine:
 			b.modulate = Color(1.15, 1.1, 0.8)
 		else:
 			b.modulate = Color(0.85, 0.85, 0.9)
 		strip.add_child(b)
 	for i in Game.slot_count() - Game.placed.size():
-		var e := _label("freier Platz\n(Automaten-Tab)", 11, Color(1, 1, 1, 0.45))
+		var e := _label(Loc.t("freier Platz\n(Automaten-Tab)"), 11, Color(1, 1, 1, 0.45))
 		e.custom_minimum_size = Vector2(100, 40)
 		e.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		strip.add_child(e)
@@ -476,12 +476,12 @@ func _build_sidebar() -> void:
 	# Reiter dürfen notfalls gekürzt werden, aber nie die Leiste breiter machen
 	tabs.clip_tabs = true
 	box.add_child(tabs)
-	_build_upgrade_tab(_scroll_tab(tabs, "Upgrades"))
-	_build_machine_tab(_scroll_tab(tabs, "Automaten"))
-	_build_world_tab(_scroll_tab(tabs, "Welten"))
-	_build_prestige_tab(_scroll_tab(tabs, "Goldmarken"))
+	_build_upgrade_tab(_scroll_tab(tabs, Loc.t("Upgrades")))
+	_build_machine_tab(_scroll_tab(tabs, Loc.t("Automaten")))
+	_build_world_tab(_scroll_tab(tabs, Loc.t("Welten")))
+	_build_prestige_tab(_scroll_tab(tabs, Loc.t("Goldmarken")))
 
-	open_all_btn = _button("Alle öffnen (A)", func() -> void: open_all_requested.emit())
+	open_all_btn = _button(Loc.t("Alle öffnen (A)"), func() -> void: open_all_requested.emit())
 	open_all_btn.theme_type_variation = "BigButton"
 	open_all_btn.custom_minimum_size = Vector2(0, 44)
 	open_all_btn.add_theme_font_size_override("font_size", 18)
@@ -517,11 +517,11 @@ func _build_upgrade_tab(v: VBoxContainer) -> void:
 	hh.add_child(hv)
 	upgrade_machine_label = _label("", 16, GOLD)
 	hv.add_child(upgrade_machine_label)
-	hv.add_child(_wrap_label("Jeder Automat hat eigene Upgrades. Gruppe anklicken zum Auf- und Zuklappen.", 12, DIM_TEXT, 120))
+	hv.add_child(_wrap_label(Loc.t("Jeder Automat hat eigene Upgrades. Gruppe anklicken zum Auf- und Zuklappen."), 12, DIM_TEXT, 120))
 
 	var cat_names: Dictionary = {}
 	var cat_order: Array = []
-	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/upgrades.json"))
+	var data: Dictionary = Loc.translate_data(JSON.parse_string(FileAccess.get_file_as_string("res://data/upgrades.json")))
 	for c in data.get("categories", []):
 		cat_names[c["id"]] = c["name"]
 		cat_order.append(c["id"])
@@ -550,7 +550,7 @@ func _build_upgrade_tab(v: VBoxContainer) -> void:
 			refresh())
 		for u in members:
 			_upgrade_row(body, u)
-		upgrade_rows["_head_" + cat] = {"head": head, "body": body, "name": cat_names.get(cat, "Weitere"),
+		upgrade_rows["_head_" + cat] = {"head": head, "body": body, "name": cat_names.get(cat, Loc.t("Weitere")),
 			"members": members.map(func(u: Dictionary) -> String: return u["id"])}
 
 
@@ -583,7 +583,7 @@ func _upgrade_row(v: VBoxContainer, u: Dictionary) -> void:
 	b.add_theme_font_size_override("font_size", 13)
 	b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(b)
-	var mx := _button("Max", func() -> void:
+	var mx := _button(Loc.t("Max"), func() -> void:
 		if Game.buy_max(id) > 0:
 			Sfx.play("upgrade", 0.9)
 		else:
@@ -641,7 +641,7 @@ func _build_machine_tab(v: VBoxContainer) -> void:
 				Sfx.play_first(["slot_place", "clunk"])
 			else:
 				Sfx.play("deny")
-				say("Kein freier Platz: mehr Plätze gibt es mit „Anbau“."))
+				say(Loc.t("Kein freier Platz: mehr Plätze gibt es mit „Anbau“.")))
 		place_b.add_theme_font_size_override("font_size", 13)
 		btns.add_child(place_b)
 		# Lange Preise dürfen die Zeile nicht breiter als die Seitenleiste machen
@@ -653,7 +653,7 @@ func _build_machine_tab(v: VBoxContainer) -> void:
 
 
 func _build_world_tab(v: VBoxContainer) -> void:
-	v.add_child(_wrap_label("Jede Welt hat ein eigenes Album und eigene Automaten. Wer genug Sets einer Welt komplett hat, kann weiterreisen. Bekannte Welten bleiben auch nach einer Neueröffnung offen.", 12, DIM_TEXT, 200))
+	v.add_child(_wrap_label(Loc.t("Jede Welt hat ein eigenes Album und eigene Automaten. Wer genug Sets einer Welt komplett hat, kann weiterreisen. Bekannte Welten bleiben auch nach einer Neueröffnung offen."), 12, DIM_TEXT, 200))
 	for w in Game.worlds:
 		var id: String = w["id"]
 		var card := _card()
@@ -703,11 +703,11 @@ func _build_prestige_tab(v: VBoxContainer) -> void:
 		if gain < 1:
 			Sfx.play("deny")
 			return
-		_ask("Laden neu eröffnen?\n\nMünzen, Upgrades, Automaten und ihre Stufen werden zurückgesetzt.\nAlbum, Erfolge, Welten und Goldmarken bleiben.\n\nDu bekommst %d Goldmarken." % gain, func() -> void:
+		_ask(Loc.t("Laden neu eröffnen?\n\nMünzen, Upgrades, Automaten und ihre Stufen werden zurückgesetzt.\nAlbum, Erfolge, Welten und Goldmarken bleiben.\n\nDu bekommst %d Goldmarken.") % gain, func() -> void:
 			clear_tray_requested.emit()
 			Game.do_prestige()
 			Sfx.play("prestige")
-			toast("Neueröffnung!", "+%d Goldmarken" % gain)))
+			toast(Loc.t("Neueröffnung!"), Loc.t("+%d Goldmarken") % gain)))
 	prestige_btn.theme_type_variation = "BigButton"
 	prestige_btn.custom_minimum_size = Vector2(0, 46)
 	prestige_btn.clip_text = true
@@ -781,7 +781,7 @@ func _build_overlay(title: String) -> PanelContainer:
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(t)
 	panel.set_meta("head", head)
-	head.add_child(_button("Schließen", func() -> void: _toggle_overlay(panel)))
+	head.add_child(_button(Loc.t("Schließen"), func() -> void: _toggle_overlay(panel)))
 	var sc := ScrollContainer.new()
 	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -814,22 +814,22 @@ func _build_pause_menu() -> void:
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 10)
 	m.add_child(v)
-	var t := _label("Menü", 30, GOLD)
+	var t := _label(Loc.t("Menü"), 30, GOLD)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(t)
 	var entries := [
-		["Weiter", toggle_pause],
-		["Einstellungen", open_settings],
-		["Hauptmenü", func() -> void:
+		[Loc.t("Weiter"), toggle_pause],
+		[Loc.t("Einstellungen"), open_settings],
+		[Loc.t("Hauptmenü"), func() -> void:
 			clear_tray_requested.emit()
 			Game.stop()
 			get_tree().change_scene_to_file(MENU_SCENE)],
-		["Spielstand löschen", func() -> void:
-			_ask("Wirklich ALLES löschen? Album, Erfolge, Welten und Goldmarken sind dann weg.", func() -> void:
+		[Loc.t("Spielstand löschen"), func() -> void:
+			_ask(Loc.t("Wirklich ALLES löschen? Album, Erfolge, Welten und Goldmarken sind dann weg."), func() -> void:
 				clear_tray_requested.emit()
 				Game.reset_game()
 				toggle_pause())],
-		["Speichern & Beenden", func() -> void:
+		[Loc.t("Speichern & Beenden"), func() -> void:
 			Game.save_game()
 			get_tree().quit()],
 	]
@@ -903,7 +903,7 @@ func _build_story() -> void:
 	story_label = _wrap_label("", 18, Color.WHITE, 520)
 	story_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	v.add_child(story_label)
-	v.add_child(_label("Klicken oder Leertaste: weiter", 12, Color(1, 1, 1, 0.45)))
+	v.add_child(_label(Loc.t("Klicken oder Leertaste: weiter"), 12, Color(1, 1, 1, 0.45)))
 
 
 func _on_story_event(trigger: String) -> void:
@@ -966,15 +966,15 @@ func _next_story_line() -> void:
 
 func _build_dialogs() -> void:
 	confirm = ConfirmationDialog.new()
-	confirm.title = "Bestätigen"
-	confirm.ok_button_text = "Ja"
-	confirm.cancel_button_text = "Abbrechen"
+	confirm.title = Loc.t("Bestätigen")
+	confirm.ok_button_text = Loc.t("Ja")
+	confirm.cancel_button_text = Loc.t("Abbrechen")
 	confirm.confirmed.connect(func() -> void:
 		Sfx.play_first(["ui_confirm"])
 		_confirm_action.call())
 	add_child(confirm)
 	info_dialog = AcceptDialog.new()
-	info_dialog.ok_button_text = "Weiter"
+	info_dialog.ok_button_text = Loc.t("Weiter")
 	add_child(info_dialog)
 
 
@@ -1024,7 +1024,7 @@ func _open_welcome(r: Dictionary) -> void:
 		v.add_theme_constant_override("separation", 10)
 		v.alignment = BoxContainer.ALIGNMENT_CENTER
 		m.add_child(v)
-		var title := _label("Willkommen zurück!", 30, GOLD)
+		var title := _label(Loc.t("Willkommen zurück!"), 30, GOLD)
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		title.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.15))
 		title.add_theme_constant_override("outline_size", 8)
@@ -1055,7 +1055,7 @@ func _open_welcome(r: Dictionary) -> void:
 		welcome_amount.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.15))
 		welcome_amount.add_theme_constant_override("outline_size", 8)
 		v.add_child(welcome_amount)
-		var ok := _button("Einsammeln", func() -> void:
+		var ok := _button(Loc.t("Einsammeln"), func() -> void:
 			welcome_panel.visible = false
 			welcome_dim.visible = false
 			Sfx.play_pref(["coin_big", "coin"]))
@@ -1063,8 +1063,8 @@ func _open_welcome(r: Dictionary) -> void:
 		ok.custom_minimum_size = Vector2(240, 48)
 		ok.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		v.add_child(ok)
-	welcome_text.text = "Du warst %s weg. Krümel hat aufgepasst,\ndie Vitrinen haben in der Zeit verdient:" % Fmt.duration(r["seconds"])
-	welcome_amount.text = "+%s Münzen" % Fmt.num(r["amount"])
+	welcome_text.text = Loc.t("Du warst %s weg. Krümel hat aufgepasst,\ndie Vitrinen haben in der Zeit verdient:") % Fmt.duration(r["seconds"])
+	welcome_amount.text = Loc.t("+%s Münzen") % Fmt.num(r["amount"])
 	welcome_dim.visible = true
 	move_child(welcome_dim, -1)
 	move_child(welcome_panel, -1)
@@ -1075,9 +1075,9 @@ func _open_welcome(r: Dictionary) -> void:
 
 func _show_ending() -> void:
 	var s := Game.stats
-	_info("Der Goldene Automat!", ("Geschafft! Der Goldene Automat steht in deiner Sternenstation.\n\n" +
-		"Spielzeit: %s\nKapseln geöffnet: %s\nFiguren: %d/%d\nLegendäre Figuren: %d\nNeueröffnungen: %d\nErfolge: %d/%d\n\n" +
-		"Du kannst weiterspielen, die Alben vervollständigen und die restlichen Erfolge holen.") % [
+	_info(Loc.t("Der Goldene Automat!"), (Loc.t("Geschafft! Der Goldene Automat steht in deiner Sternenstation.\n\n") +
+		Loc.t("Spielzeit: %s\nKapseln geöffnet: %s\nFiguren: %d/%d\nLegendäre Figuren: %d\nNeueröffnungen: %d\nErfolge: %d/%d\n\n") +
+		Loc.t("Du kannst weiterspielen, die Alben vervollständigen und die restlichen Erfolge holen.")) % [
 		Fmt.duration(s["play_time"]), Fmt.num(s["capsules_opened"]), Game.album_count(), Game.figures.size(),
 		int(s["legendaries"]), int(s["prestiges"]), Game.achievements.size(), Game.achievement_list.size()])
 
@@ -1123,7 +1123,7 @@ func _fill_album() -> void:
 	for ww in Game.worlds:
 		var wid: String = ww["id"]
 		var known: bool = wid in Game.unlocked_worlds or Game.album_count(wid) > 0
-		var b := _button("%s  %d/%d" % [ww["name"], Game.album_count(wid), Game.album_size(wid)] if known else "???", func() -> void:
+		var b := _button(Loc.t("%s  %d/%d") % [ww["name"], Game.album_count(wid), Game.album_size(wid)] if known else "???", func() -> void:
 			album_world = wid
 			Sfx.play_pref(["album_page", "ui_click"])
 			_fill_album())
@@ -1133,7 +1133,7 @@ func _fill_album() -> void:
 			b.modulate = Color(1.2, 1.15, 0.8)
 		b.add_theme_font_size_override("font_size", 15)
 		wrow.add_child(b)
-	var head := _wrap_label("%s: %d/%d Figuren  ·  Sets %d/%d  ·  Insgesamt %d/%d  ·  Jedes Set +%d %% auf alle Münzen, jede Figur bringt passives Einkommen, Duplikate erhöhen ihre Stufe." % [
+	var head := _wrap_label(Loc.t("%s: %d/%d Figuren  ·  Sets %d/%d  ·  Insgesamt %d/%d  ·  Jedes Set +%d %% auf alle Münzen, jede Figur bringt passives Einkommen, Duplikate erhöhen ihre Stufe.") % [
 		w["name"], Game.album_count(album_world), Game.album_size(album_world), Game.complete_sets(album_world), Game.world_sets(album_world).size(),
 		Game.album_count(), Game.figures.size(), int(Game.set_bonus * 100)], 14, Color(1, 1, 1, 0.8), ALBUM_W)
 	col.add_child(head)
@@ -1142,21 +1142,21 @@ func _fill_album() -> void:
 		var fr := HBoxContainer.new()
 		fr.add_theme_constant_override("separation", 8)
 		col.add_child(fr)
-		fr.add_child(_label("Fusion:", 16, Color("#c77dff")))
+		fr.add_child(_label(Loc.t("Fusion:"), 16, Color("#c77dff")))
 		for rarity in Game.FUSION_NEXT:
 			var r: Dictionary = Game.rarity_by_id[rarity]
 			var nxt: Dictionary = Game.rarity_by_id[Game.FUSION_NEXT[rarity]]
 			var rr: String = rarity
-			var b := _button("%d %s → %s  (%s)" % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Fmt.num(Game.fusion_dupes(rarity))], func() -> void:
+			var b := _button(Loc.t("%d %s → %s  (%s)") % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Fmt.num(Game.fusion_dupes(rarity))], func() -> void:
 				var res := Game.fuse(rr)
 				if res.is_empty():
 					Sfx.play("deny")
 					return
 				Sfx.play("fusion")
-				toast("Fusion!", "%s (%s)%s" % [res["figure"]["name"], res["figure"]["rarity_name"], "  NEU!" if res["is_new"] else ""])
+				toast(Loc.t("Fusion!"), Loc.t("%s (%s)%s") % [res["figure"]["name"], res["figure"]["rarity_name"], Loc.t("  NEU!") if res["is_new"] else ""])
 				_fill_album())
 			b.disabled = not Game.can_fuse(rarity)
-			b.tooltip_text = "%d %s-Duplikate ergeben 1 zufällige %s Figur. Vorhanden: %d Duplikate." % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Game.fusion_dupes(rarity)]
+			b.tooltip_text = Loc.t("%d %s-Duplikate ergeben 1 zufällige %s Figur. Vorhanden: %d Duplikate.") % [Game.FUSION_COST[rarity], r["name"], nxt["name"], Game.fusion_dupes(rarity)]
 			b.add_theme_font_size_override("font_size", 14)
 			b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			b.clip_text = true
@@ -1165,16 +1165,16 @@ func _fill_album() -> void:
 		var any_fuse := false
 		for rarity in Game.FUSION_NEXT:
 			any_fuse = any_fuse or Game.can_fuse(rarity)
-		var all_b := _button("Alles fusionieren", func() -> void:
+		var all_b := _button(Loc.t("Alles fusionieren"), func() -> void:
 			var res := Game.fuse_all()
 			if res["count"] == 0:
 				Sfx.play("deny")
 				return
 			Sfx.play("fusion")
-			toast("%d Fusionen!" % res["count"], "%d neue Figuren%s" % [res["new"], ", %d legendär" % res["legendary"] if res["legendary"] > 0 else ""])
+			toast(Loc.t("%d Fusionen!") % res["count"], Loc.t("%d neue Figuren%s") % [res["new"], Loc.t(", %d legendär") % res["legendary"] if res["legendary"] > 0 else ""])
 			_fill_album())
 		all_b.theme_type_variation = "BigButton"
-		all_b.tooltip_text = "Fusioniert alle Duplikate, bis keine Fusion mehr geht. Die Stufen der Figuren sinken dabei."
+		all_b.tooltip_text = Loc.t("Fusioniert alle Duplikate, bis keine Fusion mehr geht. Die Stufen der Figuren sinken dabei.")
 		all_b.disabled = not any_fuse
 		all_b.add_theme_font_size_override("font_size", 16)
 		all_b.custom_minimum_size = Vector2(180, 40)
@@ -1191,7 +1191,7 @@ func _fill_album() -> void:
 		var badge := Art.scaled("ui/set_badge_%s.png" % s["id"], 2)
 		if badge:
 			trow.add_child(_icon_rect(badge, 32))
-		trow.add_child(_label("%s  %d/%d%s" % [s["name"], have_n, s["figures"].size(), "   ✓ komplett" if done else ""], 20, Color(s["color"])))
+		trow.add_child(_label(Loc.t("%s  %d/%d%s") % [s["name"], have_n, s["figures"].size(), Loc.t("   ✓ komplett") if done else ""], 20, Color(s["color"])))
 		var grid := GridContainer.new()
 		grid.columns = 4
 		grid.add_theme_constant_override("h_separation", 10)
@@ -1238,12 +1238,12 @@ func _album_cell(s: Dictionary, fig: Dictionary) -> Control:
 	l.add_theme_font_size_override("font_size", 13)
 	if have > 0:
 		var inc := Game.figure_income(fig["id"]) * Game.figure_level(fig["id"]) * (1.0 + Game._eff("passive")) * Game.global_mult()
-		l.text = "%s\n%s · x%d\nStufe %d · %s/s" % [fig["name"], r["name"], have, Game.figure_level(fig["id"]), Fmt.rate(inc)]
+		l.text = Loc.t("%s\n%s · x%d\nStufe %d · %s/s") % [fig["name"], r["name"], have, Game.figure_level(fig["id"]), Fmt.rate(inc)]
 		var fl := Story.flavor(fig["id"])
 		if fl != "":
-			cell.tooltip_text = "%s: %s" % [fig["name"], fl]
+			cell.tooltip_text = Loc.t("%s: %s") % [fig["name"], fl]
 	else:
-		l.text = "???\n%s" % r["name"]
+		l.text = Loc.t("???\n%s") % r["name"]
 	hb.add_child(l)
 	return cell
 
@@ -1252,9 +1252,9 @@ func _fill_achievements() -> void:
 	for child in ach_list.get_children():
 		child.queue_free()
 	var s := Game.stats
-	ach_list.add_child(_label("Erfolge %d/%d  ·  +%d %% auf alle Münzen" % [
+	ach_list.add_child(_label(Loc.t("Erfolge %d/%d  ·  +%d %% auf alle Münzen") % [
 		Game.achievements.size(), Game.achievement_list.size(), int(Game.achievement_bonus * 100 * Game.achievements.size())], 18, GOLD))
-	var st := _wrap_label("Spielzeit %s  ·  Kapseln %s (davon nebenbei %s)  ·  Verdient %s  ·  Legendär %d  ·  Jackpots %d  ·  Neueröffnungen %d  ·  Fusionen %d  ·  Beste Kombo %d" % [
+	var st := _wrap_label(Loc.t("Spielzeit %s  ·  Kapseln %s (davon nebenbei %s)  ·  Verdient %s  ·  Legendär %d  ·  Jackpots %d  ·  Neueröffnungen %d  ·  Fusionen %d  ·  Beste Kombo %d") % [
 		Fmt.duration(s["play_time"]), Fmt.num(s["capsules_opened"]), Fmt.num(s["bg_capsules"]), Fmt.num(s["total_earned"]),
 		int(s["legendaries"]), int(s["jackpots"]), int(s["prestiges"]), int(s["fusions"]), int(s["max_combo"])], 14, Color(1, 1, 1, 0.75), 1060)
 	ach_list.add_child(st)
@@ -1284,7 +1284,7 @@ func _fill_achievements() -> void:
 		v.add_child(_label(a["name"], 16, GOLD if got else Color(0.7, 0.7, 0.75)))
 		var progress := ""
 		if not got:
-			progress = "  (%s/%s)" % [Fmt.num(minf(Game.stat(a["stat"]), a["value"])), Fmt.num(a["value"])]
+			progress = Loc.t("  (%s/%s)") % [Fmt.num(minf(Game.stat(a["stat"]), a["value"])), Fmt.num(a["value"])]
 		v.add_child(_wrap_label(a["desc"] + progress, 13, Color(1, 1, 1, 0.8 if got else 0.55), 270))
 		grid.add_child(cell)
 
@@ -1293,11 +1293,11 @@ func _fill_achievements() -> void:
 
 func refresh() -> void:
 	coins_label.text = Fmt.num(Game.coins)
-	income_label.text = "+%s/s" % Fmt.rate(Game.income_per_sec())
+	income_label.text = Loc.t("+%s/s") % Fmt.rate(Game.income_per_sec())
 	goldmarken_top.text = str(Game.goldmarken)
-	goldmarken_top.tooltip_text = "Goldmarken (ausgebbar)"
+	goldmarken_top.tooltip_text = Loc.t("Goldmarken (ausgebbar)")
 	var cw: Dictionary = Game.world_by_id[Game.current_world()]
-	world_btn.text = "%s  ·  %d/%d" % [cw["name"], Game.album_count(cw["id"]), Game.album_size(cw["id"])]
+	world_btn.text = Loc.t("%s  ·  %d/%d") % [cw["name"], Game.album_count(cw["id"]), Game.album_size(cw["id"])]
 	var wic := Art.tex("icons/world_%s.png" % cw["id"])
 	if wic:
 		world_btn.icon = wic
@@ -1307,7 +1307,7 @@ func refresh() -> void:
 
 	# Upgrades (für den gezeigten Automaten)
 	var cm: Dictionary = Game.machine()
-	upgrade_machine_label.text = "Upgrades: %s" % cm["name"]
+	upgrade_machine_label.text = Loc.t("Upgrades: %s") % cm["name"]
 	upgrade_machine_icon.texture = _machine_icon(cm["id"])
 	for key in upgrade_rows:
 		if not String(key).begins_with("_head_"):
@@ -1329,10 +1329,10 @@ func refresh() -> void:
 		hd["body"].visible = not closed
 		var extra := ""
 		if buyable > 0:
-			extra = "   %d kaufbar" % buyable
+			extra = Loc.t("   %d kaufbar") % buyable
 		elif done == shown_n and shown_n > 0:
-			extra = "   alles max"
-		hd["head"].text = "%s %s%s" % ["▸" if closed else "▾", hd["name"], extra]
+			extra = Loc.t("   alles max")
+		hd["head"].text = Loc.t("%s %s%s") % ["▸" if closed else "▾", hd["name"], extra]
 	for u in Game.upgrades:
 		var id: String = u["id"]
 		var r: Dictionary = upgrade_rows[id]
@@ -1343,7 +1343,7 @@ func refresh() -> void:
 		var b: Button = r["buy"]
 		var mx: Button = r["max"]
 		var maxed := Game.is_maxed(id)
-		r["name"].text = "%s  %d/%d" % [u["name"], Game.level(id), int(u["max_level"])]
+		r["name"].text = Loc.t("%s  %d/%d") % [u["name"], Game.level(id), int(u["max_level"])]
 		r["name"].add_theme_color_override("font_color", GOLD if maxed else Color.WHITE)
 		# Fertige Upgrades als schmale Zeile, damit die Liste kurz bleibt
 		r["desc"].visible = not maxed
@@ -1356,7 +1356,7 @@ func refresh() -> void:
 
 	# Automaten der aktuellen Welt
 	var world := Game.current_world()
-	slots_label.text = "%s  ·  Aufstellplätze %d/%d belegt. Aufgestellte Automaten laufen nebenbei von allein, der gezeigte wird gekurbelt." % [
+	slots_label.text = Loc.t("%s  ·  Aufstellplätze %d/%d belegt. Aufgestellte Automaten laufen nebenbei von allein, der gezeigte wird gekurbelt.") % [
 		cw["name"], Game.placed.size(), Game.slot_count()]
 	for m in Game.machines:
 		var id: String = m["id"]
@@ -1367,32 +1367,32 @@ func refresh() -> void:
 			continue
 		var unlocked: bool = id in Game.unlocked_machines
 		var lv := Game.machine_level(id)
-		r["title"].text = "%s  %s" % [m["name"], "★".repeat(lv)]
-		r["info"].text = "Kapsel %s  ·  Wert x%s  ·  Stufe %d/%d" % [Fmt.num(Game.capsule_cost(id)), Fmt.rate(Game.machine_value_mult(id)), lv, Game.MACHINE_MAX_LEVEL]
+		r["title"].text = Loc.t("%s  %s") % [m["name"], "★".repeat(lv)]
+		r["info"].text = Loc.t("Kapsel %s  ·  Wert x%s  ·  Stufe %d/%d") % [Fmt.num(Game.capsule_cost(id)), Fmt.rate(Game.machine_value_mult(id)), lv, Game.MACHINE_MAX_LEVEL]
 		var mb: Button = r["main"]
 		var lb: Button = r["level"]
 		var pb: Button = r["place"]
 		lb.visible = unlocked
 		pb.visible = unlocked and Game.slot_count() > 1
 		if id == Game.current_machine:
-			mb.text = "Wird gezeigt"
+			mb.text = Loc.t("Wird gezeigt")
 			mb.disabled = true
 		elif unlocked:
-			mb.text = "Zeigen"
+			mb.text = Loc.t("Zeigen")
 			mb.disabled = false
 		elif not Game.machine_available(id):
-			mb.text = "Braucht „%s“" % Game.prestige_by_id[m["requires_prestige"]]["name"] if m.has("requires_prestige") else "Gesperrt"
+			mb.text = Loc.t("Braucht „%s“") % Game.prestige_by_id[m["requires_prestige"]]["name"] if m.has("requires_prestige") else Loc.t("Gesperrt")
 			mb.disabled = true
 		else:
-			mb.text = "Freischalten: %s" % Fmt.num(float(m["unlock_cost"]))
+			mb.text = Loc.t("Freischalten: %s") % Fmt.num(float(m["unlock_cost"]))
 			mb.disabled = Game.coins < float(m["unlock_cost"])
 		if lv >= Game.MACHINE_MAX_LEVEL:
-			lb.text = "Stufe Max"
+			lb.text = Loc.t("Stufe Max")
 			lb.disabled = true
 		else:
-			lb.text = "Stufe+ %s" % Fmt.num(Game.machine_level_cost(id))
+			lb.text = Loc.t("Stufe+ %s") % Fmt.num(Game.machine_level_cost(id))
 			lb.disabled = not Game.can_level_machine(id)
-		pb.text = "Abbauen" if id in Game.placed else "Aufstellen"
+		pb.text = Loc.t("Abbauen") if id in Game.placed else Loc.t("Aufstellen")
 		pb.disabled = id == Game.current_machine or (not id in Game.placed and Game.placed.size() >= Game.slot_count())
 
 	# Welten
@@ -1401,52 +1401,52 @@ func refresh() -> void:
 		var r: Dictionary = world_rows[id]
 		var b: Button = r["button"]
 		var known: bool = id in Game.unlocked_worlds
-		r["info"].text = "Album %d/%d  ·  Sets %d/%d" % [Game.album_count(id), Game.album_size(id), Game.complete_sets(id), Game.world_sets(id).size()]
+		r["info"].text = Loc.t("Album %d/%d  ·  Sets %d/%d") % [Game.album_count(id), Game.album_size(id), Game.complete_sets(id), Game.world_sets(id).size()]
 		if id == world:
-			b.text = "Du bist hier"
+			b.text = Loc.t("Du bist hier")
 			b.disabled = true
 		elif known:
-			b.text = "Hinreisen"
+			b.text = Loc.t("Hinreisen")
 			b.disabled = false
 		else:
 			var prev := Game.previous_world(id)
 			var need := int(w["travel_sets"])
 			if Game.travel_requirements_met(id):
-				b.text = "Reisen: %s" % Fmt.num(float(w["travel_cost"]))
+				b.text = Loc.t("Reisen: %s") % Fmt.num(float(w["travel_cost"]))
 				b.disabled = Game.coins < float(w["travel_cost"])
 			elif prev in Game.unlocked_worlds:
-				b.text = "Braucht %d Sets in %s (%d/%d)" % [need, Game.world_by_id[prev]["name"], Game.complete_sets(prev), need]
+				b.text = Loc.t("Braucht %d Sets in %s (%d/%d)") % [need, Game.world_by_id[prev]["name"], Game.complete_sets(prev), need]
 				b.disabled = true
 			else:
-				b.text = "Noch unbekannt"
+				b.text = Loc.t("Noch unbekannt")
 				b.disabled = true
 	var g := Game.golden
-	golden_label.text = "%s\n%s\nFiguren: %d/%d" % [g["name"], g["desc"], Game.album_count(), Game.golden_album_needed()]
+	golden_label.text = Loc.t("%s\n%s\nFiguren: %d/%d") % [g["name"], g["desc"], Game.album_count(), Game.golden_album_needed()]
 	if Game.stats["golden_built"] >= 1:
-		golden_btn.text = "Gebaut!"
+		golden_btn.text = Loc.t("Gebaut!")
 		golden_btn.disabled = true
 	elif not g.get("world", "stadt") in Game.unlocked_worlds:
-		golden_btn.text = "Steht in der %s" % Game.world_by_id[g.get("world", "stadt")]["name"]
+		golden_btn.text = Loc.t("Steht in der %s") % Game.world_by_id[g.get("world", "stadt")]["name"]
 		golden_btn.disabled = true
 	else:
-		golden_btn.text = "Bauen: %s" % Fmt.num(float(g["cost"]))
+		golden_btn.text = Loc.t("Bauen: %s") % Fmt.num(float(g["cost"]))
 		golden_btn.disabled = not Game.can_build_golden()
 
 	# Goldmarken
 	var gain := Game.prestige_gain()
-	prestige_info.text = ("Neueröffnung: Münzen, Upgrades, Automaten und ihre Stufen starten von vorn. " +
-		"Album, Erfolge, Welten und Goldmarken bleiben. Jede jemals verdiente Goldmarke bringt dauerhaft +%d %% Münzen.") % [int(Game.GOLDMARKE_BONUS * 100)]
-	prestige_btn.text = "Neu eröffnen: +%d Goldmarken" % gain if gain >= 1 else "Neu eröffnen (noch zu wenig)"
+	prestige_info.text = (Loc.t("Neueröffnung: Münzen, Upgrades, Automaten und ihre Stufen starten von vorn. ") +
+		Loc.t("Album, Erfolge, Welten und Goldmarken bleiben. Jede jemals verdiente Goldmarke bringt dauerhaft +%d %% Münzen.")) % [int(Game.GOLDMARKE_BONUS * 100)]
+	prestige_btn.text = Loc.t("Neu eröffnen: +%d Goldmarken") % gain if gain >= 1 else Loc.t("Neu eröffnen (noch zu wenig)")
 	prestige_btn.disabled = gain < 1
-	goldmarken_label.text = "%d Goldmarken  (gesamt %d → +%s %%)" % [Game.goldmarken, Game.goldmarken_total, Fmt.num(roundf(Game.goldmarken_total * Game.GOLDMARKE_BONUS * 100))]
+	goldmarken_label.text = Loc.t("%d Goldmarken  (gesamt %d → +%s %%)") % [Game.goldmarken, Game.goldmarken_total, Fmt.num(roundf(Game.goldmarken_total * Game.GOLDMARKE_BONUS * 100))]
 	for p in Game.prestige_upgrades:
 		var id: String = p["id"]
 		var r: Dictionary = prestige_rows[id]
 		var b: Button = r["buy"]
-		r["name"].text = "%s  %d/%d" % [p["name"], Game.plevel(id), int(p["max_level"])]
+		r["name"].text = Loc.t("%s  %d/%d") % [p["name"], Game.plevel(id), int(p["max_level"])]
 		if Game.prestige_maxed(id):
-			b.text = "Max"
+			b.text = Loc.t("Max")
 			b.disabled = true
 		else:
-			b.text = "%d GM" % Game.prestige_cost(id)
+			b.text = Loc.t("%d GM") % Game.prestige_cost(id)
 			b.disabled = Game.goldmarken < Game.prestige_cost(id)

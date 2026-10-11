@@ -12,6 +12,7 @@ const DEFAULTS := {
 	"fullscreen": false,
 	"resolution": "1280x720",
 	"shake": 1.0,
+	"language": "en",
 }
 
 var values: Dictionary = DEFAULTS.duplicate()
@@ -94,6 +95,7 @@ func shake_mult() -> float:
 
 
 func apply() -> void:
+	Loc.set_lang(str(get_value("language")))
 	_set_volume("Master", float(get_value("master")))
 	_set_volume("Music", float(get_value("music")))
 	_set_volume("SFX", float(get_value("sfx")))

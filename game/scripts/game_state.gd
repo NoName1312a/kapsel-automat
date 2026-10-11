@@ -126,7 +126,7 @@ func stop() -> void:
 
 
 func _json(path: String) -> Dictionary:
-	return JSON.parse_string(FileAccess.get_file_as_string(path))
+	return Loc.translate_data(JSON.parse_string(FileAccess.get_file_as_string(path)))
 
 
 func _load_data() -> void:
@@ -979,7 +979,7 @@ func save_game() -> void:
 	}
 	var f := FileAccess.open("user://" + TMP_FILE, FileAccess.WRITE)
 	if f == null:
-		push_warning("Speichern fehlgeschlagen: %s" % FileAccess.get_open_error())
+		push_warning(Loc.t("Speichern fehlgeschlagen: %s") % FileAccess.get_open_error())
 		return
 	f.store_string(JSON.stringify(data))
 	f.close()

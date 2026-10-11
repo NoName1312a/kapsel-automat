@@ -154,7 +154,16 @@ func _run() -> void:
 	main.ui._toggle_overlay(main.ui.ach_panel)
 	await process_frame
 	check(main.ui.ach_list.get_child_count() > 0 and main.ui.album_list.get_child_count() > 0, "Album und Erfolge bauen sich auf")
-	check(Fmt.num(1234.0) == "1,23 K" and Fmt.num(5e9) == "5,00 Mrd", "Zahlenformat (%s, %s)" % [Fmt.num(1234.0), Fmt.num(5e9)])
+	var loc = root.get_node("Loc")
+	var old_lang: String = loc.lang
+	loc.set_lang("en")
+	check(Fmt.num(1234.0) == "1.23K" and Fmt.num(5e9) == "5.00B", "Zahlenformat EN (%s, %s)" % [Fmt.num(1234.0), Fmt.num(5e9)])
+	check(loc.t("Einstellungen") == "Settings" and loc.t("Willkommen zurück!") == "Welcome back!", "Übersetzung EN")
+	check(loc.translate_data({"name": "Spielhalle", "id": "stadt"}) == {"name": "Arcade", "id": "stadt"}, "Daten-Übersetzung lässt IDs in Ruhe")
+	loc.set_lang("de")
+	check(Fmt.num(1234.0) == "1,23 K" and Fmt.num(5e9) == "5,00 Mrd", "Zahlenformat DE (%s, %s)" % [Fmt.num(1234.0), Fmt.num(5e9)])
+	check(loc.t("Einstellungen") == "Einstellungen", "Deutsch bleibt Deutsch")
+	loc.set_lang(old_lang)
 
 	# Story: Mausklick blättert weiter
 	main.ui._on_story_event("new_game")

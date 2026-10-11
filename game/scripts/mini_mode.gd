@@ -52,7 +52,7 @@ func _build() -> void:
 	sb.set_content_margin_all(8)
 	root_panel.add_theme_stylebox_override("panel", sb)
 	root_panel.gui_input.connect(_on_drag_input)
-	root_panel.tooltip_text = "Am Rand ziehen zum Verschieben"
+	root_panel.tooltip_text = Loc.t("Am Rand ziehen zum Verschieben")
 	add_child(root_panel)
 
 	var h := HBoxContainer.new()
@@ -64,7 +64,7 @@ func _build() -> void:
 	machine_btn.custom_minimum_size = Vector2(80, 100)
 	machine_btn.ignore_texture_size = true
 	machine_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	machine_btn.tooltip_text = "Gedrückt halten zum Kurbeln"
+	machine_btn.tooltip_text = Loc.t("Gedrückt halten zum Kurbeln")
 	machine_btn.button_down.connect(func() -> void: holding = true)
 	machine_btn.button_up.connect(func() -> void: holding = false)
 	machine_btn.mouse_exited.connect(func() -> void: holding = false)
@@ -87,8 +87,8 @@ func _build() -> void:
 	var sw := HBoxContainer.new()
 	sw.add_theme_constant_override("separation", 4)
 	info.add_child(sw)
-	sw.add_child(_small_button("◀", "Vorheriger aufgestellter Automat", func() -> void: _switch(-1)))
-	sw.add_child(_small_button("▶", "Nächster aufgestellter Automat", func() -> void: _switch(1)))
+	sw.add_child(_small_button("◀", Loc.t("Vorheriger aufgestellter Automat"), func() -> void: _switch(-1)))
+	sw.add_child(_small_button("▶", Loc.t("Nächster aufgestellter Automat"), func() -> void: _switch(1)))
 
 	var ups := VBoxContainer.new()
 	ups.add_theme_constant_override("separation", 3)
@@ -111,10 +111,10 @@ func _build() -> void:
 	var side := VBoxContainer.new()
 	side.add_theme_constant_override("separation", 4)
 	h.add_child(side)
-	var big := _small_button("Groß", "Zurück zum großen Fenster (M)", func() -> void: exit_requested.emit())
+	var big := _small_button(Loc.t("Groß"), Loc.t("Zurück zum großen Fenster (M)"), func() -> void: exit_requested.emit())
 	big.custom_minimum_size = Vector2(56, 40)
 	side.add_child(big)
-	var quit := _small_button("✕", "Speichern und beenden", func() -> void:
+	var quit := _small_button("✕", Loc.t("Speichern und beenden"), func() -> void:
 		Game.save_game()
 		get_tree().quit())
 	quit.custom_minimum_size = Vector2(56, 30)
@@ -214,15 +214,15 @@ func show_result(res: Dictionary) -> void:
 		return
 	match res.get("type", ""):
 		"empty":
-			last_label.text = "Leer!"
+			last_label.text = Loc.t("Leer!")
 			last_label.add_theme_color_override("font_color", Color(0.75, 0.75, 0.8))
 		_:
 			var figs: Array = res.get("figures", [])
 			if figs.is_empty():
 				return
 			var f: Dictionary = figs[0]
-			var neu := "NEU! " if f["id"] in res.get("new", []) else ""
-			last_label.text = "%s%s · %s  %s%s" % [neu, f["name"], f["rarity_name"], "+" if res["value"] >= 0 else "", Fmt.num(res["value"])]
+			var neu := Loc.t("NEU! ") if f["id"] in res.get("new", []) else ""
+			last_label.text = Loc.t("%s%s · %s  %s%s") % [neu, f["name"], f["rarity_name"], "+" if res["value"] >= 0 else "", Fmt.num(res["value"])]
 			last_label.add_theme_color_override("font_color", Color(f["rarity_color"]))
 
 
@@ -231,9 +231,9 @@ func _refresh() -> void:
 		return
 	var m: Dictionary = Game.machine()
 	machine_btn.texture_normal = Art.machine_part(m["id"], "body") if Art.machine_part(m["id"], "body") else Art.machine_part("standard", "body")
-	machine_name.text = "%s · %s" % [Game.world_by_id[Game.current_world()]["name"], m["name"]]
+	machine_name.text = Loc.t("%s · %s") % [Game.world_by_id[Game.current_world()]["name"], m["name"]]
 	coins_label.text = Fmt.num(Game.coins)
-	income_label.text = "+%s/s · Kapsel %s" % [Fmt.rate(Game.income_per_sec()), Fmt.num(Game.capsule_cost())]
+	income_label.text = Loc.t("+%s/s · Kapsel %s") % [Fmt.rate(Game.income_per_sec()), Fmt.num(Game.capsule_cost())]
 	# Die drei günstigsten noch offenen Upgrades für diesen Automaten (und den Laden)
 	var open: Array = []
 	for u in Game.upgrades:
@@ -252,7 +252,7 @@ func _refresh() -> void:
 		up_ids[i] = id
 		b.visible = true
 		b.icon = Art.tex("icons/upgrades/%s.png" % id)
-		b.text = "%s %d  ·  %s" % [u["name"], Game.level(id) + 1, Fmt.num(Game.upgrade_cost(id))]
+		b.text = Loc.t("%s %d  ·  %s") % [u["name"], Game.level(id) + 1, Fmt.num(Game.upgrade_cost(id))]
 		b.tooltip_text = u["desc"]
 		b.disabled = not Game.can_buy(id)
 

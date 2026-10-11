@@ -17,9 +17,13 @@ var machine_flavor: Dictionary = {}
 
 
 func _ready() -> void:
+	reload()
+
+
+func reload() -> void:
 	if not FileAccess.file_exists(FILE):
 		return
-	var d = JSON.parse_string(FileAccess.get_file_as_string(FILE))
+	var d = Loc.translate_data(JSON.parse_string(FileAccess.get_file_as_string(FILE)))
 	if not d is Dictionary:
 		return
 	beats = d.get("beats", [])

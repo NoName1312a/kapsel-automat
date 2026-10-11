@@ -42,22 +42,22 @@ func _ready() -> void:
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		head.add_child(tr)
 	var title := Label.new()
-	title.text = "Einstellungen"
+	title.text = Loc.t("Einstellungen")
 	title.add_theme_font_size_override("font_size", 30)
 	title.add_theme_color_override("font_color", GOLD)
 	head.add_child(title)
 
-	_slider_row(v, "Gesamtlautstärke", "master", "sound_on")
-	_slider_row(v, "Musik", "music", "music")
-	_slider_row(v, "Effekte", "sfx", "sound_on")
-	_slider_row(v, "Bildschirmwackeln", "shake", "")
+	_slider_row(v, Loc.t("Gesamtlautstärke"), "master", "sound_on")
+	_slider_row(v, Loc.t("Musik"), "music", "music")
+	_slider_row(v, Loc.t("Effekte"), "sfx", "sound_on")
+	_slider_row(v, Loc.t("Bildschirmwackeln"), "shake", "")
 
 	# Auflösung (Fenstermodus); das Bild wird immer passend skaliert
 	var rrow := HBoxContainer.new()
 	rrow.add_theme_constant_override("separation", 8)
 	v.add_child(rrow)
 	var rl := Label.new()
-	rl.text = "Auflösung"
+	rl.text = Loc.t("Auflösung")
 	rl.custom_minimum_size = Vector2(150, 0)
 	rl.add_theme_font_size_override("font_size", 20)
 	rrow.add_child(rl)
@@ -77,6 +77,29 @@ func _ready() -> void:
 		rrow.add_child(rb)
 		_res_buttons.append(rb)
 
+	# Sprache (Knöpfe immer in der eigenen Sprache beschriftet)
+	var lrow := HBoxContainer.new()
+	lrow.add_theme_constant_override("separation", 8)
+	v.add_child(lrow)
+	var ll := Label.new()
+	ll.text = "Language / Sprache" if Loc.is_en() else "Sprache / Language"
+	ll.custom_minimum_size = Vector2(150, 0)
+	ll.add_theme_font_size_override("font_size", 20)
+	lrow.add_child(ll)
+	var lgroup := ButtonGroup.new()
+	for pair in [["en", "English"], ["de", "Deutsch"]]:
+		var lb := Button.new()
+		lb.toggle_mode = true
+		lb.button_group = lgroup
+		lb.focus_mode = Control.FOCUS_NONE
+		lb.text = pair[1]
+		lb.custom_minimum_size = Vector2(120, 40)
+		lb.add_theme_font_size_override("font_size", 18)
+		lb.button_pressed = Loc.lang == pair[0]
+		var code: String = pair[0]
+		lb.pressed.connect(func() -> void: Loc.switch(code))
+		lrow.add_child(lb)
+
 	# Mit Checkbox-Grafik eine echte Checkbox, sonst ein Umschalt-Knopf
 	var has_cb := Art.tex("ui/checkbox_on.png") != null
 	var fs: Button = CheckBox.new() if has_cb else Button.new()
@@ -86,7 +109,7 @@ func _ready() -> void:
 	fs.add_theme_font_size_override("font_size", 20)
 	fs.button_pressed = Settings.get_value("fullscreen")
 	var label_for := func(on: bool) -> String:
-		return "Vollbild" if has_cb else ("Vollbild: An" if on else "Vollbild: Aus")
+		return Loc.t("Vollbild") if has_cb else (Loc.t("Vollbild: An") if on else Loc.t("Vollbild: Aus"))
 	fs.text = label_for.call(fs.button_pressed)
 	fs.toggled.connect(func(on: bool) -> void:
 		fs.text = label_for.call(on)
@@ -96,7 +119,7 @@ func _ready() -> void:
 	_fs_label = label_for
 
 	var done := Button.new()
-	done.text = "Fertig"
+	done.text = Loc.t("Fertig")
 	done.theme_type_variation = "BigButton"
 	done.focus_mode = Control.FOCUS_NONE
 	done.custom_minimum_size = Vector2(0, 48)
@@ -138,14 +161,14 @@ func _slider_row(v: VBoxContainer, label: String, key: String, icon: String) -> 
 	pct.custom_minimum_size = Vector2(62, 0)
 	pct.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pct.add_theme_font_size_override("font_size", 20)
-	pct.text = "%d %%" % int(s.value)
+	pct.text = Loc.t("%d %%") % int(s.value)
 	row.add_child(pct)
 	var set_icon := func(x: float) -> void:
 		ic.texture = off_t if x <= 0.0 and off_t else on_t
 	set_icon.call(s.value)
 	s.value_changed.connect(func(x: float) -> void:
 		set_icon.call(x)
-		pct.text = "%d %%" % int(x)
+		pct.text = Loc.t("%d %%") % int(x)
 		Settings.set_value(key, x / 100.0)
 		# Hörprobe beim Effekte-Regler
 		if key == "sfx" or key == "master":

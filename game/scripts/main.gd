@@ -218,7 +218,7 @@ func _process(delta: float) -> void:
 		if auto_open_timer <= 0.0 and _open_first_capsule():
 			auto_open_timer = interval
 
-	combo_label.text = "Kombo x%d" % Game.combo if Game.combo >= 2 else ""
+	combo_label.text = Loc.t("Kombo x%d") % Game.combo if Game.combo >= 2 else ""
 
 	world.position = Vector2(randf_range(-1, 1), randf_range(-1, 1)) * shake * Settings.shake_mult()
 	shake = move_toward(shake, 0.0, delta * 40.0)
@@ -234,14 +234,14 @@ func _process(delta: float) -> void:
 func _advance_crank(amount: float, manual: bool) -> void:
 	if tray.size() >= Game.tray_size():
 		if manual:
-			_blocked("Schale voll! Erst Kapseln öffnen.")
+			_blocked(Loc.t("Schale voll! Erst Kapseln öffnen."))
 		return
 	if not Game.can_afford_capsule():
 		# Notgroschen: von Hand darf man pleite gratis kurbeln, wenn die Schale leer ist
 		# und es kein passives Einkommen gibt, das einen ohnehin rettet
 		if not manual or not tray.is_empty() or Game.income_per_sec() > 0.5:
 			if manual:
-				_blocked("Nicht genug Münzen.")
+				_blocked(Loc.t("Nicht genug Münzen."))
 			return
 	var before := crank_progress
 	crank_progress += amount
@@ -269,7 +269,7 @@ func _drop_capsule(manual: bool, free: bool = false) -> void:
 	if paid == 0:
 		return
 	if paid == 2:
-		ui.say("Gratis-Kapsel (Notgroschen)")
+		ui.say(Loc.t("Gratis-Kapsel (Notgroschen)"))
 	var c := Capsule.new()
 	c.content = Game.roll_capsule()
 	c.machine_id = Game.current_machine
@@ -292,7 +292,7 @@ func _drop_capsule(manual: bool, free: bool = false) -> void:
 	else:
 		Sfx.play("clunk", randf_range(0.95, 1.05))
 	if c.gold:
-		ui.say("Eine goldene Kapsel …!")
+		ui.say(Loc.t("Eine goldene Kapsel …!"))
 	Game.changed.emit()
 
 
@@ -361,7 +361,7 @@ func _open_capsule(c: Capsule) -> void:
 
 	if res.get("jackpot", false):
 		FX.play_sheet(world, "fx/jackpot_sheet.png", 8, REVEAL_POS + Vector2(0, -170), 3.0, 10.0)
-		_float_text("JACKPOT x%d!" % int(Game.JACKPOT_MULT), REVEAL_POS + Vector2(-120, -130), Color("#ffe14d"), 40)
+		_float_text(Loc.t("JACKPOT x%d!") % int(Game.JACKPOT_MULT), REVEAL_POS + Vector2(-120, -130), Color("#ffe14d"), 40)
 		Sfx.play_pref(["jackpot", "coin_big", "set_complete"])
 		_burst(REVEAL_POS, Color("#ffe14d"), 80)
 		shake = maxf(shake, 12.0)
@@ -370,22 +370,22 @@ func _open_capsule(c: Capsule) -> void:
 		Sfx.play_pref(["erupt", "curse"])
 		_burst(machine.position + Vector2(0, -120), Color("#ff6a2b"), 60)
 		shake = maxf(shake, 10.0)
-		ui.say("Ausbruch! %d Gratis-Kapseln" % Game.ERUPT_CAPSULES)
+		ui.say(Loc.t("Ausbruch! %d Gratis-Kapseln") % Game.ERUPT_CAPSULES)
 		for k in Game.ERUPT_CAPSULES:
 			get_tree().create_timer(0.25 + k * 0.2).timeout.connect(_drop_capsule.bind(false, true))
 	if res.get("frozen", false) and res["type"] != "empty":
-		_float_text("Eis geknackt x%d" % int(Game.FROZEN_MULT), pos + Vector2(-60, -100), Color("#bfefff"), 22)
+		_float_text(Loc.t("Eis geknackt x%d") % int(Game.FROZEN_MULT), pos + Vector2(-60, -100), Color("#bfefff"), 22)
 
 	match res["type"]:
 		"empty":
 			Sfx.play("empty")
 			_burst(pos, Color(0.5, 0.5, 0.55), 10)
-			_float_text("Leer!", pos + Vector2(-30, -70), Color(0.75, 0.75, 0.8))
+			_float_text(Loc.t("Leer!"), pos + Vector2(-30, -70), Color(0.75, 0.75, 0.8))
 			return
 		"curse":
 			Sfx.play("curse")
 			_burst(pos, Color("#7a2bd1"), 40)
-			_float_text("Fluch! %s" % Fmt.num(res["value"]), REVEAL_POS + Vector2(60, -60), Color("#c77dff"))
+			_float_text(Loc.t("Fluch! %s") % Fmt.num(res["value"]), REVEAL_POS + Vector2(60, -60), Color("#c77dff"))
 			shake = 8.0
 		_:
 			pass
@@ -408,7 +408,7 @@ func _open_capsule(c: Capsule) -> void:
 		reveal2.scale_base = 0.65
 		reveal.show_figure(figs[0], figs[0]["id"] in res["new"])
 		reveal2.show_figure(figs[1], figs[1]["id"] in res["new"])
-		ui.say("Doppelkapsel!")
+		ui.say(Loc.t("Doppelkapsel!"))
 		Sfx.play("double")
 	else:
 		reveal.position = REVEAL_POS
@@ -429,12 +429,12 @@ func _open_capsule(c: Capsule) -> void:
 		var txt := "+" + Fmt.num(res["value"])
 		var col := Color("#ffe14d")
 		if res["crit"]:
-			txt += "  TREFFER x5!"
+			txt += Loc.t("  TREFFER x5!")
 			col = Color("#ff6b6b")
 			shake = maxf(shake, 9.0)
 			Sfx.play("crit")
 		if res["blessed"]:
-			txt += "  Segen x3!"
+			txt += Loc.t("  Segen x3!")
 			col = Color("#9fffcb")
 			Sfx.play("bless")
 		_float_text(txt, REVEAL_POS + Vector2(90, -60), col)
@@ -448,7 +448,7 @@ func _open_capsule(c: Capsule) -> void:
 		get_tree().create_timer(0.3).timeout.connect(func() -> void: Sfx.play_first(["new_figure"], 1.0, -3.0))
 	if res["set_completed"]:
 		Sfx.play("set_complete")
-		ui.toast("Set komplett!", "+%d %% auf alle Münzen" % int(Game.set_bonus * 100))
+		ui.toast(Loc.t("Set komplett!"), Loc.t("+%d %% auf alle Münzen") % int(Game.set_bonus * 100))
 		shake = maxf(shake, 10.0)
 
 
@@ -490,7 +490,7 @@ func _burst(pos: Vector2, color: Color, amount: int) -> void:
 ## Automat wurde aufgewertet: Animation über dem Gehäuse.
 func _on_machine_leveled(id: String, new_level: int) -> void:
 	if id != Game.current_machine:
-		ui.toast("%s aufgewertet" % Game.machine_by_id[id]["name"], "Stufe %d" % new_level)
+		ui.toast(Loc.t("%s aufgewertet") % Game.machine_by_id[id]["name"], Loc.t("Stufe %d") % new_level)
 		Sfx.play_pref(["machine_levelup", "upgrade"], 1.0, -4.0)
 		return
 	machine.level = new_level
@@ -498,7 +498,7 @@ func _on_machine_leveled(id: String, new_level: int) -> void:
 	Sfx.play_pref(["machine_levelup", "unlock"])
 	_burst(machine.position + Vector2(0, 120), Color("#ffe14d"), 40)
 	shake = maxf(shake, 6.0)
-	_float_text("Stufe %d!" % new_level, machine.position + Vector2(-60, -30), Color("#ffe14d"), 34)
+	_float_text(Loc.t("Stufe %d!") % new_level, machine.position + Vector2(-60, -30), Color("#ffe14d"), 34)
 
 
 func _float_text(text: String, pos: Vector2, color: Color, size: int = 30) -> void:
